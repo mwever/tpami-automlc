@@ -7,3 +7,8 @@ bin
 .settings
 .classpath
 .project
+logs
+testrsc/test
+testrsc/smac.log
+test.scenario
+benchmark.properties

@@ -54,4 +54,19 @@ public class CandidateEvaluatedEventImpl implements CandidateEvaluatedEvent {
 		return this.exception;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder().append(this.threadID).append(": ").append(this.orderNo);
+
+		if (this.exception != null) {
+			sb.append(" FAIL");
+		} else if (this.evaluationReport != null) {
+			sb.append(" ").append(this.evaluationReport);
+		}
+
+		sb.append(" ").append(this.componentInstance.toString());
+
+		return sb.toString();
+	}
+
 }

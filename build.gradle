@@ -1,26 +1,134 @@
+buildscript {
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.1'
+    }
+	repositories {
+		mavenCentral()
+		maven { url "https://jitpack.io" }
+		maven { url "http://clojars.org/repo/" }
+		maven { url "https://plugins.gradle.org/m2/" }
+	}
+}
+
 plugins {
-    id 'java-library'
+	id 'java'
+	id 'eclipse'
+	id 'idea'
+	id 'org.openjfx.javafxplugin' version '0.0.5'
+}
+apply plugin: 'com.github.johnrengelman.shadow'
+
+eclipse {
+    classpath {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+javafx {
+    modules = [ 'javafx.controls', 'javafx.swing', 'javafx.web' ]
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+			srcDirs 'src/proto/java'
+	   		srcDir 'src/example/java'
+        }
+        resources {
+        	srcDir 'conf'
+        	srcDir 'resources'
+    	}
+    }
+	test {
+	   	java {
+	   		srcDir 'src/test/java'
+	   	}
+    }
+}
+
+//Java version
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+def grpcVersion = '1.23.0'
+
+dependencies {    
+    // include ailibs for compilation
+    compile ('ai.libs:mlplan-meka:0.2.1') {
+ 		exclude group: 'org.nd4j'
+ 		exclude group: 'org.bytedeco.javacpp-presets'
+ 		exclude group: 'org.deeplearning4j'
+ 		exclude group: 'org.openjfx'
+ 		exclude group: 'com.sun.jersey'
+ 		exclude group: 'org.glassfish.jersey.core'
+ 		exclude group: 'org.glassfish.jersey.inject'
+ 		exclude group: 'org.apache.hadoop'
+ 		exclude group: 'org.apache.maven'
+ 		exclude group: 'org.apache.zookeeper'
+ 		exclude group: 'org.glassfish.jersey.ext'
+ 		exclude group: 'org.eclipse.rdf4j'
+ 		exclude group: 'net.sourceforge.owlapi'
+ 		exclude group: 'org.graphstream'
+ 		exclude group: 'com.github.graphstream'
+    }
+    
+	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+	runtimeOnly group: 'org.slf4j', name:'slf4j-log4j12', version:'1.7.25'
+    
+    compile ("io.grpc:grpc-api:${grpcVersion}")
+    compile ("io.grpc:grpc-core:${grpcVersion}")
+    compile ("io.grpc:grpc-stub:${grpcVersion}")
+    compile ("io.grpc:grpc-protobuf:${grpcVersion}")
+  	compile ("io.grpc:grpc-netty:${grpcVersion}")
+    compile ("com.google.protobuf:protobuf-java:3.11.0")
+
+    // Use JUnit test framework
+  	testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.3'
+  	testCompile group: 'junit', name: 'junit-dep', version: '4.11'
+  	testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '1.3'
+  	testCompile group: 'org.mockito', name: 'mockito-core', version: '1.9.+'
+    testImplementation('junit:junit:4.11')
+}
+
+
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': "de.upb.ml2plan.randomsearch.RandomSearch"
+        )
+    }
+}
+
+configurations {
+}
+
+eclipse {
+	project.natures "org.eclipse.buildship.core.gradleprojectnature"
 }
 
 repositories {
 	mavenCentral()
-	mavenLocal()
 	maven { url "https://jitpack.io" }
 	maven { url "http://clojars.org/repo/" }
 	maven { url "https://plugins.gradle.org/m2/" }
 }
 
-dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-math3:3.6.1'
-
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:27.0.1-jre'
-    
-    // include ailibs for compilation
-    implementation 'ai.libs:jaicore-ml-meka:0.2.1'
-    implementation 'ai.libs:hasco:0.2.1'
-
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
+test {
+    testLogging {
+        outputs.upToDateWhen {false}
+        showStandardStreams = true
+    }
 }
