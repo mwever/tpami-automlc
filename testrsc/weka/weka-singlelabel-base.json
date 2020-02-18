@@ -46,7 +46,13 @@
       "refineSplits" : 8,
       "minInterval" : 10
     } ],
-    "dependencies" : [  ]
+    "dependencies" : [ 
+		{
+			"pre": "S in {true}",
+			"post": "U in {false}"
+		}
+
+	]
   },
 		{
 			"name": "weka.classifiers.trees.M5P",

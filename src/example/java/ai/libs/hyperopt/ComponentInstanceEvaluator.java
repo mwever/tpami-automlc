@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.eventbus.EventBus;
 
 import ai.libs.hasco.exceptions.ComponentInstantiationFailedException;
-import ai.libs.hyperopt.impl.PCSBasedOptimizationEvent;
 import ai.libs.jaicore.graphvisualizer.events.graph.bus.AlgorithmEventListener;
 import ai.libs.jaicore.ml.weka.WekaUtil;
 import ai.libs.jaicore.ml.weka.classification.learner.IWekaClassifier;
@@ -86,8 +85,6 @@ public class ComponentInstanceEvaluator implements IObjectEvaluator<IWekaClassif
 		} catch (ComponentInstantiationFailedException e) {
 			this.logger.error(e.getMessage());
 		}
-		PCSBasedOptimizationEvent event = new PCSBasedOptimizationEvent(componentInstance, score, this.algorithmId);
-		this.eventBus.post(event);
 		return score;
 	}
 
