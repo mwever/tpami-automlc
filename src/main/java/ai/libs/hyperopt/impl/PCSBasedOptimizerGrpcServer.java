@@ -6,7 +6,7 @@ import org.api4.java.common.attributedobjects.IObjectEvaluator;
 
 import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedOptimizerService;
-import ai.libs.hyperopt.api.IOptimizationTask;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.impl.pcs.IPCSBasedOptimizerConfig;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;

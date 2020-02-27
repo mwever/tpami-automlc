@@ -1,4 +1,6 @@
-package ai.libs.hyperopt.api;
+package ai.libs.hyperopt.api.output;
+
+import java.util.Map;
 
 import org.api4.java.algorithm.events.result.IScoredSolutionCandidateFoundEvent;
 import org.api4.java.common.attributedobjects.ScoredItem;
@@ -13,5 +15,9 @@ import ai.libs.hasco.model.ComponentInstance;
 public interface IOptimizationSolutionCandidateFoundEvent<M> extends IScoredSolutionCandidateFoundEvent<ComponentInstance, Double>, ScoredItem<Double> {
 
 	public M getObject();
+
+	public String getException();
+
+	public Map<String, ? extends Object> getEvaluationReport();
 
 }

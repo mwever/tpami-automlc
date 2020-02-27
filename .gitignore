@@ -12,3 +12,5 @@ testrsc/test
 testrsc/smac.log
 test.scenario
 benchmark.properties
+datasets
+automlc-setup.properties

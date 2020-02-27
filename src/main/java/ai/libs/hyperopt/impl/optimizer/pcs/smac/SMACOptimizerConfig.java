@@ -1,4 +1,4 @@
-package ai.libs.hyperopt.impl.optimizer.smac;
+package ai.libs.hyperopt.impl.optimizer.pcs.smac;
 
 import ai.libs.hyperopt.impl.pcs.IPCSBasedOptimizerConfig;
 

@@ -7,9 +7,9 @@ import org.api4.java.algorithm.exceptions.AlgorithmTimeoutedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hyperopt.api.IOptimizationSolutionCandidateFoundEvent;
-import ai.libs.hyperopt.api.IOptimizationTask;
-import ai.libs.hyperopt.api.IOptimizerConfig;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
+import ai.libs.hyperopt.api.input.IOptimizerConfig;
+import ai.libs.hyperopt.api.output.IOptimizationSolutionCandidateFoundEvent;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
 
 public abstract class APCSBasedOptimizer<M> extends AOptimizer<IOptimizationTask<M>, IOptimizationSolutionCandidateFoundEvent<M>, Double> {

@@ -2,12 +2,17 @@ package de.upb.ml2plan.logger;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.aeonbits.owner.ConfigFactory;
+import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,19 +21,22 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
 
 import ai.libs.hasco.gui.statsplugin.ComponentInstanceSerializer;
+import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.hyperopt.api.output.IOptimizationSolutionCandidateFoundEvent;
 import ai.libs.jaicore.db.sql.SQLAdapter;
-import de.upb.ml2plan.event.CandidateEvaluatedEvent;
 
-public class DatabaseLogger {
+public class DatabaseLogger<M> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseLogger.class);
 
-	private static final File CONFIG_FILE = new File("benchmark.properties");
+	private static final File CONFIG_FILE = new File("automlc-setup.properties");
 	private static final IDatabaseLoggerConfig DB_CONFIG = (IDatabaseLoggerConfig) ConfigFactory.create(IDatabaseLoggerConfig.class).loadPropertiesFromFile(CONFIG_FILE);
 	private static final Class<SCandidateEvaluatedSchema> SCHEMA = SCandidateEvaluatedSchema.class;
 
 	private final SQLAdapter adapter;
 	private final Map<String, Object> defaultValues;
+
+	private final AtomicInteger orderNo = new AtomicInteger(0);
 
 	public DatabaseLogger(final Map<String, Object> defaultValues) throws Exception {
 		this.adapter = new SQLAdapter(DB_CONFIG);
@@ -44,19 +52,47 @@ public class DatabaseLogger {
 	}
 
 	@Subscribe
-	public void rcvCandidateEvaluatedEvent(final CandidateEvaluatedEvent e) throws JsonProcessingException, SQLException {
+	public void rcvCandidateEvaluatedEvent(final IOptimizationSolutionCandidateFoundEvent<M> e) throws JsonProcessingException, SQLException {
 		Map<String, Object> keyValuePairs = new HashMap<>(this.defaultValues);
-		keyValuePairs.put(SCandidateEvaluatedSchema.THREAD_ID.getName(), e.getThreadID());
-		keyValuePairs.put(SCandidateEvaluatedSchema.COMPONENT_INSTANCE.getName(), new ComponentInstanceSerializer().serializeComponentInstance(e.getComponentInstance()));
+		keyValuePairs.put(SCandidateEvaluatedSchema.THREAD_ID.getName(), e.getAlgorithmId());
+		keyValuePairs.put(SCandidateEvaluatedSchema.COMPONENT_INSTANCE.getName(), new ComponentInstanceSerializer().serializeComponentInstance(e.getSolutionCandidate()));
 
 		if (e.getEvaluationReport() != null) {
-			keyValuePairs.put(SCandidateEvaluatedSchema.EVALUATION_REPORT.getName(), new ObjectMapper().writeValueAsString(e.getEvaluationReport()));
+			System.err.println(e.getEvaluationReport());
+			Map<String, Object> mapToWrite = new HashMap<>();
+			for (Entry<String, ? extends Object> entry : e.getEvaluationReport().entrySet()) {
+				System.out.println(entry);
+				if (entry.getValue() instanceof DescriptiveStatistics) { // transform descriptive statistics appropriately
+					DescriptiveStatistics stats = (DescriptiveStatistics) entry.getValue();
+					mapToWrite.put(entry.getKey() + "_min", stats.getMin());
+					mapToWrite.put(entry.getKey() + "_max", stats.getMax());
+					mapToWrite.put(entry.getKey() + "_mean", stats.getMean());
+					mapToWrite.put(entry.getKey() + "_median", stats.getGeometricMean());
+					mapToWrite.put(entry.getKey() + "_n", stats.getN());
+				} else {
+					mapToWrite.put(entry.getKey(), entry.getValue());
+				}
+			}
+			keyValuePairs.put(SCandidateEvaluatedSchema.EVALUATION_REPORT.getName(), new ObjectMapper().writeValueAsString(mapToWrite));
 		}
+
 		if (e.getException() != null) {
 			keyValuePairs.put(SCandidateEvaluatedSchema.EXCEPTION.getName(), e.getException());
 		}
 
-		keyValuePairs.put(SCandidateEvaluatedSchema.ORDER_NO.getName(), e.getOrderNo());
+		StringBuilder abstractDescription = new StringBuilder();
+		List<ComponentInstance> ciList = new LinkedList<>(Arrays.asList(e.getSolutionCandidate()));
+		while (!ciList.isEmpty()) {
+			ComponentInstance ci = ciList.remove(0);
+			abstractDescription.append(ci.getComponent().getName()).append("(");
+			abstractDescription.append(ci.getParameterValues().entrySet().stream().map(x -> x.getKey() + "=" + x.getValue()).collect(Collectors.joining(", ")));
+			abstractDescription.append(")").append(" - ");
+			ciList.addAll(ci.getSatisfactionOfRequiredInterfaces().values());
+		}
+
+		keyValuePairs.put(SCandidateEvaluatedSchema.ABSTRACT_DESCRIPTION.getName(), abstractDescription.toString());
+
+		keyValuePairs.put(SCandidateEvaluatedSchema.ORDER_NO.getName(), this.orderNo.getAndIncrement());
 		this.adapter.insert(DB_CONFIG.getLogTable(), keyValuePairs);
 	}
 

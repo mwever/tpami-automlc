@@ -190,7 +190,7 @@
 		"name": "S",
 		"type": "cat",
 		"default": "weka.attributeSelection.BestFirst",
-		"values": ["weka.attributeSelection.BestFirst", "weka.attributeSelection.BestFirst -D 1", "weka.attributeSelection.GreedyStepWise" ]
+		"values": ["weka.attributeSelection.BestFirst", "weka.attributeSelection.BestFirst -D 1", "weka.attributeSelection.GreedyStepwise" ]
 	}],
 	"dependencies": []
   },

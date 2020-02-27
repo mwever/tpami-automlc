@@ -1,6 +1,6 @@
-package ai.libs.hyperopt.impl.optimizer;
+package ai.libs.hyperopt.impl.optimizer.pcs;
 
-import ai.libs.hyperopt.api.IOptimizationTask;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.impl.pcs.AHyperbandLikeOptimizer;
 
 /**

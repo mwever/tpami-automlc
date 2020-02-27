@@ -1,12 +1,14 @@
-package ai.libs.hyperopt.api;
+package ai.libs.hyperopt.api.input;
 
 import java.util.Collection;
 
 import org.api4.java.algorithm.Timeout;
 import org.api4.java.common.attributedobjects.IObjectEvaluator;
 
+import ai.libs.hasco.core.SoftwareConfigurationProblem;
 import ai.libs.hasco.model.Component;
 import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.hyperopt.api.IConverter;
 import ai.libs.hyperopt.impl.evaluator.AutoConvertingObjectEvaluator;
 
 /**
@@ -29,23 +31,12 @@ public interface IOptimizationTask<M> {
 	public IConverter<ComponentInstance, M> getConverter();
 
 	/**
+	 * @param algorithmID The id/name of the algorithm being applied to the problem, can also be an empty string.
 	 * @return An object evaluator combining the given converter and evaluator into an automatically converting object evaluator.
 	 */
-	default IObjectEvaluator<ComponentInstance, Double> getDirectEvaluator() {
-		return new AutoConvertingObjectEvaluator<M>(this.getConverter(), this.getEvaluator());
+	default IObjectEvaluator<ComponentInstance, Double> getDirectEvaluator(final String algorithmID) {
+		return new AutoConvertingObjectEvaluator<M>(algorithmID, this.getConverter(), this.getEvaluator());
 	}
-
-	/**
-	 * @return The number of cpus to use for parallellization.
-	 */
-	public int getNumCpus();
-
-	/**
-	 * Sets the number of cpus to the provided value.
-	 *
-	 * @param numCpus The number of cpus to be used.
-	 */
-	public void setNumCpus(final int numCpus);
 
 	/**
 	 * @return The collection of components to work with in this optimization task.
@@ -79,5 +70,13 @@ public interface IOptimizationTask<M> {
 	 * @param evaluationTimeout The value for the single candidate evaluation timeout.
 	 */
 	public void setEvaluationTimeout(Timeout evaluationTimeout);
+
+	/**
+	 * @param algorithmID The id/name of the algorithm being applied to the problem, can also be an empty string.
+	 * @return The software configuration problem description according to this optimization task.
+	 */
+	default SoftwareConfigurationProblem<Double> getSoftwareConfigurationProblem(final String algorithmID) {
+		return new SoftwareConfigurationProblem<>(this.getComponents(), this.getRequestedInterface(), this.getDirectEvaluator(algorithmID));
+	}
 
 }

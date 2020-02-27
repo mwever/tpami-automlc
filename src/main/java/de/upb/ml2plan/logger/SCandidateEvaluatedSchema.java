@@ -10,10 +10,14 @@ public enum SCandidateEvaluatedSchema implements IDBSchema {
 	THREAD_ID("varchar-255"),
 	/* The component instance description of the candidate evaluated. */
 	COMPONENT_INSTANCE("text"),
+	/* The component instance description of the candidate evaluated. */
+	MEASURE("varchar-255"),
 	/* The evaluation report for this candidate. */
 	EVALUATION_REPORT("json"),
 	/* Field for logging exception stack traces (if any exception occurred while evaluating the candidate). */
 	EXCEPTION("text"),
+	/* Abstract description of a component containing only the different levels of components. */
+	ABSTRACT_DESCRIPTION("text"),
 	/* Order number of the evaluation run. */
 	ORDER_NO("int-10");
 

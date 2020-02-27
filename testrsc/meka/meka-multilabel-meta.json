@@ -6,7 +6,7 @@
 	"components": [
 		{
 			"name": "meka.classifiers.multilabel.meta.MBR",
-			"providedInterface": ["MLClassifier","MetaMLClassifier","ProblemTransformationMethod"],
+			"providedInterface": ["MLClassifier","MetaMLClassifier"],
 			"requiredInterface": [{"id": "W","name": "meka.classifiers.multilabel.BR"}],
 			"parameter": []
 		},
@@ -82,7 +82,7 @@
 		},
 		{
 			"name": "meka.classifiers.multilabel.meta.BaggingML",
-			"providedInterface": ["MLClassifier","MetaMLClassifier","ProblemTransformationMethod"],
+			"providedInterface": ["MLClassifier","MetaMLClassifier"],
 			"requiredInterface": [{"id": "W","name": "BasicMLClassifier"}],
 			"parameter": [
 				{
@@ -109,7 +109,7 @@
 		},
 		{
 			"name": "meka.classifiers.multilabel.meta.BaggingMLdup",
-			"providedInterface": ["MLClassifier","MetaMLClassifier","ProblemTransformationMethod"],
+			"providedInterface": ["MLClassifier","MetaMLClassifier"],
 			"requiredInterface": [{"id": "W","name": "BasicMLClassifier"}],
 			"parameter": [
 				{
@@ -136,7 +136,7 @@
 		},
 		{
 			"name": "meka.classifiers.multilabel.meta.EnsembleML",
-			"providedInterface": ["MLClassifier","MetaMLClassifier","ProblemTransformationMethod"],
+			"providedInterface": ["MLClassifier","MetaMLClassifier"],
 			"requiredInterface": [{"id": "W","name": "BasicMLClassifier"}],
 			"parameter": [
 				{

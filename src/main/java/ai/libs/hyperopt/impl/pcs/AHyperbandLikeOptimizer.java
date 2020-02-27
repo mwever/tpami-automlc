@@ -12,10 +12,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hyperopt.api.IOptimizationTask;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.impl.PCSBasedOptimizerGrpcServer;
 import ai.libs.hyperopt.impl.exception.OptimizationException;
-import ai.libs.hyperopt.impl.optimizer.HyperbandLikeOptimizerConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.HyperbandLikeOptimizerConfig;
 import ai.libs.hyperopt.util.ScenarioFileUtil;
 import ai.libs.jaicore.basic.FileUtil;
 

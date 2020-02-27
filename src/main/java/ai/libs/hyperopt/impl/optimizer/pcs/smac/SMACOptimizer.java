@@ -1,4 +1,4 @@
-package ai.libs.hyperopt.impl.optimizer.smac;
+package ai.libs.hyperopt.impl.optimizer.pcs.smac;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hyperopt.api.IOptimizationTask;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.impl.GlobalConfig;
 import ai.libs.hyperopt.impl.HASCOToPCSConverter;
 import ai.libs.hyperopt.impl.PCSBasedOptimizerServiceImpl;

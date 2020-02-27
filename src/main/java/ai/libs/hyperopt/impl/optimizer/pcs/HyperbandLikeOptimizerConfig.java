@@ -1,4 +1,4 @@
-package ai.libs.hyperopt.impl.optimizer;
+package ai.libs.hyperopt.impl.optimizer.pcs;
 
 import ai.libs.hyperopt.impl.pcs.IPCSBasedOptimizerConfig;
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -19,27 +20,26 @@ import java.util.stream.IntStream;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.api4.java.ai.ml.classification.IClassifierEvaluator;
 import org.api4.java.algorithm.Timeout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 import ai.libs.hasco.model.ComponentInstance;
-import ai.libs.hasco.model.ComponentUtil;
 import ai.libs.hasco.serialization.ComponentLoader;
 import ai.libs.jaicore.interrupt.Interrupter;
-import ai.libs.jaicore.interrupt.InterruptionTimerTask;
 import ai.libs.jaicore.ml.classification.multilabel.learner.IMekaClassifier;
-import ai.libs.mlplan.multilabel.mekamlplan.MekaPipelineFactory;
 import de.upb.ml2plan.IListenable;
 import de.upb.ml2plan.event.CandidateEvaluatedEventImpl;
 import de.upb.ml2plan.logger.DatabaseLogger;
 import de.upb.ml2plan.logger.SCandidateEvaluatedSchema;
 import meka.classifiers.multilabel.Evaluation;
 import meka.core.MLUtils;
-import meka.core.Result;
 import weka.core.Instances;
 
 public class RandomSearch implements IListenable {
+	private static final Logger LOGGER = LoggerFactory.getLogger(RandomSearch.class);
 
 	private final EventBus eventBus = new EventBus();
 
@@ -59,7 +59,6 @@ public class RandomSearch implements IListenable {
 	private final Instances dataset;
 
 	private final Interrupter interrupter;
-	private final Timer timer;
 
 	public RandomSearch(final int numCPUs, final Timeout timeout, final Timeout candidateTimeout, final IClassifierEvaluator evaluator) throws Exception {
 		this.numCPUs = numCPUs;
@@ -69,9 +68,9 @@ public class RandomSearch implements IListenable {
 		this.cl = new ComponentLoader(new File("testrsc/meka/mlplan-meka.json"));
 		this.allSelections = new ArrayList<>(ComponentUtil.getAllAlgorithmSelectionInstances("MLClassifier", this.cl.getComponents()));
 		this.dataset = new Instances(new FileReader(new File("testrsc/flags.arff")));
+//		this.dataset.setClassIndex(this.dataset.numAttributes() - 1);
 		MLUtils.prepareData(this.dataset);
 		this.interrupter = Interrupter.get();
-		this.timer = new Timer();
 	}
 
 	public void run() {
@@ -90,6 +89,8 @@ public class RandomSearch implements IListenable {
 		return this.eventBus;
 	}
 
+	private Timer timer = new Timer();
+
 	class RandomSearchWorker implements Runnable {
 		private int id;
 		private Random rand;
@@ -101,25 +102,45 @@ public class RandomSearch implements IListenable {
 
 		@Override
 		public void run() {
-			while (RandomSearch.this.running.get()) {
-				ComponentInstance ci = this.sampleRandomComponent();
-				long startTimestamp = System.currentTimeMillis();
-				InterruptionTimerTask interruptMe = new InterruptionTimerTask("CancelEval" + Thread.currentThread().getName(), Thread.currentThread());
-				RandomSearch.this.timer.schedule(interruptMe, RandomSearch.this.candidateTimeout.milliseconds());
-				try {
-					System.out.println("Schedule timeout for in " + RandomSearch.this.candidateTimeout.milliseconds() + "ms");
-					IMekaClassifier classifier = RandomSearch.this.factory.getComponentInstantiation(ci);
-					Result res = Evaluation.cvModel(classifier.getClassifier(), new Instances(RandomSearch.this.dataset), 2, "0.5");
-					interruptMe.cancel();
-					RandomSearch.this.getEventBus().post(new CandidateEvaluatedEventImpl(Thread.currentThread().getName(), ci, RandomSearch.this.orderNo.getAndIncrement(), res.getStats(res, "1")));
-				} catch (InterruptedException e) {
-					Thread.interrupted();
-					System.err.println(Thread.currentThread() + ": Timeout after " + (System.currentTimeMillis() - startTimestamp) + "ms");
-					RandomSearch.this.getEventBus().post(new CandidateEvaluatedEventImpl(Thread.currentThread().getName(), ci, RandomSearch.this.orderNo.getAndIncrement(), "Eval Timeout"));
-				} catch (Exception e) {
-					interruptMe.cancel();
-					RandomSearch.this.getEventBus().post(new CandidateEvaluatedEventImpl(Thread.currentThread().getName(), ci, RandomSearch.this.orderNo.getAndIncrement(), ExceptionUtils.getStackTrace(e)));
+			try {
+				while (RandomSearch.this.running.get()) {
+					LOGGER.info("Sample new candidate...");
+					ComponentInstance ci = this.sampleRandomComponent();
+					TimerTask interruptTask = new TimerTask() {
+						private Thread thread = Thread.currentThread();
+
+						@Override
+						public void run() {
+							this.thread.interrupt();
+						}
+					};
+					long startTime = System.currentTimeMillis();
+					try {
+						IMekaClassifier classifier = RandomSearch.this.factory.getComponentInstantiation(ci);
+						RandomSearch.this.timer.schedule(interruptTask, 10000);
+
+						Evaluation.cvModel(classifier.getClassifier(), new Instances(RandomSearch.this.dataset), 2, "0.5");
+						classifier.getClassifier().getCapabilities().testWithFail(RandomSearch.this.dataset);
+						interruptTask.cancel();
+
+						Map<String, Object> map = new HashMap<>();
+						map.put("runType", "finished");
+						map.put("runTime", (System.currentTimeMillis() - startTime));
+						RandomSearch.this.getEventBus().post(new CandidateEvaluatedEventImpl(Thread.currentThread().getName(), ci, RandomSearch.this.orderNo.getAndIncrement(), map));
+					} catch (InterruptedException e) {
+						Map<String, Object> map = new HashMap<>();
+						map.put("runType", "interrutped");
+						map.put("runTime", (System.currentTimeMillis() - startTime));
+						LOGGER.info("Got interrupted which is a good sign, thus send success event!");
+						RandomSearch.this.getEventBus().post(new CandidateEvaluatedEventImpl(Thread.currentThread().getName(), ci, RandomSearch.this.orderNo.getAndIncrement(), map));
+					} catch (Exception e) {
+						interruptTask.cancel();
+						LOGGER.info("Capabilities do not match, send fail event!");
+						RandomSearch.this.getEventBus().post(new CandidateEvaluatedEventImpl(Thread.currentThread().getName(), ci, RandomSearch.this.orderNo.getAndIncrement(), ExceptionUtils.getStackTrace(e)));
+					}
 				}
+			} catch (Throwable e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -134,7 +155,16 @@ public class RandomSearch implements IListenable {
 			while (!queue.isEmpty()) {
 				ComponentInstance currentCI = queue.remove(0);
 				if (!currentCI.getComponent().getParameters().isEmpty()) {
-					currentCI.getParameterValues().putAll(ComponentUtil.randomParameterizationOfComponent(currentCI.getComponent(), this.rand).getParameterValues());
+					ComponentInstance parametrization = null;
+					while (parametrization == null) {
+						try {
+							parametrization = ComponentUtil.randomParameterizationOfComponent(currentCI.getComponent(), this.rand);
+						} catch (Exception e) {
+							LOGGER.warn("Could not instantiate component instance {} with random parameters", ciToInstantiate, e);
+						}
+					}
+					currentCI.getParameterValues().putAll(parametrization.getParameterValues());
+
 				}
 
 				if (!currentCI.getSatisfactionOfRequiredInterfaces().isEmpty()) {
@@ -147,7 +177,7 @@ public class RandomSearch implements IListenable {
 	}
 
 	public static void main(final String[] args) throws Exception {
-		RandomSearch rs = new RandomSearch(40, new Timeout(24, TimeUnit.HOURS), new Timeout(600, TimeUnit.SECONDS), null);
+		RandomSearch rs = new RandomSearch(6, new Timeout(24, TimeUnit.HOURS), new Timeout(600, TimeUnit.SECONDS), null);
 		rs.registerListener(new Object() {
 			@Subscribe
 			public void rcvEvent(final Object event) {

@@ -1,22 +1,25 @@
 package ai.libs.hyperopt.example.meka;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.api4.java.algorithm.Timeout;
 import org.api4.java.common.attributedobjects.IObjectEvaluator;
 
 import ai.libs.hasco.model.Component;
 import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.hasco.model.Parameter;
+import ai.libs.hasco.model.ParameterRefinementConfiguration;
 import ai.libs.hyperopt.api.IConverter;
-import ai.libs.hyperopt.api.IOptimizationTask;
-import ai.libs.hyperopt.impl.model.OptimizationTask;
+import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
+import ai.libs.hyperopt.impl.model.PlanningOptimizationTask;
 import ai.libs.jaicore.ml.classification.multilabel.learner.IMekaClassifier;
 
-public class MekaOptimizationTask extends OptimizationTask<IMekaClassifier> implements IOptimizationTask<IMekaClassifier> {
+public class MekaOptimizationTask extends PlanningOptimizationTask<IMekaClassifier> implements IPlanningOptimizationTask<IMekaClassifier> {
 
-	public MekaOptimizationTask(final IConverter<ComponentInstance, IMekaClassifier> converter, final IObjectEvaluator<IMekaClassifier, Double> evaluator, final int numCpus, final Collection<Component> components,
-			final String requestedInterface, final Timeout globalTimeout, final Timeout evaluationTimeout) {
-		super(converter, evaluator, numCpus, components, requestedInterface, globalTimeout, evaluationTimeout);
+	public MekaOptimizationTask(final IConverter<ComponentInstance, IMekaClassifier> converter, final IObjectEvaluator<IMekaClassifier, Double> evaluator, final Collection<Component> components, final String requestedInterface,
+			final Timeout globalTimeout, final Timeout evaluationTimeout, final Map<Component, Map<Parameter, ParameterRefinementConfiguration>> parameterRefinementConfiguration) {
+		super(converter, evaluator, components, requestedInterface, globalTimeout, evaluationTimeout, parameterRefinementConfiguration);
 	}
 
 }

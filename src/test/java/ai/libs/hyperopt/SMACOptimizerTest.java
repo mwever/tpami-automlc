@@ -13,8 +13,8 @@ import org.junit.Test;
 import ai.libs.hasco.model.Component;
 import ai.libs.hasco.serialization.ComponentLoader;
 import ai.libs.hyperopt.impl.model.OptimizationTask;
-import ai.libs.hyperopt.impl.optimizer.smac.SMACOptimizer;
-import ai.libs.hyperopt.impl.optimizer.smac.SMACOptimizerConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.smac.SMACOptimizer;
+import ai.libs.hyperopt.impl.optimizer.pcs.smac.SMACOptimizerConfig;
 import ai.libs.jaicore.ml.weka.classification.learner.IWekaClassifier;
 
 public class SMACOptimizerTest {

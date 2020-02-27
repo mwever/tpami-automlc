@@ -12,7 +12,7 @@ import ai.libs.hasco.model.Component;
 import ai.libs.hasco.serialization.ComponentLoader;
 import ai.libs.hyperopt.impl.HASCOToPCSConverter;
 import ai.libs.hyperopt.impl.model.OptimizationTask;
-import ai.libs.hyperopt.impl.optimizer.HyperBandOptimizer;
+import ai.libs.hyperopt.impl.optimizer.pcs.HyperBandOptimizer;
 import ai.libs.jaicore.ml.weka.classification.learner.IWekaClassifier;
 import ai.libs.mlplan.multiclass.wekamlplan.weka.WekaPipelineFactory;
 

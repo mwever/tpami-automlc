@@ -16,8 +16,8 @@ import ai.libs.hasco.model.Parameter;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedComponentProto;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedEvaluationResponseProto;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedOptimizerServiceGrpc.PCSBasedOptimizerServiceImplBase;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedParameterProto;
-import ai.libs.hyperopt.api.IOptimizationTask;
 import io.grpc.stub.StreamObserver;
 
 /**

@@ -2,11 +2,13 @@ package de.upb.ml2plan.event;
 
 import java.util.Map;
 
-import ai.libs.hasco.model.ComponentInstance;
+import org.api4.java.algorithm.events.IAlgorithmEvent;
 
-public interface CandidateEvaluatedEvent {
+import ai.libs.hyperopt.api.output.IOptimizationOutput;
 
-	public ComponentInstance getComponentInstance();
+public interface CandidateEvaluatedEvent<M> extends IAlgorithmEvent {
+
+	public IOptimizationOutput<M> getOptimizationOutput();
 
 	public Map<String, Object> getEvaluationReport();
 

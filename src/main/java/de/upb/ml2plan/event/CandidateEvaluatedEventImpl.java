@@ -2,36 +2,38 @@ package de.upb.ml2plan.event;
 
 import java.util.Map;
 
-import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.hyperopt.api.output.IOptimizationOutput;
 
-public class CandidateEvaluatedEventImpl implements CandidateEvaluatedEvent {
+public class CandidateEvaluatedEventImpl<M> implements CandidateEvaluatedEvent<M> {
 
 	private final String threadID;
-	private final ComponentInstance componentInstance;
+	private final IOptimizationOutput<M> optOut;
 	private final int orderNo;
+	private final long timestamp;
 
 	private Map<String, Object> evaluationReport;
 	private String exception;
 
-	private CandidateEvaluatedEventImpl(final String threadID, final ComponentInstance componentInstance, final int orderNo) {
+	private CandidateEvaluatedEventImpl(final String threadID, final IOptimizationOutput<M> optOut, final int orderNo) {
 		this.threadID = threadID;
-		this.componentInstance = componentInstance;
+		this.optOut = optOut;
 		this.orderNo = orderNo;
+		this.timestamp = System.currentTimeMillis();
 	}
 
-	public CandidateEvaluatedEventImpl(final String threadID, final ComponentInstance componentInstance, final int orderNo, final Map<String, Object> evaluationReport) {
-		this(threadID, componentInstance, orderNo);
+	public CandidateEvaluatedEventImpl(final String threadID, final IOptimizationOutput<M> optOut, final int orderNo, final Map<String, Object> evaluationReport) {
+		this(threadID, optOut, orderNo);
 		this.evaluationReport = evaluationReport;
 	}
 
-	public CandidateEvaluatedEventImpl(final String threadID, final ComponentInstance componentInstance, final int orderNo, final String exception) {
-		this(threadID, componentInstance, orderNo);
+	public CandidateEvaluatedEventImpl(final String threadID, final IOptimizationOutput<M> optOut, final int orderNo, final String exception) {
+		this(threadID, optOut, orderNo);
 		this.exception = exception;
 	}
 
 	@Override
-	public ComponentInstance getComponentInstance() {
-		return this.componentInstance;
+	public IOptimizationOutput<M> getOptimizationOutput() {
+		return this.optOut;
 	}
 
 	@Override
@@ -64,9 +66,19 @@ public class CandidateEvaluatedEventImpl implements CandidateEvaluatedEvent {
 			sb.append(" ").append(this.evaluationReport);
 		}
 
-		sb.append(" ").append(this.componentInstance.toString());
+		sb.append(" ").append(this.optOut.toString());
 
 		return sb.toString();
+	}
+
+	@Override
+	public String getAlgorithmId() {
+		return this.threadID;
+	}
+
+	@Override
+	public long getTimestamp() {
+		return this.timestamp;
 	}
 
 }

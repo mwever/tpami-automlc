@@ -13,8 +13,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hyperopt.impl.optimizer.smac.SMACOptimizer;
-import ai.libs.hyperopt.impl.optimizer.smac.SMACOptimizerConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.smac.SMACOptimizer;
+import ai.libs.hyperopt.impl.optimizer.pcs.smac.SMACOptimizerConfig;
 import ai.libs.jaicore.basic.FileUtil;
 
 /**
