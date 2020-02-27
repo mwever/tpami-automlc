@@ -1,60 +1,55 @@
 package ai.libs.hyperopt.impl.optimizer.baseline;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.api4.java.algorithm.events.IAlgorithmEvent;
 import org.api4.java.algorithm.exceptions.AlgorithmException;
 import org.api4.java.algorithm.exceptions.AlgorithmExecutionCanceledException;
 import org.api4.java.algorithm.exceptions.AlgorithmTimeoutedException;
+import org.api4.java.common.attributedobjects.IObjectEvaluator;
+import org.api4.java.common.attributedobjects.ObjectEvaluationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.EventBus;
-
+import ai.libs.hasco.core.Util;
 import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.hyperopt.api.ConversionFailedException;
 import ai.libs.hyperopt.api.IOptimizer;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.impl.model.OptimizationOutput;
+import ai.libs.hyperopt.util.ComponentUtil;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
-import de.upb.ml2plan.event.CandidateEvaluatedEventImpl;
-import de.upb.ml2plan.randomsearch.ComponentUtil;
 
 public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizationOutput<M>, Double> implements IOptimizer<IPlanningOptimizationTask<M>, M> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RandomSearch.class);
 
 	private Lock lock = new ReentrantLock();
-	private Condition globalTimeout = this.lock.newCondition();
+	private Semaphore globalTimeoutSynchro = new Semaphore(0);
 
-	private final AtomicInteger orderNo = new AtomicInteger(0);
-
-	private EventBus eventBus;
 	private final List<ComponentInstance> allSelections;
+	private final IObjectEvaluator<ComponentInstance, Double> evaluator;
+
+	private final long timestamp = System.currentTimeMillis();
 
 	private ExecutorService pool;
 
 	public RandomSearch(final IOptimizerConfig config, final IPlanningOptimizationTask<M> input) {
 		super(config, input);
 		this.allSelections = new ArrayList<>(ComponentUtil.getAllAlgorithmSelectionInstances(input.getRequestedInterface(), input.getComponents()));
+		this.evaluator = input.getDirectEvaluator(this.getClass().getSimpleName());
 	}
 
 	@Override
@@ -66,8 +61,8 @@ public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IO
 			return super.activate();
 		case ACTIVE:
 			IntStream.range(0, this.getNumCPUs()).mapToObj(x -> new RandomSearchWorker(x)).forEach(this.pool::submit);
-			boolean signalled = this.globalTimeout.await(this.getInput().getGlobalTimeout().milliseconds(), TimeUnit.MILLISECONDS);
-			if (!signalled) {
+			boolean timeouted = !this.globalTimeoutSynchro.tryAcquire(this.getNumCPUs(), this.getInput().getGlobalTimeout().milliseconds(), TimeUnit.MILLISECONDS);
+			if (timeouted) {
 				this.cancel();
 			}
 			return this.terminate();
@@ -79,8 +74,6 @@ public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IO
 	class RandomSearchWorker implements Runnable {
 		private int id;
 		private Random rand;
-		private M evaluableObject;
-		private Double score;
 
 		public RandomSearchWorker(final int id) {
 			this.id = id;
@@ -89,68 +82,35 @@ public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IO
 
 		@Override
 		public void run() {
-			while (!RandomSearch.this.isCanceled()) {
-				Map<String, Object> map = new HashMap<>();
-
-				LOGGER.info("Sample new candidate...");
-				ComponentInstance ci = this.sampleRandomComponent();
-				this.evaluableObject = null;
-				this.score = null;
-
-				// Define future task
-				Callable<IOptimizationOutput<M>> futureCall = new Callable<IOptimizationOutput<M>>() {
-					@Override
-					public IOptimizationOutput<M> call() throws Exception {
-						long startTimestamp = System.currentTimeMillis();
-						RandomSearchWorker.this.evaluableObject = RandomSearch.this.getInput().getConverter().convert(ci);
-						RandomSearchWorker.this.score = RandomSearch.this.getInput().getEvaluator().evaluate(RandomSearchWorker.this.evaluableObject);
-						map.put("evalTime", (System.currentTimeMillis() - startTimestamp));
-						map.put("internalScore", RandomSearchWorker.this.score);
-						map.put("exitState", "done");
-						return new OptimizationOutput<>(RandomSearchWorker.this.evaluableObject, RandomSearchWorker.this.score, ci);
+			try {
+				while (!RandomSearch.this.isCanceled()) {
+					LOGGER.trace("Sample new candidate...");
+					ComponentInstance ci = this.sampleRandomComponent();
+					try {
+						LOGGER.trace("Evaluate candidate.");
+						Double score = RandomSearch.this.evaluator.evaluate(ci);
+						LOGGER.trace("Create candidate output object.");
+						IOptimizationOutput<M> candidate = new OptimizationOutput<>(RandomSearch.this.timestamp, RandomSearch.this.getInput().getConverter().convert(ci), score, ci);
+						LOGGER.info("Found candidate with score {} ({}).", score, ci);
+						RandomSearch.this.lock.lock();
+						try {
+							RandomSearch.this.updateBestSeenSolution(candidate);
+						} finally {
+							RandomSearch.this.lock.unlock();
+						}
+					} catch (ConversionFailedException e) {
+						LOGGER.info("Could not convert candidate {} into an executable object and a respective entry has been logged to the evaluation table.", Util.getComponentNamesOfComposition(ci));
+					} catch (ObjectEvaluationFailedException e) {
+						LOGGER.info("Could not evaluate candidate {} and a respective entry has been logged to the evaluation table.", Util.getComponentNamesOfComposition(ci));
+					} catch (InterruptedException e) {
+						LOGGER.info("Thread {} has been interrupted, thus, shutting down this thread.");
+						break;
 					}
-				};
-				FutureTask<IOptimizationOutput<M>> run = new FutureTask<>(futureCall);
-
-				Thread future = new Thread(run);
-				long starttime = System.currentTimeMillis();
-				try {
-					future.start();
-					IOptimizationOutput<M> result = run.get(RandomSearch.this.getInput().getEvaluationTimeout().milliseconds(), TimeUnit.MILLISECONDS);
-					if (result == null) {
-						throw new NullPointerException("The result of the future task was null.");
-					}
-					map.put("runtime", (System.currentTimeMillis() - starttime));
-					LOGGER.info("Evaluated candidate {} with score {} in time {}ms", "x", result.getScore());
-					this.sendEvent(result, map);
-				} catch (TimeoutException e) {
-					LOGGER.info("A timeout occurred for the evaluation task as the future is not yet done."); // execution of candidate timed out.
-					future.interrupt(); // ensure that future task thread is shutting down
-					map.put("exitState", "timeout");
-					map.put("internalScore", 20000);
-					map.put("runtime", (System.currentTimeMillis() - starttime));
-					this.sendEvent(new OptimizationOutput<>(this.evaluableObject, this.score, ci), map);
-				} catch (InterruptedException e) {
-					LOGGER.info("Worker thread got interrupted, so forward the interrupt to the current future task.");
-					future.interrupt(); // forward interrupt to candidate evaluation future
-					map.put("exitState", "interrutped");
-					map.put("internalScore", 10000);
-					map.put("runTime", (System.currentTimeMillis() - starttime));
-					this.sendEvent(new OptimizationOutput<>(this.evaluableObject, this.score, ci), map);
-				} catch (Exception e) {
-					LOGGER.warn("An unexpected exception occurred!");
-					future.interrupt(); // ensure future is exited.
-					this.sendEvent(new OptimizationOutput<>(this.evaluableObject, this.score, ci), e); // send event with exception stack trace.
 				}
+			} finally {
+				LOGGER.info("Releasing one permit on the global timeout synchronization as this thread is going to shutdown");
+				RandomSearch.this.globalTimeoutSynchro.release();
 			}
-		}
-
-		private void sendEvent(final IOptimizationOutput<M> result, final Map<String, Object> map) {
-			RandomSearch.this.getEventBus().post(new CandidateEvaluatedEventImpl<>(Thread.currentThread().getName(), result, RandomSearch.this.orderNo.getAndIncrement(), map));
-		}
-
-		private void sendEvent(final IOptimizationOutput<M> result, final Throwable e) {
-			RandomSearch.this.getEventBus().post(new CandidateEvaluatedEventImpl<>(Thread.currentThread().getName(), result, RandomSearch.this.orderNo.getAndIncrement(), ExceptionUtils.getStackTrace(e)));
 		}
 
 		/**
@@ -158,9 +118,12 @@ public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IO
 		 * @return The random component instantiation of an MLC Meka classifier.
 		 */
 		private ComponentInstance sampleRandomComponent() {
+			LOGGER.trace("Sample uniformly algorithm selection.");
 			ComponentInstance ciToInstantiate = new ComponentInstance(RandomSearch.this.allSelections.get(this.rand.nextInt(RandomSearch.this.allSelections.size())));
 			List<ComponentInstance> queue = new LinkedList<>();
 			queue.add(ciToInstantiate);
+
+			LOGGER.trace("Sample parameters for contained components.");
 			while (!queue.isEmpty()) {
 				ComponentInstance currentCI = queue.remove(0);
 				if (!currentCI.getComponent().getParameters().isEmpty()) {
@@ -181,21 +144,9 @@ public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IO
 				}
 			}
 
+			LOGGER.trace("Return randomly sampled component instance.");
 			return ciToInstantiate;
 		}
-	}
-
-	@Override
-	public void registerListener(final Object listener) {
-		this.eventBus.register(listener);
-	}
-
-	public void unregisterListener(final Object listener) {
-		this.eventBus.unregister(listener);
-	}
-
-	public EventBus getEventBus() {
-		return this.eventBus;
 	}
 
 	@Override
@@ -215,7 +166,6 @@ public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IO
 	@Override
 	public void cancel() {
 		super.cancel();
-		this.globalTimeout.notify();
 		this.pool.shutdownNow();
 	}
 }

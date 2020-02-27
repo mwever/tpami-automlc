@@ -11,11 +11,19 @@ public class EventForwarder {
 	public EventForwarder(final EventBus source, final EventBus target) {
 		this.source = source;
 		this.target = target;
-		this.source.register(this);
+		if (this.source != null) {
+			this.source.register(this);
+		}
+	}
+
+	public EventForwarder(final EventBus target) {
+		this(null, target);
 	}
 
 	public void cancel() {
-		this.source.unregister(this);
+		if (this.source != null) {
+			this.source.unregister(this);
+		}
 	}
 
 	@Subscribe

@@ -16,4 +16,6 @@ public interface IOptimizationOutput<M> extends ScoredItem<Double> {
 
 	public long getTimestamp();
 
+	public long getTimeUntilFound();
+
 }

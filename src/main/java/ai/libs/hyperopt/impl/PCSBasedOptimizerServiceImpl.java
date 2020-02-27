@@ -16,8 +16,8 @@ import ai.libs.hasco.model.Parameter;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedComponentProto;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedEvaluationResponseProto;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedOptimizerServiceGrpc.PCSBasedOptimizerServiceImplBase;
-import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedParameterProto;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
 import io.grpc.stub.StreamObserver;
 
 /**
@@ -50,7 +50,7 @@ public class PCSBasedOptimizerServiceImpl<M> extends PCSBasedOptimizerServiceImp
 		Double score = 0.0;
 		try {
 			System.out.println(componentInstance);
-			score = this.input.getDirectEvaluator().evaluate(componentInstance);
+			score = this.input.getDirectEvaluator(this.getClass().getSimpleName()).evaluate(componentInstance);
 		} catch (InterruptedException | ObjectEvaluationFailedException e) {
 			e.printStackTrace();
 		}

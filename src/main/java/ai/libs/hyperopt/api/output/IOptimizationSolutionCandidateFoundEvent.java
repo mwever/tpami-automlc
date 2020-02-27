@@ -20,4 +20,6 @@ public interface IOptimizationSolutionCandidateFoundEvent<M> extends IScoredSolu
 
 	public Map<String, ? extends Object> getEvaluationReport();
 
+	public long getTimeUntilFound();
+
 }

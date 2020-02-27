@@ -19,12 +19,13 @@ import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.impl.model.OptimizationOutput;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
 import ai.libs.jaicore.planning.hierarchical.algorithms.forwarddecomposition.graphgenerators.tfd.TFDNode;
-import ai.libs.jaicore.search.algorithms.standard.bestfirst.events.RolloutEvent;
 import ai.libs.jaicore.search.probleminputs.GraphSearchWithPathEvaluationsInput;
 
 public abstract class AHTNBasedOptimizer<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizationOutput<M>, Double> implements IOptimizer<IPlanningOptimizationTask<M>, M> {
 
 	private HASCOViaFDFactory<GraphSearchWithPathEvaluationsInput<TFDNode, String, Double>, Double> factory;
+
+	private final long timestamp = System.currentTimeMillis();
 
 	@SuppressWarnings("unchecked")
 	public AHTNBasedOptimizer(final IOptimizerConfig config, final IPlanningOptimizationTask<M> input) {
@@ -42,19 +43,10 @@ public abstract class AHTNBasedOptimizer<M> extends AOptimizer<IPlanningOptimiza
 			algo.setTimeout(this.getInput().getGlobalTimeout());
 			algo.registerListener(new Object() {
 				@Subscribe
-				public void rcvEVent(final Object event) {
-					System.out.println(event.getClass());
-
-					if (event instanceof RolloutEvent) {
-						System.out.println(((RolloutEvent) event).getScore());
-					}
-				}
-
-				@Subscribe
 				public void rcvEvent(final HASCOSolutionEvent<Double> event) {
 					try {
-						AHTNBasedOptimizer.this.updateBestSeenSolution(new OptimizationOutput<M>(AHTNBasedOptimizer.this.getInput().getConverter().convert(event.getSolutionCandidate().getComponentInstance()), event.getScore(),
-								event.getSolutionCandidate().getComponentInstance()));
+						AHTNBasedOptimizer.this.updateBestSeenSolution(new OptimizationOutput<M>(AHTNBasedOptimizer.this.timestamp,
+								AHTNBasedOptimizer.this.getInput().getConverter().convert(event.getSolutionCandidate().getComponentInstance()), event.getScore(), event.getSolutionCandidate().getComponentInstance()));
 					} catch (ConversionFailedException e) {
 						e.printStackTrace();
 					}

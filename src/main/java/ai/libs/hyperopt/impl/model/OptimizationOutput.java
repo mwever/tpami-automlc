@@ -17,17 +17,20 @@ public class OptimizationOutput<M> implements IOptimizationOutput<M> {
 	private long timestamp;
 	/** <Optional> KVStore for storing additional annotations/information. */
 	private Map<String, ? extends Object> evaluationReport = null;
+	/** The time needed to find this candidate. */
+	private long timeUntilFound;
 
-	public OptimizationOutput(final M object, final Double score, final ComponentInstance solutionDescription, final Map<String, ? extends Object> annotations) {
+	public OptimizationOutput(final long timestampOptStarted, final M object, final Double score, final ComponentInstance solutionDescription, final Map<String, ? extends Object> annotations) {
 		this.object = object;
 		this.score = score;
 		this.solutionDescription = solutionDescription;
 		this.evaluationReport = annotations;
 		this.timestamp = System.currentTimeMillis();
+		this.timeUntilFound = this.timestamp - timestampOptStarted;
 	}
 
-	public OptimizationOutput(final M object, final Double score, final ComponentInstance solutionDescription) {
-		this(object, score, solutionDescription, null);
+	public OptimizationOutput(final long timestampOptStarted, final M object, final Double score, final ComponentInstance solutionDescription) {
+		this(timestampOptStarted, object, score, solutionDescription, null);
 	}
 
 	@Override
@@ -53,6 +56,11 @@ public class OptimizationOutput<M> implements IOptimizationOutput<M> {
 	@Override
 	public long getTimestamp() {
 		return this.timestamp;
+	}
+
+	@Override
+	public long getTimeUntilFound() {
+		return this.timeUntilFound;
 	}
 
 }

@@ -62,4 +62,9 @@ public class OptimizationSolutionCandidateFoundEvent<M> implements IOptimization
 		return this.output.getEvaluationReport();
 	}
 
+	@Override
+	public long getTimeUntilFound() {
+		return this.output.getTimeUntilFound();
+	}
+
 }

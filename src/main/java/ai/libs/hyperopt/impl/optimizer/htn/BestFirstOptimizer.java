@@ -5,9 +5,6 @@ import org.api4.java.ai.graphsearch.problem.pathsearch.pathevaluation.IPathEvalu
 import org.api4.java.ai.graphsearch.problem.pathsearch.pathevaluation.PathEvaluationException;
 import org.api4.java.datastructure.graph.ILabeledPath;
 
-import com.google.common.eventbus.Subscribe;
-
-import ai.libs.hasco.core.HASCO;
 import ai.libs.hasco.core.HASCOConfig;
 import ai.libs.hasco.core.RefinementConfiguredSoftwareConfigurationProblem;
 import ai.libs.hasco.core.SoftwareConfigurationProblem;
@@ -39,12 +36,6 @@ public class BestFirstOptimizer<M> extends AHTNBasedOptimizer<M> {
 		SoftwareConfigurationProblem<Double> coreProblem = new SoftwareConfigurationProblem<>(input.getComponents(), input.getRequestedInterface(), input.getDirectEvaluator(this.getClass().getSimpleName()));
 		this.hascoFactory.setProblemInput(new RefinementConfiguredSoftwareConfigurationProblem<>(coreProblem, input.getParameterRefinementConfiguration()));
 		this.algo = this.hascoFactory.getAlgorithm();
-		((HASCO) this.algo).getSearch().registerListener(new Object() {
-			@Subscribe
-			public void rcvEvent(final Object e) {
-				System.out.println("BestFirstOptimizer: " + e.getClass().getName());
-			}
-		});
 		this.algo.setNumCPUs(config.cpus());
 
 	}

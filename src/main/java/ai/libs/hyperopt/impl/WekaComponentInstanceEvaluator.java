@@ -73,7 +73,7 @@ public class WekaComponentInstanceEvaluator implements IComponentInstanceEvaluat
 		} catch (Exception e) {
 			this.logger.error(LoggerUtil.getExceptionInfo(e));
 		}
-		PCSBasedOptimizationEvent event = new PCSBasedOptimizationEvent(componentInstance, score, this.algorithmId);
+		PCSBasedOptimizationEvent event = new PCSBasedOptimizationEvent(null, componentInstance, score, this.algorithmId);
 		this.eventBus.post(event);
 		return score;
 	}
