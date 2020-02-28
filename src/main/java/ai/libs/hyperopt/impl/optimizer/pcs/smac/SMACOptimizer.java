@@ -114,7 +114,7 @@ public class SMACOptimizer<M> extends APCSBasedOptimizer<M> {
 			LOGGER.error(e.getMessage());
 			LOGGER.error("Unable spawn python process={} in path={}", command, this.getConfig().getExecutionPath());
 		}
-		BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		BufferedReader r = new BufferedReader(new  InputStreamReader(p.getInputStream()));
 
 		String line = null;
 		List<String> smacOutLines = new ArrayList<>();
