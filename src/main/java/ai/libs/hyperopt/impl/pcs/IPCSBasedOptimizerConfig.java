@@ -8,7 +8,7 @@ import java.util.Properties;
 
 import org.aeonbits.owner.ConfigFactory;
 
-import ai.libs.hyperopt.api.IOptimizerConfig;
+import ai.libs.hyperopt.api.input.IOptimizerConfig;
 
 /**
  *

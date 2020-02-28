@@ -8,33 +8,33 @@ import org.api4.java.common.attributedobjects.IObjectEvaluator;
 import ai.libs.hasco.model.Component;
 import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.IConverter;
-import ai.libs.hyperopt.api.IOptimizationTask;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
+import ai.libs.hyperopt.impl.evaluator.AutoConvertingObjectEvaluator;
 
 public class OptimizationTask<M> implements IOptimizationTask<M> {
 
 	private final IConverter<ComponentInstance, M> converter;
 	private final IObjectEvaluator<M, Double> evaluator;
 
-	private int numCpus;
 	private Timeout globalTimeout;
 	private Timeout evaluationTimeout;
 
 	private final Collection<Component> components;
 	private final String requestedInterface;
+	private IObjectEvaluator<ComponentInstance, Double> directEvaluator;
 
 	/**
 	 * Standard c'tor defining an optimization task.
 	 * @param converter Converter for transforming component instances into an evaluable object.
 	 * @param evaluator The evaluator for assessing the quality of an object.
 	 */
-	public OptimizationTask(final IConverter<ComponentInstance, M> converter, final IObjectEvaluator<M, Double> evaluator, final int numCpus, final Collection<Component> components, final String requestedInterface,
-			final Timeout globalTimeout, final Timeout evaluationTimeout) {
+	public OptimizationTask(final IConverter<ComponentInstance, M> converter, final IObjectEvaluator<M, Double> evaluator, final Collection<Component> components, final String requestedInterface, final Timeout globalTimeout,
+			final Timeout evaluationTimeout) {
 		// Components for the execution of the optimization task
 		this.converter = converter;
 		this.evaluator = evaluator;
 
 		// Technical specifications of the optimization task
-		this.numCpus = numCpus;
 		this.globalTimeout = globalTimeout;
 		this.evaluationTimeout = evaluationTimeout;
 
@@ -54,8 +54,11 @@ public class OptimizationTask<M> implements IOptimizationTask<M> {
 	}
 
 	@Override
-	public int getNumCpus() {
-		return this.numCpus;
+	public IObjectEvaluator<ComponentInstance, Double> getDirectEvaluator(final String algorithmID) {
+		if (this.directEvaluator == null) {
+			this.directEvaluator = new AutoConvertingObjectEvaluator<>(algorithmID, this.converter, this.evaluator);
+		}
+		return this.directEvaluator;
 	}
 
 	@Override
@@ -76,11 +79,6 @@ public class OptimizationTask<M> implements IOptimizationTask<M> {
 	@Override
 	public Timeout getEvaluationTimeout() {
 		return this.evaluationTimeout;
-	}
-
-	@Override
-	public void setNumCpus(final int numCpus) {
-		this.numCpus = numCpus;
 	}
 
 	@Override

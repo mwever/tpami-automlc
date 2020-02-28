@@ -14,7 +14,7 @@ plugins {
 	id 'java'
 	id 'eclipse'
 	id 'idea'
-	id 'org.openjfx.javafxplugin' version '0.0.5'
+	//id 'org.openjfx.javafxplugin' version '0.0.5'
 }
 apply plugin: 'com.github.johnrengelman.shadow'
 
@@ -25,9 +25,9 @@ eclipse {
     }
 }
 
-javafx {
-    modules = [ 'javafx.controls', 'javafx.swing', 'javafx.web' ]
-}
+//javafx {
+//    modules = [ 'javafx.controls', 'javafx.swing', 'javafx.web' ]
+//}
 
 sourceSets {
     main {
@@ -107,7 +107,7 @@ shadowJar {
 jar {
     manifest {
         attributes(
-            'Main-Class': "de.upb.ml2plan.randomsearch.RandomSearch"
+            'Main-Class': "ai.libs.hyperopt.experimenter.AutoMLCExperimenter"
         )
     }
 }

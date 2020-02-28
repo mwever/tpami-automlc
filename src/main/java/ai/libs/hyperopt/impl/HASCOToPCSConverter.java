@@ -26,7 +26,7 @@ import ai.libs.hasco.model.Dependency;
 import ai.libs.hasco.model.IParameterDomain;
 import ai.libs.hasco.model.NumericParameterDomain;
 import ai.libs.hasco.model.Parameter;
-import ai.libs.hyperopt.api.IOptimizationTask;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.jaicore.basic.sets.Pair;
 
 /**

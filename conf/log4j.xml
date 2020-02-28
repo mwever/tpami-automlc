@@ -55,8 +55,44 @@
     <appender-ref ref="traceFileAppender" />
   </logger>
   
+  <logger name="ai.libs.jaicore">
+    <level value="warn" />
+  </logger>
+  
+  <logger name="ai.libs.hyperopt.example.meka.MekaClassifierEvaluator">
+    <level value="warn" />
+  </logger>
+  
+  <logger name="ai.libs.hasco">
+    <level value="info" />
+  </logger>
+  
+  <logger name="ai.libs.hasco.core.IsValidParameterRangeRefinementPredicate">
+    <level value="warn" />
+  </logger>
+  
+  <logger name="ai.libs.hasco.core.IsRefinementCompletedPredicate">
+    <level value="warn" />
+  </logger>
+  
+  <logger name="ai.libs.hasco.core.Util">
+    <level value="warn" />
+  </logger>
+  
+  
+  
+  
   <logger name="ai.libs.jaicore.ml.core.filter">
     <level value="warn" />
+  </logger>
+  
+  <logger name="de.upb">
+    <level value="debug" />
+    <appender-ref ref="console" />
+    <appender-ref ref="infoFileAppender" />
+    <appender-ref ref="warnFileAppender" />
+    <appender-ref ref="errFileAppender" />
+    <appender-ref ref="traceFileAppender" />
   </logger>
   
   <logger name="ai.libs.jaicore.basic.algorithm.GeneralAlgorithmTester">

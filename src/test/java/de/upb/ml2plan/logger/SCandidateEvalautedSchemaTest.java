@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import ai.libs.hyperopt.logger.SCandidateEvaluatedSchema;
+import ai.libs.hyperopt.util.DBSchemaUtil;
+
 public class SCandidateEvalautedSchemaTest {
 
 	@Test

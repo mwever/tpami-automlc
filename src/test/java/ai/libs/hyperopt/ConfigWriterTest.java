@@ -5,7 +5,7 @@ import java.io.File;
 import org.aeonbits.owner.ConfigFactory;
 import org.junit.Test;
 
-import ai.libs.hyperopt.impl.optimizer.smac.SMACOptimizerConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.smac.SMACOptimizerConfig;
 import ai.libs.hyperopt.util.ScenarioFileUtil;
 
 public class ConfigWriterTest {

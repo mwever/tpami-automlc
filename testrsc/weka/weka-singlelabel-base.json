@@ -50,8 +50,11 @@
 		{
 			"pre": "S in {true}",
 			"post": "U in {false}"
+		},
+		{
+			"pre": "U in {true}",
+			"post": "C in [0.25,0.25]"
 		}
-
 	]
   },
 		{
