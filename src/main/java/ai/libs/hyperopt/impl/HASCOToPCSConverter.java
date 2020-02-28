@@ -61,7 +61,7 @@ public class HASCOToPCSConverter {
 	 * @param outputDir path to folder that should contain the generated pcs file
 	 * @throws Exception
 	 */
-	public static void generatePCSFile(final IOptimizationTask<?> input, final File outputFile) throws Exception {
+	public static String generatePCSFile(final IOptimizationTask<?> input, final File executionPath) throws Exception {
 		dependendParameterMap = new HashMap<>();
 		componentConditionals = new HashMap<>();
 		Collection<Component> components = input.getComponents();
@@ -71,7 +71,8 @@ public class HASCOToPCSConverter {
 		}
 
 		resolveInterfaces(components, requestedInterface);
-		toPCS(components, requestedInterface, outputFile);
+		toPCS(components, requestedInterface, new File(executionPath, input.getRequestedInterface()+".pcs"));
+		return input.getRequestedInterface()+".pcs";
 	}
 
 	private static void resolveInterfaces(final Collection<Component> components, final String requestedInterface) {

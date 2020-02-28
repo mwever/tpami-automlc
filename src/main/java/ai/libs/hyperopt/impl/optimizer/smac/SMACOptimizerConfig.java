@@ -19,6 +19,7 @@ public interface SMACOptimizerConfig extends IPCSBasedOptimizerConfig {
 	public static final String K_SMAC_CFG_RUN_COUNT_LIMIT = "smac.cfg.run_count_limit";
 	public static final String K_SMAC_CFG_WALL_CLOCK_LIMIT = "smac.cfg.wall_clock_limit";
 	public static final String K_SMAC_CFG_PARAM_FILE = "smac.cfg.paramfile";
+	public static final String K_SMAC_CFG_ALGO = "smac.cfg.algo";
 
 	@Key(K_SMAC_EXEC_PATH)
 	public String getExecutionPath();
@@ -38,12 +39,14 @@ public interface SMACOptimizerConfig extends IPCSBasedOptimizerConfig {
 	public Integer getAlwaysRaceDefault();
 
 	@Key(K_SMAC_CFG_COST_FOR_CRASH)
+	@DefaultValue("2147483647.0")
 	public Double getCostForCrash();
 
 	@Key(K_SMAC_CFG_CUTOFF)
 	public Double getCutoff();
 
 	@Key(K_SMAC_CFG_DETERMINISTIC)
+	@DefaultValue("true")
 	public Integer getDeterministic();
 
 	@Key(K_SMAC_CFG_MEMORY_LIMIT)
@@ -53,7 +56,12 @@ public interface SMACOptimizerConfig extends IPCSBasedOptimizerConfig {
 	public String getOverallObj();
 
 	@Key(K_SMAC_CFG_RUN_OBJ)
+	@DefaultValue("quality")
 	public String getRunObj();
+	
+	@Key(K_SMAC_CFG_ALGO)
+	@DefaultValue("python SMACOptimizerClient.py")
+	public String getAlgo();
 
 	@Key(K_SMAC_CFG_RUN_COUNT_LIMIT)
 	public Integer getRunCountLimit();

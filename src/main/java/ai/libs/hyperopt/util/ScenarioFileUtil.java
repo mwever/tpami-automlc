@@ -66,7 +66,7 @@ public class ScenarioFileUtil {
 
 	public static void propertiesToScenarioText(final File outputFile, final SMACOptimizerConfig config, final String... keysToWriteIntoScenario) {
 		StringBuilder sb = new StringBuilder();
-		Arrays.stream(keysToWriteIntoScenario).filter(x -> config.getProperty(x) != null).map(x -> x.substring(x.lastIndexOf('.') + 1) + "=" + config.getProperty(x) + "\n").forEach(sb::append);
+		Arrays.stream(keysToWriteIntoScenario).filter(x -> config.getProperty(x) != null).map(x -> x.substring(x.lastIndexOf('.') + 1) + " = " + config.getProperty(x) + "\n").forEach(sb::append);
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
 			bw.write(sb.toString());
 		} catch (IOException e) {

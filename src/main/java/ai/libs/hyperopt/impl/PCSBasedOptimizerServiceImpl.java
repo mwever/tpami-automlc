@@ -33,6 +33,7 @@ public class PCSBasedOptimizerServiceImpl<M> extends PCSBasedOptimizerServiceImp
 
 	public PCSBasedOptimizerServiceImpl(final IOptimizationTask<M> input) {
 		this.input = input;
+		this.parameterMapping = new HashMap<>();
 	}
 
 	/**
@@ -80,6 +81,7 @@ public class PCSBasedOptimizerServiceImpl<M> extends PCSBasedOptimizerServiceImp
 			Log.error("component does not exist:" + componentName);
 		}
 
+		System.out.println(params);
 		Map<String, String> requiredInterfaces = new HashMap<>(); // namespacedName,key
 		for (Map.Entry<String, String> e : cmp.getRequiredInterfaces().entrySet()) {
 			requiredInterfaces.put(HASCOToPCSConverter.nameSpaceInterface(cmp, e.getValue()), e.getKey());
@@ -90,7 +92,10 @@ public class PCSBasedOptimizerServiceImpl<M> extends PCSBasedOptimizerServiceImp
 		Map<String, String> componentParameters = new HashMap<>();
 
 		for (Parameter hp : hascoParams) {
+			System.out.println("HP: " + hp);
+			System.out.println(this.parameterMapping);
 			Optional<PCSBasedParameterProto> op = params.stream().filter(p -> this.parameterMapping.getOrDefault(p.getKey(), p.getKey()).contains(componentName + "." + hp)).findFirst();
+			System.out.println(op);
 			if (op.isPresent()) {
 				PCSBasedParameterProto param = op.get();
 				int indexOfLastDot = this.parameterMapping.getOrDefault(param.getKey(), param.getKey()).lastIndexOf(".");
