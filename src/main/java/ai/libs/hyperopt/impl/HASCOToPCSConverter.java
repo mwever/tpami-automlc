@@ -108,7 +108,7 @@ public class HASCOToPCSConverter {
 		// The interface to be resolved.
 		StringBuilder sb = new StringBuilder(requestedInterfaceParamName);
 		// set of component names providing the requested interface as the domain of a categorical parameter
-		sb.append(" {").append(matchingComponents.stream().map(x -> x.getName()).collect(Collectors.joining(","))).append("}");
+		sb.append(" categorical {").append(matchingComponents.stream().map(x -> x.getName()).collect(Collectors.joining(","))).append("}");
 		// default value for this categorical parameter: simply the first component from the collection
 		return sb.append("[").append(matchingComponents.iterator().next().getName()).append("]").toString();
 	}
