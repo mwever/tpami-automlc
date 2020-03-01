@@ -1,294 +1,294 @@
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-weka.classifiers.lazy.IBk.E {true,false}[false]
-weka.classifiers.lazy.IBk.X {true,false}[false]
-weka.classifiers.lazy.IBk.K [1,64] [1.0]i
-weka.classifiers.trees.LMT.P {true,false}[false]
-weka.classifiers.trees.LMT.W [0.0,1.0] [0.5]
-weka.classifiers.trees.LMT.R {true,false}[false]
-weka.classifiers.trees.LMT.B {true,false}[false]
-weka.classifiers.trees.LMT.A {true,false}[false]
-weka.classifiers.trees.LMT.M [1,64] [15.0]i
-weka.classifiers.trees.LMT.C {true,false}[false]
-weka.classifiers.rules.PART.R {true,false}[false]
-weka.classifiers.rules.PART.N [2,5] [3.0]i
-weka.classifiers.rules.PART.B {true,false}[false]
-weka.classifiers.rules.PART.M [1,64] [2.0]i
-weka.classifiers.functions.SimpleLogistic.WActivator {0,1}[0]
-weka.classifiers.functions.SimpleLogistic.W [0.0,1.0] [0.0]
-weka.classifiers.functions.SimpleLogistic.A {true,false}[false]
-weka.classifiers.functions.SimpleLogistic.S {true,false}[false]
-weka.classifiers.bayes.NaiveBayes.D {true,false}[false]
-weka.classifiers.bayes.NaiveBayes.K {true,false}[false]
-weka.classifiers.functions.MultilayerPerceptron.L [0.1,1.0] [0.3]l
-weka.classifiers.functions.MultilayerPerceptron.M [0.1,1.0] [0.2]l
-weka.classifiers.functions.MultilayerPerceptron.H {a,i,o,t}[a]
-weka.classifiers.functions.MultilayerPerceptron.R {true,false}[false]
-weka.classifiers.functions.MultilayerPerceptron.B {true,false}[false]
-weka.classifiers.functions.MultilayerPerceptron.S {1}[1]
-weka.classifiers.functions.MultilayerPerceptron.D {true,false}[false]
-weka.classifiers.functions.MultilayerPerceptron.C {true,false}[false]
-weka.classifiers.rules.JRip.P {true,false}[false]
-weka.classifiers.rules.JRip.N [1.0,5.0] [2.0]l
-weka.classifiers.rules.JRip.O [1,5] [2.0]i
-weka.classifiers.rules.JRip.E {true,false}[false]
-weka.classifiers.rules.M5Rules.N {true,false}[false]
-weka.classifiers.rules.M5Rules.U {true,false}[false]
-weka.classifiers.rules.M5Rules.R {true,false}[false]
-weka.classifiers.rules.M5Rules.M [1,64] [4.0]i
-weka.classifiers.trees.RandomForest.depthActivator {0,1}[0]
-weka.classifiers.trees.RandomForest.featuresActivator {0,1}[0]
-weka.classifiers.trees.RandomForest.depth [2,20] [2]i
-weka.classifiers.trees.RandomForest.I [2,256] [10.0]i
-weka.classifiers.trees.RandomForest.K [2,32] [2]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+weka.classifiers.lazy.IBk.E categorical {true,false}[false]
+weka.classifiers.lazy.IBk.X categorical {true,false}[false]
+weka.classifiers.lazy.IBk.K integer [1,64] [1.0]
+weka.classifiers.trees.LMT.P categorical {true,false}[false]
+weka.classifiers.trees.LMT.W real [0.0,1.0] [0.5]
+weka.classifiers.trees.LMT.R categorical {true,false}[false]
+weka.classifiers.trees.LMT.B categorical {true,false}[false]
+weka.classifiers.trees.LMT.A categorical {true,false}[false]
+weka.classifiers.trees.LMT.M integer [1,64] [15.0]
+weka.classifiers.trees.LMT.C categorical {true,false}[false]
+weka.classifiers.rules.PART.R categorical {true,false}[false]
+weka.classifiers.rules.PART.N integer [2,5] [3.0]
+weka.classifiers.rules.PART.B categorical {true,false}[false]
+weka.classifiers.rules.PART.M integer [1,64] [2.0]
+weka.classifiers.functions.SimpleLogistic.WActivator categorical {0,1}[0]
+weka.classifiers.functions.SimpleLogistic.W real [0.0,1.0] [0.0]
+weka.classifiers.functions.SimpleLogistic.A categorical {true,false}[false]
+weka.classifiers.functions.SimpleLogistic.S categorical {true,false}[false]
+weka.classifiers.bayes.NaiveBayes.D categorical {true,false}[false]
+weka.classifiers.bayes.NaiveBayes.K categorical {true,false}[false]
+weka.classifiers.functions.MultilayerPerceptron.L real [0.1,1.0] [0.3]log
+weka.classifiers.functions.MultilayerPerceptron.M real [0.1,1.0] [0.2]log
+weka.classifiers.functions.MultilayerPerceptron.H categorical {a,i,o,t}[a]
+weka.classifiers.functions.MultilayerPerceptron.R categorical {true,false}[false]
+weka.classifiers.functions.MultilayerPerceptron.B categorical {true,false}[false]
+weka.classifiers.functions.MultilayerPerceptron.S categorical {1}[1]
+weka.classifiers.functions.MultilayerPerceptron.D categorical {true,false}[false]
+weka.classifiers.functions.MultilayerPerceptron.C categorical {true,false}[false]
+weka.classifiers.rules.JRip.P categorical {true,false}[false]
+weka.classifiers.rules.JRip.N real [1.0,5.0] [2.0]log
+weka.classifiers.rules.JRip.O integer [1,5] [2.0]
+weka.classifiers.rules.JRip.E categorical {true,false}[false]
+weka.classifiers.rules.M5Rules.N categorical {true,false}[false]
+weka.classifiers.rules.M5Rules.U categorical {true,false}[false]
+weka.classifiers.rules.M5Rules.R categorical {true,false}[false]
+weka.classifiers.rules.M5Rules.M integer [1,64] [4.0]
+weka.classifiers.trees.RandomForest.depthActivator categorical {0,1}[0]
+weka.classifiers.trees.RandomForest.featuresActivator categorical {0,1}[0]
+weka.classifiers.trees.RandomForest.depth integer [2,20] [2]
+weka.classifiers.trees.RandomForest.I integer [2,256] [10.0]
+weka.classifiers.trees.RandomForest.K integer [2,32] [2]
 weka.classifiers.functions.SMO.K {weka.classifiers.functions.supportVector.NormalizedPolyKernel,weka.classifiers.functions.supportVector.PolyKernel,weka.classifiers.functions.supportVector.RBFKernel,weka.classifiers.functions.supportVector.Puk}[weka.classifiers.functions.supportVector.NormalizedPolyKernel]
-weka.classifiers.functions.supportVector.NormalizedPolyKernel.L {true,false}[false]
-weka.classifiers.functions.supportVector.NormalizedPolyKernel.E [0.2,5.0] [1.0]l
-weka.classifiers.functions.supportVector.PolyKernel.L {true,false}[false]
-weka.classifiers.functions.supportVector.PolyKernel.E [0.2,5.0] [1.0]l
-weka.classifiers.functions.supportVector.RBFKernel.G [1.0E-4,1.0] [0.01]l
-weka.classifiers.functions.supportVector.Puk.O [0.1,1.0] [1.0]l
-weka.classifiers.functions.supportVector.Puk.S [0.1,10.0] [1.0]l
-weka.classifiers.functions.SMO.M {true,false}[false]
-weka.classifiers.functions.SMO.N {0,1,2}[0]
-weka.classifiers.functions.SMO.C [0.5,1.5] [1.0]l
-weka.classifiers.trees.RandomTree.backActivator {0,1}[0]
-weka.classifiers.trees.RandomTree.depthActivator {0,1}[0]
-weka.classifiers.trees.RandomTree.featuresActivator {0,1}[0]
-weka.classifiers.trees.RandomTree.N [0,5] [0.0]i
-weka.classifiers.trees.RandomTree.U {true,false}[false]
-weka.classifiers.trees.RandomTree.depth [2,20] [2]i
-weka.classifiers.trees.RandomTree.M [1,64] [1.0]i
-weka.classifiers.trees.RandomTree.K [2,32] [2]i
-weka.classifiers.functions.Logistic.R [1.0E-12,10.0] [1.0E-7]l
-weka.classifiers.trees.M5P.N {true,false}[false]
-weka.classifiers.trees.M5P.U {true,false}[false]
-weka.classifiers.trees.M5P.R {true,false}[false]
-weka.classifiers.trees.M5P.M [1,64] [4.0]i
-weka.classifiers.bayes.BayesNet.Q {weka.classifiers.bayes.net.search.local.K2,weka.classifiers.bayes.net.search.local.HillClimber,weka.classifiers.bayes.net.search.local.LAGDHillClimber,weka.classifiers.bayes.net.search.local.SimulatedAnnealing,weka.classifiers.bayes.net.search.local.TabuSearch,weka.classifiers.bayes.net.search.local.TAN}[weka.classifiers.bayes.net.search.local.K2]
-weka.classifiers.bayes.BayesNet.D {true,false}[false]
-weka.classifiers.lazy.KStar.M {a,d,m,n}[a]
-weka.classifiers.lazy.KStar.E {true,false}[false]
-weka.classifiers.lazy.KStar.B [1,100] [20.0]i
-weka.classifiers.functions.VotedPerceptron.M [5000,50000] [10000.0]i
-weka.classifiers.functions.VotedPerceptron.E [0.2,5.0] [1.0]l
-weka.classifiers.functions.VotedPerceptron.I [1,10] [1.0]i
-weka.classifiers.trees.J48.S {true,false}[false]
-weka.classifiers.trees.J48.U {true,false}[false]
-weka.classifiers.trees.J48.O {true,false}[false]
-weka.classifiers.trees.J48.J {true,false}[false]
-weka.classifiers.trees.J48.C [0.0,1.0] [0.25]
-weka.classifiers.trees.J48.B {true,false}[false]
-weka.classifiers.trees.J48.M [1,64] [2.0]i
-weka.classifiers.trees.J48.A {true,false}[false]
-weka.classifiers.rules.OneR.B [1,32] [6.0]i
-weka.classifiers.rules.DecisionTable.X [1,4] [4.0]i
-weka.classifiers.rules.DecisionTable.I {true,false}[false]
-weka.classifiers.rules.DecisionTable.E {acc,rmse,mae,auc}[acc]
-weka.classifiers.rules.DecisionTable.S {GreedyStepwise,BestFirst}[GreedyStepwise]
-weka.classifiers.trees.REPTree.depthActivator {0,1}[0]
-weka.classifiers.trees.REPTree.P {true,false}[false]
-weka.classifiers.trees.REPTree.L [2,20] [2.0]i
-weka.classifiers.trees.REPTree.V [1.0E-5,0.1] [0.001]l
-weka.classifiers.trees.REPTree.M [1,64] [2.0]i
+weka.classifiers.functions.supportVector.NormalizedPolyKernel.L categorical {true,false}[false]
+weka.classifiers.functions.supportVector.NormalizedPolyKernel.E real [0.2,5.0] [1.0]log
+weka.classifiers.functions.supportVector.PolyKernel.L categorical {true,false}[false]
+weka.classifiers.functions.supportVector.PolyKernel.E real [0.2,5.0] [1.0]log
+weka.classifiers.functions.supportVector.RBFKernel.G real [1.0E-4,1.0] [0.01]log
+weka.classifiers.functions.supportVector.Puk.O real [0.1,1.0] [1.0]log
+weka.classifiers.functions.supportVector.Puk.S real [0.1,10.0] [1.0]log
+weka.classifiers.functions.SMO.M categorical {true,false}[false]
+weka.classifiers.functions.SMO.N categorical {0,1,2}[0]
+weka.classifiers.functions.SMO.C real [0.5,1.5] [1.0]log
+weka.classifiers.trees.RandomTree.backActivator categorical {0,1}[0]
+weka.classifiers.trees.RandomTree.depthActivator categorical {0,1}[0]
+weka.classifiers.trees.RandomTree.featuresActivator categorical {0,1}[0]
+weka.classifiers.trees.RandomTree.N integer [0,5] [0.0]
+weka.classifiers.trees.RandomTree.U categorical {true,false}[false]
+weka.classifiers.trees.RandomTree.depth integer [2,20] [2]
+weka.classifiers.trees.RandomTree.M integer [1,64] [1.0]
+weka.classifiers.trees.RandomTree.K integer [2,32] [2]
+weka.classifiers.functions.Logistic.R real [1.0E-12,10.0] [1.0E-7]log
+weka.classifiers.trees.M5P.N categorical {true,false}[false]
+weka.classifiers.trees.M5P.U categorical {true,false}[false]
+weka.classifiers.trees.M5P.R categorical {true,false}[false]
+weka.classifiers.trees.M5P.M integer [1,64] [4.0]
+weka.classifiers.bayes.BayesNet.Q categorical {weka.classifiers.bayes.net.search.local.K2,weka.classifiers.bayes.net.search.local.HillClimber,weka.classifiers.bayes.net.search.local.LAGDHillClimber,weka.classifiers.bayes.net.search.local.SimulatedAnnealing,weka.classifiers.bayes.net.search.local.TabuSearch,weka.classifiers.bayes.net.search.local.TAN}[weka.classifiers.bayes.net.search.local.K2]
+weka.classifiers.bayes.BayesNet.D categorical {true,false}[false]
+weka.classifiers.lazy.KStar.M categorical {a,d,m,n}[a]
+weka.classifiers.lazy.KStar.E categorical {true,false}[false]
+weka.classifiers.lazy.KStar.B integer [1,100] [20.0]
+weka.classifiers.functions.VotedPerceptron.M integer [5000,50000] [10000.0]
+weka.classifiers.functions.VotedPerceptron.E real [0.2,5.0] [1.0]log
+weka.classifiers.functions.VotedPerceptron.I integer [1,10] [1.0]
+weka.classifiers.trees.J48.S categorical {true,false}[false]
+weka.classifiers.trees.J48.U categorical {true,false}[false]
+weka.classifiers.trees.J48.O categorical {true,false}[false]
+weka.classifiers.trees.J48.J categorical {true,false}[false]
+weka.classifiers.trees.J48.C real [0.0,1.0] [0.25]
+weka.classifiers.trees.J48.B categorical {true,false}[false]
+weka.classifiers.trees.J48.M integer [1,64] [2.0]
+weka.classifiers.trees.J48.A categorical {true,false}[false]
+weka.classifiers.rules.OneR.B integer [1,32] [6.0]
+weka.classifiers.rules.DecisionTable.X integer [1,4] [4.0]
+weka.classifiers.rules.DecisionTable.I categorical {true,false}[false]
+weka.classifiers.rules.DecisionTable.E categorical {acc,rmse,mae,auc}[acc]
+weka.classifiers.rules.DecisionTable.S categorical {GreedyStepwise,BestFirst}[GreedyStepwise]
+weka.classifiers.trees.REPTree.depthActivator categorical {0,1}[0]
+weka.classifiers.trees.REPTree.P categorical {true,false}[false]
+weka.classifiers.trees.REPTree.L integer [2,20] [2.0]
+weka.classifiers.trees.REPTree.V real [1.0E-5,0.1] [0.001]log
+weka.classifiers.trees.REPTree.M integer [1,64] [2.0]
 
-weka.classifiers.meta.RandomSubSpace.P [0.1,1.0] [0.5]l
-weka.classifiers.meta.RandomSubSpace.S {1}[1]
-weka.classifiers.meta.RandomSubSpace.I [2,64] [10.0]i
-weka.classifiers.lazy.IBk.I {true,false}[false]
-weka.classifiers.meta.Vote.S {1}[1]
-weka.classifiers.meta.Vote.R {AVG,PROD,MAJ,MIN,MAX}[AVG]
+weka.classifiers.meta.RandomSubSpace.P real [0.1,1.0] [0.5]log
+weka.classifiers.meta.RandomSubSpace.S categorical {1}[1]
+weka.classifiers.meta.RandomSubSpace.I integer [2,64] [10.0]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+weka.classifiers.meta.Vote.S categorical {1}[1]
+weka.classifiers.meta.Vote.R categorical {AVG,PROD,MAJ,MIN,MAX}[AVG]
 meka.classifiers.multilabel.PCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
 weka.classifiers.meta.RandomCommittee.W {weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.trees.RandomForest,weka.classifiers.trees.RandomTree,weka.classifiers.trees.REPTree}[weka.classifiers.functions.MultilayerPerceptron]
-weka.classifiers.functions.MultilayerPerceptron.L [0.1,1.0] [0.3]l
-weka.classifiers.meta.RandomCommittee.S {1}[1]
-weka.classifiers.meta.RandomCommittee.I [2,64] [10.0]i
-weka.classifiers.meta.AttributeSelectedClassifier.E {weka.attributeSelection.CfsSubsetEval,weka.attributeSelection.CfsSubsetEval -L}[weka.attributeSelection.CfsSubsetEval]
-weka.classifiers.meta.AttributeSelectedClassifier.S {weka.attributeSelection.BestFirst,weka.attributeSelection.BestFirst -D 1,weka.attributeSelection.GreedyStepwise}[weka.attributeSelection.BestFirst]
+weka.classifiers.functions.MultilayerPerceptron.L real [0.1,1.0] [0.3]log
+weka.classifiers.meta.RandomCommittee.S categorical {1}[1]
+weka.classifiers.meta.RandomCommittee.I integer [2,64] [10.0]
+weka.classifiers.meta.AttributeSelectedClassifier.E categorical {weka.attributeSelection.CfsSubsetEval,weka.attributeSelection.CfsSubsetEval -L}[weka.attributeSelection.CfsSubsetEval]
+weka.classifiers.meta.AttributeSelectedClassifier.S categorical {weka.attributeSelection.BestFirst,weka.attributeSelection.BestFirst -D 1,weka.attributeSelection.GreedyStepwise}[weka.attributeSelection.BestFirst]
 weka.classifiers.meta.Stacking.B {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-weka.classifiers.meta.Stacking.X {10}[10]
-weka.classifiers.meta.Stacking.S {1}[1]
-weka.classifiers.meta.AdditiveRegression.sActivator {0,1}[0]
-weka.classifiers.meta.AdditiveRegression.I [2,128] [10.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+weka.classifiers.meta.Stacking.X categorical {10}[10]
+weka.classifiers.meta.Stacking.S categorical {1}[1]
+weka.classifiers.meta.AdditiveRegression.sActivator categorical {0,1}[0]
+weka.classifiers.meta.AdditiveRegression.I integer [2,128] [10.0]
 weka.classifiers.lazy.LWL.W {weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.trees.J48,weka.classifiers.meta.AdaBoostM1,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost}[weka.classifiers.meta.RandomSubSpace]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-weka.classifiers.meta.Bagging.O {true,false}[false]
-weka.classifiers.meta.Bagging.P [10,100] [100.0]i
-weka.classifiers.meta.Bagging.S {1}[1]
-weka.classifiers.meta.Bagging.I [2,128] [10.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+weka.classifiers.meta.Bagging.O categorical {true,false}[false]
+weka.classifiers.meta.Bagging.P integer [10,100] [100.0]
+weka.classifiers.meta.Bagging.S categorical {1}[1]
+weka.classifiers.meta.Bagging.I integer [2,128] [10.0]
 weka.classifiers.meta.AdaBoostM1.W {weka.classifiers.trees.LMT,weka.classifiers.lazy.KStar,weka.classifiers.rules.OneR}[weka.classifiers.trees.LMT]
-weka.classifiers.trees.LMT.P {true,false}[false]
-weka.classifiers.meta.AdaBoostM1.pActivator {0,1}[0]
-weka.classifiers.meta.AdaBoostM1.P [10,100] [100.0]i
-weka.classifiers.meta.AdaBoostM1.S {1}[1]
-weka.classifiers.meta.AdaBoostM1.Q {true,false}[false]
-weka.classifiers.meta.AdaBoostM1.I [2,128] [10.0]i
-weka.classifiers.lazy.LWL.U [0,4] [0.0]i
-weka.classifiers.lazy.LWL.K {-1,10,30,60,90,120}[-1]
+weka.classifiers.trees.LMT.P categorical {true,false}[false]
+weka.classifiers.meta.AdaBoostM1.pActivator categorical {0,1}[0]
+weka.classifiers.meta.AdaBoostM1.P integer [10,100] [100.0]
+weka.classifiers.meta.AdaBoostM1.S categorical {1}[1]
+weka.classifiers.meta.AdaBoostM1.Q categorical {true,false}[false]
+weka.classifiers.meta.AdaBoostM1.I integer [2,128] [10.0]
+weka.classifiers.lazy.LWL.U integer [0,4] [0.0]
+weka.classifiers.lazy.LWL.K categorical {-1,10,30,60,90,120}[-1]
 meka.classifiers.multilabel.PSt.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.PSt.N [0,5] [0.0]i
-meka.classifiers.multilabel.PSt.P [0,5] [0.0]i
-meka.classifiers.multilabel.BPNN.H [1,100] [10.0]i
-meka.classifiers.multilabel.BPNN.r [0.001,0.1] [0.1]l
-meka.classifiers.multilabel.BPNN.E [10,10000] [1000.0]i
-meka.classifiers.multilabel.BPNN.m [0.1,0.9] [0.1]l
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.PSt.N integer [0,5] [0.0]
+meka.classifiers.multilabel.PSt.P integer [0,5] [0.0]
+meka.classifiers.multilabel.BPNN.H integer [1,100] [10.0]
+meka.classifiers.multilabel.BPNN.r real [0.001,0.1] [0.1]log
+meka.classifiers.multilabel.BPNN.E integer [10,10000] [1000.0]
+meka.classifiers.multilabel.BPNN.m real [0.1,0.9] [0.1]log
 meka.classifiers.multilabel.MCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.MCC.Is [0,1500] [0.0]i
-meka.classifiers.multilabel.MCC.Iy [0,100] [10.0]i
-meka.classifiers.multilabel.MCC.P {Accuracy,Jaccard index,Hamming score,Exact match,Jaccard distance,Hamming loss,ZeroOne loss,Harmonic score,One error,Rank loss,Avg precision,Log Loss (lim. L),Log Loss (lim. D),Micro Precision,Micro Recall,Macro Precision,Macro Recall,F1 (micro averaged),F1 (macro averaged by example),F1 (macro averaged by label),AUPRC (macro averaged),AUROC (macro averaged),Levenshtein distance}[Exact match]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.MCC.Is integer [0,1500] [0.0]
+meka.classifiers.multilabel.MCC.Iy integer [0,100] [10.0]
+meka.classifiers.multilabel.MCC.P categorical {Accuracy,Jaccard index,Hamming score,Exact match,Jaccard distance,Hamming loss,ZeroOne loss,Harmonic score,One error,Rank loss,Avg precision,Log Loss (lim. L),Log Loss (lim. D),Micro Precision,Micro Recall,Macro Precision,Macro Recall,F1 (micro averaged),F1 (macro averaged by example),F1 (macro averaged by label),AUPRC (macro averaged),AUROC (macro averaged),Levenshtein distance}[Exact match]
 meka.classifiers.multilabel.CT.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.CT.Is [0,1500] [0.0]i
-meka.classifiers.multilabel.CT.Iy [0,100] [10.0]i
-meka.classifiers.multilabel.CT.P {Accuracy,Jaccard index,Hamming score,Exact match,Jaccard distance,Hamming loss,ZeroOne loss,Harmonic score,One error,Rank loss,Avg precision,Log Loss (lim. L),Log Loss (lim. D),Micro Precision,Micro Recall,Macro Precision,Macro Recall,F1 (micro averaged),F1 (macro averaged by example),F1 (macro averaged by label),AUPRC (macro averaged),AUROC (macro averaged),Levenshtein distance}[Exact match]
-meka.classifiers.multilabel.CT.X {lbf,C,I,Ib,H,Hbf,X,F,L,None}[lbf]
-meka.classifiers.multilabel.CT.L [1,4] [1.0]i
-meka.classifiers.multilabel.CT.H {0,-1}[0]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.CT.Is integer [0,1500] [0.0]
+meka.classifiers.multilabel.CT.Iy integer [0,100] [10.0]
+meka.classifiers.multilabel.CT.P categorical {Accuracy,Jaccard index,Hamming score,Exact match,Jaccard distance,Hamming loss,ZeroOne loss,Harmonic score,One error,Rank loss,Avg precision,Log Loss (lim. L),Log Loss (lim. D),Micro Precision,Micro Recall,Macro Precision,Macro Recall,F1 (micro averaged),F1 (macro averaged by example),F1 (macro averaged by label),AUPRC (macro averaged),AUROC (macro averaged),Levenshtein distance}[Exact match]
+meka.classifiers.multilabel.CT.X categorical {lbf,C,I,Ib,H,Hbf,X,F,L,None}[lbf]
+meka.classifiers.multilabel.CT.L integer [1,4] [1.0]
+meka.classifiers.multilabel.CT.H categorical {0,-1}[0]
 meka.classifiers.multilabel.meta.SubsetMapper.W {meka.classifiers.multilabel.BPNN,meka.classifiers.multilabel.CCq,meka.classifiers.multilabel.RT,meka.classifiers.multilabel.meta.BaggingMLdup,meka.classifiers.multilabel.meta.MBR,meka.classifiers.multilabel.BR,meka.classifiers.multilabel.FW,meka.classifiers.multilabel.CDN,meka.classifiers.multilabel.BRq,meka.classifiers.multilabel.LC,meka.classifiers.multilabel.CC,meka.classifiers.multilabel.meta.EnsembleML,meka.classifiers.multilabel.meta.BaggingML,meka.classifiers.multilabel.DBPNN}[meka.classifiers.multilabel.BPNN]
-meka.classifiers.multilabel.BPNN.H [1,100] [10.0]i
+meka.classifiers.multilabel.BPNN.H integer [1,100] [10.0]
 meka.classifiers.multilabel.CCq.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.CCq.P [0.2,0.8] [0.8]l
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.CCq.P real [0.2,0.8] [0.8]log
 meka.classifiers.multilabel.RT.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
 meka.classifiers.multilabel.meta.BaggingMLdup.W {meka.classifiers.multilabel.MajorityLabelset,meka.classifiers.multilabel.PCC,meka.classifiers.multilabel.PSt,meka.classifiers.multilabel.BPNN,meka.classifiers.multilabel.MCC,meka.classifiers.multilabel.CT,meka.classifiers.multilabel.PMCC,meka.classifiers.multilabel.BCC,meka.classifiers.multilabel.CCq,meka.classifiers.multilabel.CDT,meka.classifiers.multilabel.RT,meka.classifiers.multilabel.RAkEL,meka.classifiers.multilabel.BR,meka.classifiers.multilabel.FW,meka.classifiers.multilabel.HASEL,meka.classifiers.multilabel.RAkELd,meka.classifiers.multilabel.PS,meka.classifiers.multilabel.CDN,meka.classifiers.multilabel.BRq,meka.classifiers.multilabel.LC,meka.classifiers.multilabel.CC,meka.classifiers.multilabel.DBPNN}[meka.classifiers.multilabel.MajorityLabelset]
 meka.classifiers.multilabel.PCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
 meka.classifiers.multilabel.PMCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.PMCC.O {0,1}[0]
-meka.classifiers.multilabel.PMCC.Is [0,1500] [0.0]i
-meka.classifiers.multilabel.PMCC.B [0.01,0.99] [0.03]l
-meka.classifiers.multilabel.PMCC.Iy [0,100] [10.0]i
-meka.classifiers.multilabel.PMCC.P {Accuracy,Jaccard index,Hamming score,Exact match,Jaccard distance,Hamming loss,ZeroOne loss,Harmonic score,One error,Rank loss,Avg precision,Log Loss (lim. L),Log Loss (lim. D),Micro Precision,Micro Recall,Macro Precision,Macro Recall,F1 (micro averaged),F1 (macro averaged by example),F1 (macro averaged by label),AUPRC (macro averaged),AUROC (macro averaged),Levenshtein distance}[Exact match]
-meka.classifiers.multilabel.PMCC.M [1,50] [10.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.PMCC.O categorical {0,1}[0]
+meka.classifiers.multilabel.PMCC.Is integer [0,1500] [0.0]
+meka.classifiers.multilabel.PMCC.B real [0.01,0.99] [0.03]log
+meka.classifiers.multilabel.PMCC.Iy integer [0,100] [10.0]
+meka.classifiers.multilabel.PMCC.P categorical {Accuracy,Jaccard index,Hamming score,Exact match,Jaccard distance,Hamming loss,ZeroOne loss,Harmonic score,One error,Rank loss,Avg precision,Log Loss (lim. L),Log Loss (lim. D),Micro Precision,Micro Recall,Macro Precision,Macro Recall,F1 (micro averaged),F1 (macro averaged by example),F1 (macro averaged by label),AUPRC (macro averaged),AUROC (macro averaged),Levenshtein distance}[Exact match]
+meka.classifiers.multilabel.PMCC.M integer [1,50] [10.0]
 meka.classifiers.multilabel.BCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.BCC.X {lbf,C,I,Ib,H,Hbf,X,F,L,None}[lbf]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.BCC.X categorical {lbf,C,I,Ib,H,Hbf,X,F,L,None}[lbf]
 meka.classifiers.multilabel.CDT.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.CDT.L [1,5] [1.0]i
-meka.classifiers.multilabel.CDT.X {lbf,C,I,Ib,H,Hbf,X,F,L,None}[None]
-meka.classifiers.multilabel.CDT.I [100,1000] [1000.0]i
-meka.classifiers.multilabel.CDT.Ic [1,100] [100.0]i
-meka.classifiers.multilabel.CDT.H {0,-1}[0]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.CDT.L integer [1,5] [1.0]
+meka.classifiers.multilabel.CDT.X categorical {lbf,C,I,Ib,H,Hbf,X,F,L,None}[None]
+meka.classifiers.multilabel.CDT.I integer [100,1000] [1000.0]
+meka.classifiers.multilabel.CDT.Ic integer [1,100] [100.0]
+meka.classifiers.multilabel.CDT.H categorical {0,-1}[0]
 meka.classifiers.multilabel.RAkEL.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.RAkEL.N [0,5] [0.0]i
-meka.classifiers.multilabel.RAkEL.M [2,20] [10.0]i
-meka.classifiers.multilabel.RAkEL.P [0,5] [0.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.RAkEL.N integer [0,5] [0.0]
+meka.classifiers.multilabel.RAkEL.M integer [2,20] [10.0]
+meka.classifiers.multilabel.RAkEL.P integer [0,5] [0.0]
 meka.classifiers.multilabel.BR.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
 meka.classifiers.multilabel.FW.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
 meka.classifiers.multilabel.HASEL.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.HASEL.N [0,5] [0.0]i
-meka.classifiers.multilabel.HASEL.P [0,5] [0.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.HASEL.N integer [0,5] [0.0]
+meka.classifiers.multilabel.HASEL.P integer [0,5] [0.0]
 meka.classifiers.multilabel.RAkELd.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.RAkELd.N [0,5] [0.0]i
-meka.classifiers.multilabel.RAkELd.P [0,5] [0.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.RAkELd.N integer [0,5] [0.0]
+meka.classifiers.multilabel.RAkELd.P integer [0,5] [0.0]
 meka.classifiers.multilabel.PS.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.PS.N [0,5] [0.0]i
-meka.classifiers.multilabel.PS.P [0,5] [0.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.PS.N integer [0,5] [0.0]
+meka.classifiers.multilabel.PS.P integer [0,5] [0.0]
 meka.classifiers.multilabel.CDN.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.CDN.I [100,1000] [1000.0]i
-meka.classifiers.multilabel.CDN.Ic [1,100] [100.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.CDN.I integer [100,1000] [1000.0]
+meka.classifiers.multilabel.CDN.Ic integer [1,100] [100.0]
 meka.classifiers.multilabel.BRq.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.BRq.P [0.2,0.8] [0.8]l
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.BRq.P real [0.2,0.8] [0.8]log
 meka.classifiers.multilabel.LC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
 meka.classifiers.multilabel.CC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
 meka.classifiers.multilabel.DBPNN.W {meka.classifiers.multilabel.BPNN}[meka.classifiers.multilabel.BPNN]
-meka.classifiers.multilabel.BPNN.H [1,100] [10.0]i
-meka.classifiers.multilabel.DBPNN.N [1,5] [1.0]i
-meka.classifiers.multilabel.DBPNN.H [1,100] [10.0]i
-meka.classifiers.multilabel.DBPNN.r [0.001,0.1] [0.1]l
-meka.classifiers.multilabel.DBPNN.E [10,10000] [1000.0]i
-meka.classifiers.multilabel.DBPNN.m [0.1,0.9] [0.1]l
-meka.classifiers.multilabel.meta.BaggingMLdup.I [10,50] [10.0]i
-meka.classifiers.multilabel.meta.BaggingMLdup.P [10,100] [67.0]i
+meka.classifiers.multilabel.BPNN.H integer [1,100] [10.0]
+meka.classifiers.multilabel.DBPNN.N integer [1,5] [1.0]
+meka.classifiers.multilabel.DBPNN.H integer [1,100] [10.0]
+meka.classifiers.multilabel.DBPNN.r real [0.001,0.1] [0.1]log
+meka.classifiers.multilabel.DBPNN.E integer [10,10000] [1000.0]
+meka.classifiers.multilabel.DBPNN.m real [0.1,0.9] [0.1]log
+meka.classifiers.multilabel.meta.BaggingMLdup.I integer [10,50] [10.0]
+meka.classifiers.multilabel.meta.BaggingMLdup.P integer [10,100] [67.0]
 meka.classifiers.multilabel.meta.MBR.W {meka.classifiers.multilabel.BR}[meka.classifiers.multilabel.BR]
 meka.classifiers.multilabel.BR.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
 meka.classifiers.multilabel.meta.EnsembleML.W {meka.classifiers.multilabel.MajorityLabelset,meka.classifiers.multilabel.PCC,meka.classifiers.multilabel.PSt,meka.classifiers.multilabel.BPNN,meka.classifiers.multilabel.MCC,meka.classifiers.multilabel.CT,meka.classifiers.multilabel.PMCC,meka.classifiers.multilabel.BCC,meka.classifiers.multilabel.CCq,meka.classifiers.multilabel.CDT,meka.classifiers.multilabel.RT,meka.classifiers.multilabel.RAkEL,meka.classifiers.multilabel.BR,meka.classifiers.multilabel.FW,meka.classifiers.multilabel.HASEL,meka.classifiers.multilabel.RAkELd,meka.classifiers.multilabel.PS,meka.classifiers.multilabel.CDN,meka.classifiers.multilabel.BRq,meka.classifiers.multilabel.LC,meka.classifiers.multilabel.CC,meka.classifiers.multilabel.DBPNN}[meka.classifiers.multilabel.MajorityLabelset]
 meka.classifiers.multilabel.PCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.meta.EnsembleML.I [10,50] [10.0]i
-meka.classifiers.multilabel.meta.EnsembleML.P [10,100] [67.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.meta.EnsembleML.I integer [10,50] [10.0]
+meka.classifiers.multilabel.meta.EnsembleML.P integer [10,100] [67.0]
 meka.classifiers.multilabel.meta.BaggingML.W {meka.classifiers.multilabel.MajorityLabelset,meka.classifiers.multilabel.PCC,meka.classifiers.multilabel.PSt,meka.classifiers.multilabel.BPNN,meka.classifiers.multilabel.MCC,meka.classifiers.multilabel.CT,meka.classifiers.multilabel.PMCC,meka.classifiers.multilabel.BCC,meka.classifiers.multilabel.CCq,meka.classifiers.multilabel.CDT,meka.classifiers.multilabel.RT,meka.classifiers.multilabel.RAkEL,meka.classifiers.multilabel.BR,meka.classifiers.multilabel.FW,meka.classifiers.multilabel.HASEL,meka.classifiers.multilabel.RAkELd,meka.classifiers.multilabel.PS,meka.classifiers.multilabel.CDN,meka.classifiers.multilabel.BRq,meka.classifiers.multilabel.LC,meka.classifiers.multilabel.CC,meka.classifiers.multilabel.DBPNN}[meka.classifiers.multilabel.MajorityLabelset]
 meka.classifiers.multilabel.PCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.meta.BaggingML.I [10,50] [10.0]i
-meka.classifiers.multilabel.meta.BaggingML.P [10,100] [67.0]i
-weka.classifiers.functions.SimpleLogistic.opt2-W [0.0,1.0] [0.0]
-weka.classifiers.bayes.NaiveBayes.opt1-K {false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.meta.BaggingML.I integer [10,50] [10.0]
+meka.classifiers.multilabel.meta.BaggingML.P integer [10,100] [67.0]
+weka.classifiers.functions.SimpleLogistic.opt2-W real [0.0,1.0] [0.0]
+weka.classifiers.bayes.NaiveBayes.opt1-K categorical {false}[false]
 meka.classifiers.multilabel.meta.RandomSubspaceML.W {meka.classifiers.multilabel.BPNN,meka.classifiers.multilabel.CCq,meka.classifiers.multilabel.RT,meka.classifiers.multilabel.meta.BaggingMLdup,meka.classifiers.multilabel.meta.MBR,meka.classifiers.multilabel.BR,meka.classifiers.multilabel.FW,meka.classifiers.multilabel.CDN,meka.classifiers.multilabel.BRq,meka.classifiers.multilabel.LC,meka.classifiers.multilabel.CC,meka.classifiers.multilabel.meta.EnsembleML,meka.classifiers.multilabel.meta.BaggingML,meka.classifiers.multilabel.DBPNN}[meka.classifiers.multilabel.BPNN]
-meka.classifiers.multilabel.BPNN.H [1,100] [10.0]i
-meka.classifiers.multilabel.meta.RandomSubspaceML.I [10,50] [10.0]i
-meka.classifiers.multilabel.meta.RandomSubspaceML.P [10,100] [67.0]i
-meka.classifiers.multilabel.meta.RandomSubspaceML.A [10,100] [50.0]i
-weka.classifiers.meta.AdditiveRegression.opt2-S [0.0,1.0] [1.0]
+meka.classifiers.multilabel.BPNN.H integer [1,100] [10.0]
+meka.classifiers.multilabel.meta.RandomSubspaceML.I integer [10,50] [10.0]
+meka.classifiers.multilabel.meta.RandomSubspaceML.P integer [10,100] [67.0]
+meka.classifiers.multilabel.meta.RandomSubspaceML.A integer [10,100] [50.0]
+weka.classifiers.meta.AdditiveRegression.opt2-S real [0.0,1.0] [1.0]
 meka.classifiers.multilabel.meta.EM.W {meka.classifiers.multilabel.BPNN,meka.classifiers.multilabel.CCq,meka.classifiers.multilabel.RT,meka.classifiers.multilabel.meta.BaggingMLdup,meka.classifiers.multilabel.meta.MBR,meka.classifiers.multilabel.BR,meka.classifiers.multilabel.FW,meka.classifiers.multilabel.CDN,meka.classifiers.multilabel.BRq,meka.classifiers.multilabel.LC,meka.classifiers.multilabel.CC,meka.classifiers.multilabel.meta.EnsembleML,meka.classifiers.multilabel.meta.BaggingML,meka.classifiers.multilabel.DBPNN}[meka.classifiers.multilabel.BPNN]
-meka.classifiers.multilabel.BPNN.H [1,100] [10.0]i
-meka.classifiers.multilabel.meta.EM.I [10,50] [10.0]i
-weka.classifiers.trees.RandomForest.opt2-K [1,32] [1]i
-weka.classifiers.trees.RandomForest.opt2-depth [1,20] [1]i
+meka.classifiers.multilabel.BPNN.H integer [1,100] [10.0]
+meka.classifiers.multilabel.meta.EM.I integer [10,50] [10.0]
+weka.classifiers.trees.RandomForest.opt2-K integer [1,32] [1]
+weka.classifiers.trees.RandomForest.opt2-depth integer [1,20] [1]
 meka.classifiers.multilabel.MLCBMaD.W {meka.classifiers.multilabel.MajorityLabelset,meka.classifiers.multilabel.PCC,meka.classifiers.multilabel.PSt,meka.classifiers.multilabel.BPNN,meka.classifiers.multilabel.MCC,meka.classifiers.multilabel.CT,meka.classifiers.multilabel.PMCC,meka.classifiers.multilabel.BCC,meka.classifiers.multilabel.CCq,meka.classifiers.multilabel.CDT,meka.classifiers.multilabel.RT,meka.classifiers.multilabel.RAkEL,meka.classifiers.multilabel.BR,meka.classifiers.multilabel.FW,meka.classifiers.multilabel.HASEL,meka.classifiers.multilabel.RAkELd,meka.classifiers.multilabel.PS,meka.classifiers.multilabel.CDN,meka.classifiers.multilabel.BRq,meka.classifiers.multilabel.LC,meka.classifiers.multilabel.CC,meka.classifiers.multilabel.DBPNN}[meka.classifiers.multilabel.MajorityLabelset]
 meka.classifiers.multilabel.PCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.MLCBMaD.size [1,20] [20.0]i
-meka.classifiers.multilabel.MLCBMaD.threshold [0.0,1.0] [0.5]
-weka.classifiers.trees.RandomTree.opt2-K [2,32] [2]i
-weka.classifiers.trees.RandomTree.opt2-depth [2,20] [2]i
-weka.classifiers.trees.RandomTree.opt2-N [2,5] [2]i
-weka.classifiers.functions.supportVector.NormalizedPolyKernel.L {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.MLCBMaD.size integer [1,20] [20.0]
+meka.classifiers.multilabel.MLCBMaD.threshold real [0.0,1.0] [0.5]
+weka.classifiers.trees.RandomTree.opt2-K integer [2,32] [2]
+weka.classifiers.trees.RandomTree.opt2-depth integer [2,20] [2]
+weka.classifiers.trees.RandomTree.opt2-N integer [2,5] [2]
+weka.classifiers.functions.supportVector.NormalizedPolyKernel.L categorical {true,false}[false]
 root.R {meka.classifiers.multilabel.MajorityLabelset,meka.classifiers.multilabel.PCC,meka.classifiers.multilabel.PSt,meka.classifiers.multilabel.BPNN,meka.classifiers.multilabel.MCC,meka.classifiers.multilabel.CT,meka.classifiers.multilabel.meta.SubsetMapper,meka.classifiers.multilabel.PMCC,meka.classifiers.multilabel.meta.RandomSubspaceML,meka.classifiers.multilabel.BCC,meka.classifiers.multilabel.meta.EM,meka.classifiers.multilabel.CCq,meka.classifiers.multilabel.CDT,meka.classifiers.multilabel.RT,meka.classifiers.multilabel.MLCBMaD,meka.classifiers.multilabel.RAkEL,meka.classifiers.multilabel.meta.BaggingMLdup,meka.classifiers.multilabel.meta.MBR,meka.classifiers.multilabel.BR,meka.classifiers.multilabel.FW,meka.classifiers.multilabel.HASEL,meka.classifiers.multilabel.RAkELd,meka.classifiers.multilabel.meta.CM,meka.classifiers.multilabel.PS,meka.classifiers.multilabel.CDN,meka.classifiers.multilabel.BRq,meka.classifiers.multilabel.LC,meka.classifiers.multilabel.CC,meka.classifiers.multilabel.meta.EnsembleML,meka.classifiers.multilabel.meta.BaggingML,meka.classifiers.multilabel.DBPNN}[meka.classifiers.multilabel.MajorityLabelset]
 meka.classifiers.multilabel.PCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
 meka.classifiers.multilabel.meta.CM.W {meka.classifiers.multilabel.MajorityLabelset,meka.classifiers.multilabel.PCC,meka.classifiers.multilabel.PSt,meka.classifiers.multilabel.BPNN,meka.classifiers.multilabel.MCC,meka.classifiers.multilabel.CT,meka.classifiers.multilabel.PMCC,meka.classifiers.multilabel.BCC,meka.classifiers.multilabel.CCq,meka.classifiers.multilabel.CDT,meka.classifiers.multilabel.RT,meka.classifiers.multilabel.RAkEL,meka.classifiers.multilabel.BR,meka.classifiers.multilabel.FW,meka.classifiers.multilabel.HASEL,meka.classifiers.multilabel.RAkELd,meka.classifiers.multilabel.PS,meka.classifiers.multilabel.CDN,meka.classifiers.multilabel.BRq,meka.classifiers.multilabel.LC,meka.classifiers.multilabel.CC,meka.classifiers.multilabel.DBPNN}[meka.classifiers.multilabel.MajorityLabelset]
 meka.classifiers.multilabel.PCC.W {weka.classifiers.meta.ClassificationViaRegression,weka.classifiers.meta.RandomSubSpace,weka.classifiers.lazy.IBk,weka.classifiers.meta.Vote,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.meta.RandomCommittee,weka.classifiers.meta.AttributeSelectedClassifier,weka.classifiers.meta.Stacking,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.meta.AdditiveRegression,weka.classifiers.rules.JRip,weka.classifiers.lazy.LWL,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.meta.Bagging,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.meta.AdaBoostM1,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree,weka.classifiers.meta.LogitBoost,weka.classifiers.meta.MultiClassClassifier}[weka.classifiers.meta.ClassificationViaRegression]
 weka.classifiers.meta.RandomSubSpace.W {weka.classifiers.lazy.IBk,weka.classifiers.trees.LMT,weka.classifiers.rules.PART,weka.classifiers.functions.SimpleLogistic,weka.classifiers.bayes.NaiveBayesMultinomial,weka.classifiers.bayes.NaiveBayes,weka.classifiers.functions.MultilayerPerceptron,weka.classifiers.rules.JRip,weka.classifiers.rules.M5Rules,weka.classifiers.rules.ZeroR,weka.classifiers.trees.DecisionStump,weka.classifiers.trees.RandomForest,weka.classifiers.functions.SMO,weka.classifiers.trees.RandomTree,weka.classifiers.functions.Logistic,weka.classifiers.trees.M5P,weka.classifiers.bayes.BayesNet,weka.classifiers.lazy.KStar,weka.classifiers.functions.VotedPerceptron,weka.classifiers.trees.J48,weka.classifiers.rules.OneR,weka.classifiers.functions.SimpleLinearRegression,weka.classifiers.rules.DecisionTable,weka.classifiers.trees.REPTree}[weka.classifiers.lazy.IBk]
-weka.classifiers.lazy.IBk.I {true,false}[false]
-meka.classifiers.multilabel.meta.CM.I [10,50] [10.0]i
-weka.classifiers.trees.J48.opt1-U {false}[false]
-weka.classifiers.meta.AdaBoostM1.opt2-P [50,100] [100.0]i
-weka.classifiers.trees.REPTree.opt2-L [2,20] [2.0]i
+weka.classifiers.lazy.IBk.I categorical {true,false}[false]
+meka.classifiers.multilabel.meta.CM.I integer [10,50] [10.0]
+weka.classifiers.trees.J48.opt1-U categorical {false}[false]
+weka.classifiers.meta.AdaBoostM1.opt2-P integer [50,100] [100.0]
+weka.classifiers.trees.REPTree.opt2-L integer [2,20] [2.0]
 Conditionals:
 weka.classifiers.lazy.IBk.I|weka.classifiers.meta.RandomSubSpace.W in {weka.classifiers.lazy.IBk}
 weka.classifiers.lazy.IBk.E|weka.classifiers.meta.RandomSubSpace.W in {weka.classifiers.lazy.IBk}

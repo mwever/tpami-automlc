@@ -353,13 +353,21 @@ public class HASCOToPCSConverter {
 		String name = param.getName();
 		pcsLine.append(name).append(" ");
 
+		if (domain.isInteger()) {
+			pcsLine.append("integer ");
+		} else {
+			pcsLine.append("real ");
+		}
+
 		pcsLine.append("[").append(min).append(",").append(max).append("] ");
 
 		pcsLine.append("[").append(defaultValue).append("]");
 		if (domain.isInteger()) {
-			pcsLine.append("i");
-		} else if (isLogSpace) {
-			pcsLine.append("l");
+//			pcsLine.append("i");
+		}
+
+		if (isLogSpace) {
+			pcsLine.append("log");
 		}
 
 		return pcsLine.toString();
@@ -371,7 +379,7 @@ public class HASCOToPCSConverter {
 		CategoricalParameterDomain domain = (CategoricalParameterDomain) param.getDefaultDomain();
 		String[] values = domain.getValues();
 		String name = param.getName();
-		pcsLine.append(name).append(" ");
+		pcsLine.append(name).append(" categorical ");
 
 		boolean isDefaultValueContainedInValues = false;
 		pcsLine.append("{");
