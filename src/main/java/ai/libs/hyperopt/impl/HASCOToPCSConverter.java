@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -45,16 +44,12 @@ public class HASCOToPCSConverter {
 	private Map<String, List<String>> componentConditionals;
 	private Set<String> conditionalParametersToRemove = new HashSet<>();
 	private Map<String, Collection<Component>> componentsByProvidedInterfaces = new HashMap<>();
-//	private List<String> interfaceLines = new ArrayList<>();
 	// mapping from artifical names to original parameter names
 	private Map<String, String> dependendParameterMap;
 
 	private final boolean rootRequired;
 	private final Collection<Component> components;
 	private final String requestedInterface;
-
-	/** Multiple conditions are concatenated with OR (||) */
-	private final Map<String, List<String>> paramActivationConditions = new HashMap<>();
 
 	public HASCOToPCSConverter(final Collection<Component> components, final String requestedInterface) {
 		this.components = new HashSet<>(getComponentsWithProvidedInterface(components, requestedInterface));
@@ -114,28 +109,19 @@ public class HASCOToPCSConverter {
 		return String.format("%s categorical {%s} [%s]", paramName, SetUtil.implode(values, ","), defaultValue);
 	}
 
-	private String requestedInterfaceToPCSString(final Collection<Component> matchingComponents, final String requestedInterfaceParamName) {
-		// The interface to be resolved.
-		StringBuilder sb = new StringBuilder(requestedInterfaceParamName);
-		// set of component names providing the requested interface as the domain of a categorical parameter
-		sb.append(" categorical {").append(matchingComponents.stream().map(x -> x.getName()).collect(Collectors.joining(","))).append("}");
-		// default value for this categorical parameter: simply the first component from the collection
-		return sb.append("[").append(matchingComponents.iterator().next().getName()).append("]").toString();
-	}
-
 	private void toPCS(final File outputFile) {
 		StringBuilder singleFileParameters = new StringBuilder();
 		StringBuilder singleFileConditionals = new StringBuilder();
 
 		Map<String, Set<String>> constraints = new HashMap<>();
 		for (Component cmp : this.components) {
-			Set<Parameter> params = cmp.getParameters();
 			for (Entry<String, String> reqI : cmp.getRequiredInterfaces().entrySet()) {
 				Collection<Component> subCompList = getComponentsWithProvidedInterface(this.components, reqI.getValue());
 				String reqIString = this.getCategoricalPCSParam(cmp.getName() + "." + reqI.getKey(), subCompList.stream().map(x -> x.getName()).collect(Collectors.toList()), subCompList.iterator().next().getName());
 				// add parameter definition for required interface
 				singleFileParameters.append(reqIString);
 
+				// Add constraints for activation of sub-components
 				for (Component sc : subCompList) {
 					String constraintForSC = String.format("%s in {%s}", cmp.getName() + "." + reqI.getKey(), sc.getName());
 
@@ -151,9 +137,23 @@ public class HASCOToPCSConverter {
 				}
 			}
 
-			Collection<Dependency> dependencies = cmp.getDependencies();
+			for (Parameter param : cmp.getParameters()) {
+				if (param.getDefaultDomain() instanceof CategoricalParameterDomain) {
+					String categoricalStr = this.handleCategorical(cmp.getName(), param);
+					if (categoricalStr != null && !categoricalStr.isEmpty()) {
+						singleFileParameters.append(categoricalStr).append(System.lineSeparator());
+					}
+				} else if (param.getDefaultDomain() instanceof NumericParameterDomain) {
+					String numericStr = this.handleNumeric(cmp.getName(), param);
+					if (numericStr != null && !numericStr.isEmpty()) {
+						singleFileParameters.append(numericStr).append(System.lineSeparator());
+					}
+				}
+			}
+
+			Set<Parameter> params = cmp.getParameters();
 			Map<String, Integer> dependedParameterCounts = new HashMap<>();
-			for (Dependency dep : dependencies) {
+			for (Dependency dep : cmp.getDependencies()) {
 				// conclusion and premise has so far always only 1 element
 				Pair<Parameter, IParameterDomain> post = dep.getConclusion().iterator().next();
 				if (params.contains(post.getX())) {
@@ -181,18 +181,6 @@ public class HASCOToPCSConverter {
 				this.componentConditionals.put(cmp.getName(), conditionals);
 			}
 
-			for (Parameter param : params) {
-				if (dependedParameterCounts.get(param.getName()) == null) {
-					// ignore the dependend parameter's original form
-					if (param.getDefaultDomain() instanceof CategoricalParameterDomain) {
-						String categoricalStr = this.handleCategorical(cmp.getName(), param);
-						singleFileParameters.append(categoricalStr).append(System.lineSeparator());
-					} else if (param.getDefaultDomain() instanceof NumericParameterDomain) {
-						String numericStr = this.handleNumeric(cmp.getName(), param);
-						singleFileParameters.append(numericStr).append(System.lineSeparator());
-					}
-				}
-			}
 		}
 
 		for (Entry<String, Set<String>> condition : constraints.entrySet()) {
@@ -206,28 +194,6 @@ public class HASCOToPCSConverter {
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
-	}
-
-	private String removeUnusedParameters(final StringBuilder content) {
-		String[] lines = content.toString().split(System.lineSeparator());
-		Set<String> lineSet = new LinkedHashSet<>();
-		for (String line : lines) {
-			boolean containsAny = false;
-			for (String param : this.conditionalParametersToRemove) {
-				if (line.startsWith(param)) {
-					containsAny = true;
-					break;
-				}
-			}
-			if (!containsAny) {
-				lineSet.add(line);
-			}
-		}
-
-		StringBuilder cleanContent = new StringBuilder();
-		lineSet.forEach(l -> cleanContent.append(l).append(System.lineSeparator()));
-
-		return cleanContent.toString();
 	}
 
 	private String handleDependencyConditional(final String name, final Pair<Parameter, IParameterDomain> post, final Pair<Parameter, IParameterDomain> pre, final Map<String, Integer> dependedParameterCounts) {
@@ -263,37 +229,6 @@ public class HASCOToPCSConverter {
 		return String.format("%s.%s|%s in {%s}", paramNamespace, paramName, iface, domain);
 	}
 
-	private String handleRequiredInterfaces(final Component requiringComponent, final String interfaceId, final String interfaceNameToHandle) {
-		System.out.println("Calling handleRequiredInterfaces with interfaceId " + interfaceId + " and interfaceNameToHandle " + interfaceNameToHandle);
-		String interfaceParamName = this.nameSpaceInterface(requiringComponent, interfaceId);
-		System.out.println("Interface parameter name: " + interfaceParamName);
-
-		List<Component> componentsProvidingTheInterface = this.components.stream().filter(c -> c.getProvidedInterfaces().contains(interfaceNameToHandle)).collect(Collectors.toList());
-
-		StringBuilder pcsContent = new StringBuilder(this.requestedInterfaceToPCSString(getComponentsWithProvidedInterface(this.components, interfaceNameToHandle), interfaceParamName)).append("\n");
-		for (Component cmp : componentsProvidingTheInterface) {
-			Map<String, String> requiredInterfaces = cmp.getRequiredInterfaces();
-			for (Map.Entry<String, String> e : requiredInterfaces.entrySet()) {
-				pcsContent.append(this.handleRequiredInterfaces(cmp, e.getKey(), e.getValue()));
-				this.componentConditionals.computeIfAbsent(requiringComponent.getName(), t -> new ArrayList<>()).add(paramActivationCondition(cmp.getName(), e.getValue(), interfaceId, cmp.getName()));
-			}
-
-			Set<Parameter> params = cmp.getParameters();
-			for (Parameter param : params) {
-				if (param.getDefaultDomain() instanceof CategoricalParameterDomain) {
-					pcsContent.append(this.handleCategorical(cmp.getName(), param)).append(System.lineSeparator());
-				} else if (param.getDefaultDomain() instanceof NumericParameterDomain) {
-					pcsContent.append(this.handleNumeric(cmp.getName(), param)).append(System.lineSeparator());
-				} else {
-					throw new IllegalArgumentException("Unsupported parameter type.");
-				}
-				this.componentConditionals.computeIfAbsent(requiringComponent.getName(), t -> new ArrayList<>()).add(paramActivationCondition(cmp.getName(), param.getName(), interfaceParamName, cmp.getName()));
-			}
-		}
-
-		return pcsContent.toString();
-	}
-
 	private String handleNumeric(final String componentName, final Parameter param) {
 		String defaultValue = null;
 		NumericParameterDomain domain = (NumericParameterDomain) param.getDefaultDomain();
@@ -314,16 +249,13 @@ public class HASCOToPCSConverter {
 			Double defVal = (Double) param.getDefaultValue();
 			defaultValue = String.valueOf(defVal);
 			if (defVal < minVal || defVal > maxVal) {
-				Log.error("default value:" + defVal + " for " + param.getName() + " is not within range!! replacing it with minValue");
+				logger.error("default value:" + defVal + " for " + param.getName() + " is not within range!! replacing it with minValue");
 				defaultValue = min;
 			}
 		} else {
 			Double minVal = domain.getMin();
 			Double maxVal = domain.getMax();
 			if (minVal.equals(maxVal)) {
-				// if a numeric param has min and max values as same then it is ignored in
-				// hasco, so don't add it to pcs file
-				this.componentConditionals.remove(componentName);
 				return "";
 			}
 			if (minVal != 0) {
@@ -332,7 +264,7 @@ public class HASCOToPCSConverter {
 			Double defVal = (Double) param.getDefaultValue();
 			defaultValue = String.valueOf(defVal);
 			if (defVal < minVal || defVal > maxVal) {
-				Log.error("default value:" + defVal + " for " + param.getName() + " is not within range!! replacing it with minValue");
+				logger.error("default value:" + defVal + " for " + param.getName() + " is not within range!! replacing it with minValue");
 				defaultValue = min;
 			}
 			max = String.valueOf(maxVal);
