@@ -38,7 +38,6 @@ sourceSets {
         }
         resources {
         	srcDir 'conf'
-        	srcDir 'resources'
     	}
     }
 	test {

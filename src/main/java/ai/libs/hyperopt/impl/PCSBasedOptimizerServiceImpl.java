@@ -82,7 +82,7 @@ public class PCSBasedOptimizerServiceImpl<M> extends PCSBasedOptimizerServiceImp
 
 		Map<String, String> requiredInterfaces = new HashMap<>(); // namespacedName,key
 		for (Map.Entry<String, String> e : cmp.getRequiredInterfaces().entrySet()) {
-			requiredInterfaces.put(HASCOToPCSConverter.nameSpaceInterface(cmp, e.getValue()), e.getKey());
+//			requiredInterfaces.put(HASCOToPCSConverter.nameSpaceInterface(cmp, e.getValue()), e.getKey());
 		}
 
 		Set<Parameter> hascoParams = cmp.getParameters();

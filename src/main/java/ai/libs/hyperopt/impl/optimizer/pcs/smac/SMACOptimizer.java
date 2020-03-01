@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.impl.GlobalConfig;
-import ai.libs.hyperopt.impl.HASCOToPCSConverter;
 import ai.libs.hyperopt.impl.PCSBasedOptimizerServiceImpl;
 import ai.libs.hyperopt.impl.exception.OptimizationException;
 import ai.libs.hyperopt.impl.pcs.APCSBasedOptimizer;
@@ -42,7 +41,7 @@ public class SMACOptimizer<M> extends APCSBasedOptimizer<M> {
 	@Override
 	public void prepareOptimization() throws Exception {
 		// write search space configuration file
-		HASCOToPCSConverter.generatePCSFile(this.getInput(), new File(this.getConfig().getExecutionPath(), "searchspace.pcs"));
+//		HASCOToPCSConverter.generatePCSFile(new File(this.getConfig().getExecutionPath(), "searchspace.pcs"));
 
 		// assemble execution parameters for SMAC and write them to scenario file
 		String[] keysToWriteIntoScenario = { SMACOptimizerConfig.K_SMAC_CFG_PARAM_FILE, SMACOptimizerConfig.K_SMAC_CFG_ALGO_RUNS_TIMELIMIT, SMACOptimizerConfig.K_SMAC_CFG_ALWAYS_RACE_DEFAULT, SMACOptimizerConfig.K_SMAC_CFG_COST_FOR_CRASH,
