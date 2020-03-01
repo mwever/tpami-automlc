@@ -18,7 +18,7 @@ import ai.libs.hyperopt.api.input.IOptimizerConfig;
 public interface IPCSBasedOptimizerConfig extends IOptimizerConfig {
 
 	public static final String PCS_BASED_OPTIMIZER_IP = "pcs_based_optimizer.ip";
-	public static final String PCS_OPTIMIZER_PORT = "pcs_based_optimizer.port";
+	public static final String PCS_OPTIMIZER_PORT = "pcs_based_optimizer.gRPC_port";
 
 	@Key(PCS_BASED_OPTIMIZER_IP)
 	@DefaultValue("localhost")

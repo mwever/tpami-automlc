@@ -41,13 +41,16 @@ public class SMACOptimizer<M> extends APCSBasedOptimizer<M> {
 	@Override
 	public void prepareOptimization() throws Exception {
 		// write search space configuration file
-//		HASCOToPCSConverter.generatePCSFile(new File(this.getConfig().getExecutionPath(), "searchspace.pcs"));
+//		String filename = HASCOToPCSConverter.generatePCSFile(this.getInput(), new File(this.getConfig().getExecutionPath()));
+//		this.getConfig().setProperty(SMACOptimizerConfig.K_SMAC_CFG_PARAM_FILE, filename);
 
 		// assemble execution parameters for SMAC and write them to scenario file
-		String[] keysToWriteIntoScenario = { SMACOptimizerConfig.K_SMAC_CFG_PARAM_FILE, SMACOptimizerConfig.K_SMAC_CFG_ALGO_RUNS_TIMELIMIT, SMACOptimizerConfig.K_SMAC_CFG_ALWAYS_RACE_DEFAULT, SMACOptimizerConfig.K_SMAC_CFG_COST_FOR_CRASH,
-				SMACOptimizerConfig.K_SMAC_CFG_CUTOFF, SMACOptimizerConfig.K_SMAC_CFG_DETERMINISTIC, SMACOptimizerConfig.K_SMAC_CFG_GRPC_PORT, SMACOptimizerConfig.K_SMAC_CFG_MEMORY_LIMIT, SMACOptimizerConfig.K_SMAC_CFG_OVERALL_OBJ,
-				SMACOptimizerConfig.K_SMAC_CFG_RUN_COUNT_LIMIT, SMACOptimizerConfig.K_SMAC_CFG_RUN_OBJ, SMACOptimizerConfig.K_SMAC_CFG_WALL_CLOCK_LIMIT, SMACOptimizerConfig.PCS_BASED_OPTIMIZER_IP, SMACOptimizerConfig.PCS_OPTIMIZER_PORT };
+		String[] keysToWriteIntoScenario = { SMACOptimizerConfig.K_SMAC_CFG_ALGO, SMACOptimizerConfig.K_SMAC_CFG_PARAM_FILE, SMACOptimizerConfig.K_SMAC_CFG_ALGO_RUNS_TIMELIMIT, SMACOptimizerConfig.K_SMAC_CFG_ALWAYS_RACE_DEFAULT,
+				SMACOptimizerConfig.K_SMAC_CFG_COST_FOR_CRASH, SMACOptimizerConfig.K_SMAC_CFG_CUTOFF, SMACOptimizerConfig.K_SMAC_CFG_DETERMINISTIC, SMACOptimizerConfig.K_SMAC_CFG_GRPC_PORT, SMACOptimizerConfig.K_SMAC_CFG_MEMORY_LIMIT,
+				SMACOptimizerConfig.K_SMAC_CFG_OVERALL_OBJ, SMACOptimizerConfig.K_SMAC_CFG_RUN_COUNT_LIMIT, SMACOptimizerConfig.K_SMAC_CFG_RUN_OBJ, SMACOptimizerConfig.K_SMAC_CFG_WALL_CLOCK_LIMIT };
 		ScenarioFileUtil.propertiesToScenarioText(new File(this.getConfig().getExecutionPath(), "scenario.txt"), this.getConfig(), keysToWriteIntoScenario);
+		String[] keysToWriteIntoClientConfig = { SMACOptimizerConfig.K_SMAC_CFG_PARAM_FILE, SMACOptimizerConfig.PCS_OPTIMIZER_PORT };
+		ScenarioFileUtil.propertiesToScenarioText(new File(this.getConfig().getExecutionPath(), "client.cfg"), this.getConfig(), keysToWriteIntoClientConfig);
 	}
 
 	@Override

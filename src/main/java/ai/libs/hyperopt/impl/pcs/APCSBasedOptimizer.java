@@ -4,15 +4,22 @@ import org.api4.java.algorithm.events.IAlgorithmEvent;
 import org.api4.java.algorithm.exceptions.AlgorithmException;
 import org.api4.java.algorithm.exceptions.AlgorithmExecutionCanceledException;
 import org.api4.java.algorithm.exceptions.AlgorithmTimeoutedException;
+import org.api4.java.common.attributedobjects.IObjectEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.eventbus.Subscribe;
+
+import ai.libs.hasco.core.Util;
+import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.hyperopt.api.IListenable;
 import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
+import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.api.output.IOptimizationSolutionCandidateFoundEvent;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
 
-public abstract class APCSBasedOptimizer<M> extends AOptimizer<IOptimizationTask<M>, IOptimizationSolutionCandidateFoundEvent<M>, Double> {
+public abstract class APCSBasedOptimizer<M> extends AOptimizer<IOptimizationTask<M>, IOptimizationOutput<M>, Double> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(APCSBasedOptimizer.class);
 
@@ -28,6 +35,16 @@ public abstract class APCSBasedOptimizer<M> extends AOptimizer<IOptimizationTask
 	public IAlgorithmEvent nextWithException() throws InterruptedException, AlgorithmExecutionCanceledException, AlgorithmTimeoutedException, AlgorithmException {
 		switch (this.getState()) {
 		case CREATED:
+			IObjectEvaluator<ComponentInstance, Double> evaluator = this.getInput().getDirectEvaluator(this.getClass().getSimpleName());
+			if(evaluator instanceof IListenable) {
+				((IListenable) evaluator).registerListener(new Object() {
+					@Subscribe
+					public void rcvEvent(IOptimizationOutput<M> out) {
+						LOGGER.info("Received new solution candidate with score {} ({})", out.getScore(), Util.getComponentNamesOfComposition(out.getSolutionDescription()));
+						APCSBasedOptimizer.this.updateBestSeenSolution(out);
+					}
+				});
+			}
 			return super.activate();
 		case ACTIVE:
 			LOGGER.debug("Prepare optimization.");
@@ -57,7 +74,7 @@ public abstract class APCSBasedOptimizer<M> extends AOptimizer<IOptimizationTask
 				throw new AlgorithmException("Could not post handle optimization", e);
 			}
 
-			return this.getBestSeenSolution();
+			return this.terminate();
 		default:
 			throw new IllegalStateException("Cannot do anything in state " + this.getState());
 		}
