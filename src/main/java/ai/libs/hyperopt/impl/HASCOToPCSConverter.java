@@ -106,7 +106,7 @@ public class HASCOToPCSConverter {
 	}
 
 	private String getCategoricalPCSParam(final String paramName, final Collection<String> values, final String defaultValue) {
-		return String.format("%s categorical {%s} [%s]", paramName, SetUtil.implode(values, ","), defaultValue);
+		return String.format("%s categorical {%s} [%s]", paramName, "'"+SetUtil.implode(values, "','")+"'", defaultValue);
 	}
 
 	private void toPCS(final File outputFile) {
@@ -114,12 +114,13 @@ public class HASCOToPCSConverter {
 		StringBuilder singleFileConditionals = new StringBuilder();
 
 		Map<String, Set<String>> constraints = new HashMap<>();
+		Set<String> constraintsToRemove = new HashSet<>();
 		for (Component cmp : this.components) {
 			for (Entry<String, String> reqI : cmp.getRequiredInterfaces().entrySet()) {
 				Collection<Component> subCompList = getComponentsWithProvidedInterface(this.components, reqI.getValue());
 				String reqIString = this.getCategoricalPCSParam(cmp.getName() + "." + reqI.getKey(), subCompList.stream().map(x -> x.getName()).collect(Collectors.toList()), subCompList.iterator().next().getName());
 				// add parameter definition for required interface
-				singleFileParameters.append(reqIString);
+				singleFileParameters.append(reqIString).append(System.lineSeparator());
 
 				// Add constraints for activation of sub-components
 				for (Component sc : subCompList) {
@@ -142,49 +143,53 @@ public class HASCOToPCSConverter {
 					String categoricalStr = this.handleCategorical(cmp.getName(), param);
 					if (categoricalStr != null && !categoricalStr.isEmpty()) {
 						singleFileParameters.append(categoricalStr).append(System.lineSeparator());
+					} else {
+						constraintsToRemove.add(cmp.getName()+"."+param.getName());
 					}
 				} else if (param.getDefaultDomain() instanceof NumericParameterDomain) {
 					String numericStr = this.handleNumeric(cmp.getName(), param);
 					if (numericStr != null && !numericStr.isEmpty()) {
 						singleFileParameters.append(numericStr).append(System.lineSeparator());
+					} else {
+						constraintsToRemove.add(cmp.getName()+"."+param.getName());
 					}
 				}
 			}
 
-			Set<Parameter> params = cmp.getParameters();
-			Map<String, Integer> dependedParameterCounts = new HashMap<>();
-			for (Dependency dep : cmp.getDependencies()) {
-				// conclusion and premise has so far always only 1 element
-				Pair<Parameter, IParameterDomain> post = dep.getConclusion().iterator().next();
-				if (params.contains(post.getX())) {
-					Parameter param = params.stream().filter(p -> p.equals(post.getX())).findFirst().get();
-					Integer val = dependedParameterCounts.get(param.getName());
-					val = val == null ? 1 : ++val;
-					dependedParameterCounts.put(param.getName(), val);
-					String artificialName = "opt" + val + "-" + post.getX().getName();
-					this.dependendParameterMap.put(artificialName, post.getX().getName());
-					Parameter dependendParam = new Parameter(artificialName, post.getY(), post.getX().getDefaultValue());
-					params.add(dependendParam);
-				}
-
-				Pair<Parameter, IParameterDomain> pre = dep.getPremise().iterator().next().iterator().next();
-
-				String cond = this.handleDependencyConditional(cmp.getName(), post, pre, dependedParameterCounts);
-
-				List<String> conditionals = this.componentConditionals.get(cmp.getName());
-				if (conditionals == null) {
-					conditionals = new ArrayList<>();
-					conditionals.add(cond);
-				} else {
-					conditionals.add(cond);
-				}
-				this.componentConditionals.put(cmp.getName(), conditionals);
-			}
-
+//			Set<Parameter> params = cmp.getParameters();
+//			Map<String, Integer> dependedParameterCounts = new HashMap<>();
+//			for (Dependency dep : cmp.getDependencies()) {
+//				// conclusion and premise has so far always only 1 element
+//				Pair<Parameter, IParameterDomain> post = dep.getConclusion().iterator().next();
+//				if (params.contains(post.getX())) {
+//					Parameter param = params.stream().filter(p -> p.equals(post.getX())).findFirst().get();
+//					Integer val = dependedParameterCounts.get(param.getName());
+//					val = val == null ? 1 : ++val;
+//					dependedParameterCounts.put(param.getName(), val);
+//					String artificialName = "opt" + val + "-" + post.getX().getName();
+//					this.dependendParameterMap.put(artificialName, post.getX().getName());
+//					Parameter dependendParam = new Parameter(artificialName, post.getY(), post.getX().getDefaultValue());
+//					params.add(dependendParam);
+//				}
+//
+//				Pair<Parameter, IParameterDomain> pre = dep.getPremise().iterator().next().iterator().next();
+//
+//				String cond = this.handleDependencyConditional(cmp.getName(), post, pre, dependedParameterCounts);
+//
+//				List<String> conditionals = this.componentConditionals.get(cmp.getName());
+//				if (conditionals == null) {
+//					conditionals = new ArrayList<>();
+//					conditionals.add(cond);
+//				} else {
+//					conditionals.add(cond);
+//				}
+//				this.componentConditionals.put(cmp.getName(), conditionals);
+//			}
 		}
 
+		constraintsToRemove.stream().forEach(constraints::remove);
 		for (Entry<String, Set<String>> condition : constraints.entrySet()) {
-			singleFileConditionals.append(String.format("%s | %s", condition.getKey(), SetUtil.implode(condition.getValue(), " || "))).append(System.lineSeparator());
+			singleFileConditionals.append(String.format("%s | %s", condition.getKey(), SetUtil.implode(condition.getValue(), "||"))).append(System.lineSeparator());
 		}
 
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
@@ -289,7 +294,7 @@ public class HASCOToPCSConverter {
 			Log.error("Default value must be contained in categorical values for component:" + componentName);
 			defaultValue = values[0];
 		}
-		return String.format("%s.%s categorical {%s} [%s]", componentName, param.getName(), SetUtil.implode(Arrays.stream(values).collect(Collectors.toList()), ","), defaultValue);
+		return String.format("%s.%s categorical {%s} [%s]", componentName, param.getName(),SetUtil.implode(Arrays.stream(values).map(x -> x.replaceAll(" ", "_")).collect(Collectors.toList()), ","), defaultValue);
 	}
 
 }

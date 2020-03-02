@@ -4,7 +4,7 @@ import ai.libs.hasco.serialization.ComponentLoader;
 import ai.libs.hyperopt.impl.HASCOToPCSConverter;
 
 public class HASCO2PCSConverterTest {
-	private static final String REQUESTED_INTERFACE = "weka.classifiers.functions.SMO";
+	private static final String REQUESTED_INTERFACE = "AbstractClassifier";
 
 	public static void main(final String[] args) throws Exception {
 		ComponentLoader cl = new ComponentLoader(new File("testrsc/meka/mlplan-meka.json"));
