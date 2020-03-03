@@ -9,6 +9,7 @@ import ai.libs.hasco.core.SoftwareConfigurationProblem;
 import ai.libs.hasco.model.Component;
 import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.IConverter;
+import ai.libs.hyperopt.api.IHyperoptObjectEvaluator;
 import ai.libs.hyperopt.impl.evaluator.AutoConvertingObjectEvaluator;
 
 /**
@@ -23,7 +24,7 @@ public interface IOptimizationTask<M> {
 	/**
 	 * @return An evaluator for assessing an instantiation's quality.
 	 */
-	public IObjectEvaluator<M, Double> getEvaluator();
+	public IHyperoptObjectEvaluator<M> getEvaluator();
 
 	/**
 	 * @return The converter translating a ComponentInstance into a representation accessible by the evaluator.

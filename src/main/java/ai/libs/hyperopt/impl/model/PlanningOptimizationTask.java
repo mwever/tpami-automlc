@@ -4,13 +4,13 @@ import java.util.Collection;
 import java.util.Map;
 
 import org.api4.java.algorithm.Timeout;
-import org.api4.java.common.attributedobjects.IObjectEvaluator;
 
 import ai.libs.hasco.model.Component;
 import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hasco.model.Parameter;
 import ai.libs.hasco.model.ParameterRefinementConfiguration;
 import ai.libs.hyperopt.api.IConverter;
+import ai.libs.hyperopt.api.IHyperoptObjectEvaluator;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
 
 public class PlanningOptimizationTask<M> extends OptimizationTask<M> implements IPlanningOptimizationTask<M> {
@@ -22,7 +22,7 @@ public class PlanningOptimizationTask<M> extends OptimizationTask<M> implements 
 	 * @param converter Converter for transforming component instances into an evaluable object.
 	 * @param evaluator The evaluator for assessing the quality of an object.
 	 */
-	public PlanningOptimizationTask(final IConverter<ComponentInstance, M> converter, final IObjectEvaluator<M, Double> evaluator, final Collection<Component> components, final String requestedInterface, final Timeout globalTimeout,
+	public PlanningOptimizationTask(final IConverter<ComponentInstance, M> converter, final IHyperoptObjectEvaluator<M> evaluator, final Collection<Component> components, final String requestedInterface, final Timeout globalTimeout,
 			final Timeout evaluationTimeout, final Map<Component, Map<Parameter, ParameterRefinementConfiguration>> parameterRefinementConfiguration) {
 		super(converter, evaluator, components, requestedInterface, globalTimeout, evaluationTimeout);
 		this.parameterRefinementConfiguration = parameterRefinementConfiguration;

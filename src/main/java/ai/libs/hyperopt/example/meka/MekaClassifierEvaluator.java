@@ -14,6 +14,7 @@ import org.api4.java.common.attributedobjects.ObjectEvaluationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ai.libs.hyperopt.api.IHyperoptObjectEvaluator;
 import ai.libs.hyperopt.api.ILoggingObjectEvaluator;
 import ai.libs.hyperopt.experimenter.AutoMLCExperimenter;
 import ai.libs.jaicore.ml.classification.multilabel.learner.IMekaClassifier;
@@ -25,7 +26,7 @@ import meka.core.Metrics;
 import meka.core.Result;
 import weka.core.Instances;
 
-public class MekaClassifierEvaluator implements ILoggingObjectEvaluator<IMekaClassifier, Double> {
+public class MekaClassifierEvaluator implements ILoggingObjectEvaluator<IMekaClassifier>, IHyperoptObjectEvaluator<IMekaClassifier> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MekaClassifierEvaluator.class);
 
@@ -63,7 +64,7 @@ public class MekaClassifierEvaluator implements ILoggingObjectEvaluator<IMekaCla
 	}
 
 	@Override
-	public double evaluate(final IMekaClassifier object, final Map<String, DescriptiveStatistics> log) throws ObjectEvaluationFailedException, InterruptedException {
+	public Double evaluate(final IMekaClassifier object, final Map<String, DescriptiveStatistics> log, final int budget) throws ObjectEvaluationFailedException, InterruptedException {
 		Random rand = new Random(this.seed);
 		Semaphore sem = new Semaphore(0);
 
@@ -73,7 +74,7 @@ public class MekaClassifierEvaluator implements ILoggingObjectEvaluator<IMekaCla
 			@Override
 			public void run() {
 				try {
-					for (int i = 0; i < MekaClassifierEvaluator.this.iterations; i++) {
+					for (int i = 0; i < budget; i++) {
 						LOGGER.debug("Draw split for iteration {}", i);
 						List<IWekaInstances> split = WekaUtil.realizeSplit(new WekaInstances(MekaClassifierEvaluator.this.dataset),
 								WekaUtil.getArbitrarySplit(new WekaInstances(MekaClassifierEvaluator.this.dataset), rand, MekaClassifierEvaluator.this.splitRatio));
@@ -117,5 +118,10 @@ public class MekaClassifierEvaluator implements ILoggingObjectEvaluator<IMekaCla
 		}
 
 		return log.get(MekaClassifierEvaluator.this.measure).getMean();
+	}
+
+	@Override
+	public int getMaxBudget() {
+		return this.iterations;
 	}
 }

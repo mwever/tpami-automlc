@@ -8,13 +8,14 @@ import org.api4.java.common.attributedobjects.IObjectEvaluator;
 import ai.libs.hasco.model.Component;
 import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.IConverter;
+import ai.libs.hyperopt.api.IHyperoptObjectEvaluator;
 import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.impl.evaluator.AutoConvertingObjectEvaluator;
 
 public class OptimizationTask<M> implements IOptimizationTask<M> {
 
 	private final IConverter<ComponentInstance, M> converter;
-	private final IObjectEvaluator<M, Double> evaluator;
+	private final IHyperoptObjectEvaluator<M> evaluator;
 
 	private Timeout globalTimeout;
 	private Timeout evaluationTimeout;
@@ -28,7 +29,7 @@ public class OptimizationTask<M> implements IOptimizationTask<M> {
 	 * @param converter Converter for transforming component instances into an evaluable object.
 	 * @param evaluator The evaluator for assessing the quality of an object.
 	 */
-	public OptimizationTask(final IConverter<ComponentInstance, M> converter, final IObjectEvaluator<M, Double> evaluator, final Collection<Component> components, final String requestedInterface, final Timeout globalTimeout,
+	public OptimizationTask(final IConverter<ComponentInstance, M> converter, final IHyperoptObjectEvaluator<M> evaluator, final Collection<Component> components, final String requestedInterface, final Timeout globalTimeout,
 			final Timeout evaluationTimeout) {
 		// Components for the execution of the optimization task
 		this.converter = converter;
@@ -49,7 +50,7 @@ public class OptimizationTask<M> implements IOptimizationTask<M> {
 	}
 
 	@Override
-	public IObjectEvaluator<M, Double> getEvaluator() {
+	public IHyperoptObjectEvaluator<M> getEvaluator() {
 		return this.evaluator;
 	}
 

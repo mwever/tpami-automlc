@@ -32,5 +32,6 @@ smac /usr/bin/smac
     curl https://raw.githubusercontent.com/automl/auto-sklearn/master/requirements.txt | xargs -n 1 -L 1 pip install
     pip install grpcio
     pip install grpcio-tools
-
     chmod +x /usr/bin/smac
+    
+    pip install hpbandster

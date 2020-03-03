@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
-import org.api4.java.common.attributedobjects.IObjectEvaluator;
 import org.api4.java.common.attributedobjects.ObjectEvaluationFailedException;
 import org.codehaus.plexus.util.ExceptionUtils;
 
@@ -13,6 +12,7 @@ import ai.libs.hyperopt.api.AListenable;
 import ai.libs.hyperopt.api.ConversionFailedException;
 import ai.libs.hyperopt.api.IComponentInstanceEvaluator;
 import ai.libs.hyperopt.api.IConverter;
+import ai.libs.hyperopt.api.IHyperoptObjectEvaluator;
 import ai.libs.hyperopt.api.ILoggingObjectEvaluator;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.impl.model.OptimizationOutput;
@@ -22,11 +22,11 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements ICo
 
 	private final String algorithmID;
 	private IConverter<ComponentInstance, M> converter;
-	private IObjectEvaluator<M, Double> evaluator;
+	private IHyperoptObjectEvaluator<M> evaluator;
 
 	private long timestampCreated;
 
-	public AutoConvertingObjectEvaluator(final String algorithmID, final IConverter<ComponentInstance, M> converter, final IObjectEvaluator<M, Double> evaluator) {
+	public AutoConvertingObjectEvaluator(final String algorithmID, final IConverter<ComponentInstance, M> converter, final IHyperoptObjectEvaluator<M> evaluator) {
 		this.algorithmID = algorithmID;
 		this.converter = converter;
 		this.evaluator = evaluator;
@@ -35,6 +35,10 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements ICo
 
 	@Override
 	public Double evaluate(final ComponentInstance source) throws InterruptedException, ObjectEvaluationFailedException {
+		return this.evaluate(source, this.evaluator.getMaxBudget());
+	}
+	
+	public Double evaluate(final ComponentInstance source, final int iterations) throws InterruptedException, ObjectEvaluationFailedException {
 		M convertedObject = null;
 		try {
 			convertedObject = this.converter.convert(source);
@@ -47,7 +51,7 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements ICo
 		Double score = null;
 		try {
 			if (this.evaluator instanceof ILoggingObjectEvaluator) {
-				score = ((ILoggingObjectEvaluator<M, Double>) this.evaluator).evaluate(convertedObject, log);
+				score = ((ILoggingObjectEvaluator<M>) this.evaluator).evaluate(convertedObject, log);
 			} else {
 				score = this.evaluator.evaluate(convertedObject);
 			}
@@ -60,6 +64,7 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements ICo
 			this.getEventBus().post(new OptimizationSolutionCandidateFoundEvent<M>(this.algorithmID, output, ExceptionUtils.getFullStackTrace(e)));
 			throw e;
 		}
+		
 	}
 
 	@Override
