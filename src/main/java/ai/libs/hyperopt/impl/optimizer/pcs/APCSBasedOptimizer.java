@@ -2,6 +2,7 @@ package ai.libs.hyperopt.impl.optimizer.pcs;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -12,22 +13,31 @@ import org.api4.java.algorithm.exceptions.AlgorithmTimeoutedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hyperopt.api.input.IOptimizationTask;
+import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.hyperopt.api.IOptimizer;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
+import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
-import ai.libs.hyperopt.impl.HASCOToPCSConverter;
+import ai.libs.hyperopt.impl.GlobalConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.grpc.PCSBasedOptimizerServiceImpl;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
 import ai.libs.jaicore.processes.ProcessUtil;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
 
-public abstract class APCSBasedOptimizer<M> extends AOptimizer<IOptimizationTask<M>, IOptimizationOutput<M>, Double> {
+public abstract class APCSBasedOptimizer<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizationOutput<M>, Double> implements IOptimizer<IPlanningOptimizationTask<M>, M> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(APCSBasedOptimizer.class);
+	private static final IPCSBasedOptimizerConfig GRPC_CONFIG = IPCSBasedOptimizerConfig.get(GlobalConfig.OPTIMIZER_CONFIG_PATH);
+	
 	private HASCOToPCSConverter searchspaceConverter;
 
 	private File pcsFile;
-	private File workingDirectory;
+	private File workingDirectory = new File("test");
+	
+	private Server server;
 
-	protected APCSBasedOptimizer(final IOptimizerConfig config, final IOptimizationTask<M> task) {
+	protected APCSBasedOptimizer(final IOptimizerConfig config, final IPlanningOptimizationTask<M> task) {
 		super(config, task);
 		this.searchspaceConverter = new HASCOToPCSConverter(task.getComponents(), task.getRequestedInterface());
 	}
@@ -40,12 +50,19 @@ public abstract class APCSBasedOptimizer<M> extends AOptimizer<IOptimizationTask
 			try {
 				this.preparePCSFile();
 			} catch (Exception e) {
-				throw new AlgorithmException("Could not create search space file.");
+				throw new AlgorithmException("Could not create search space file.",e);
+			}
+			try {
+				// prepare evaluation interface server
+				server = ServerBuilder.forPort(GRPC_CONFIG.getPort()).addService(new PCSBasedOptimizerServiceImpl<M>(this.getInput(), this.searchspaceConverter)).build();
+				server.start();
+			} catch (Exception e) {
+				throw new AlgorithmException("Could not start evaluation server.", e);
 			}
 			return this.activate();
 		case ACTIVE:
 			// start optimizer program
-			ProcessBuilder pb = new ProcessBuilder(this.getCommand()).directory(this.workingDirectory);
+			ProcessBuilder pb = new ProcessBuilder(this.getCommand()).directory(this.workingDirectory).redirectOutput(Redirect.INHERIT).redirectError(Redirect.INHERIT);
 			Process p = null;
 			try {
 				// start optimization process
@@ -64,6 +81,8 @@ public abstract class APCSBasedOptimizer<M> extends AOptimizer<IOptimizationTask
 					}
 				}
 			}
+			
+			server.shutdownNow();
 			// terminate algorithm as optimizer is finished now.
 			return this.terminate();
 		default:
@@ -76,6 +95,16 @@ public abstract class APCSBasedOptimizer<M> extends AOptimizer<IOptimizationTask
 //		this.pcsFile.deleteOnExit();
 		this.pcsFile = new File(new File("test"), "searchspace.pcs");
 		this.searchspaceConverter.generatePCSFile(this.pcsFile);
+	}
+	
+	@Override
+	public ComponentInstance getResultAsComponentInstance() {
+		return null;
+	}
+
+	@Override
+	public M getResult() {
+		return null;
 	}
 
 	/**

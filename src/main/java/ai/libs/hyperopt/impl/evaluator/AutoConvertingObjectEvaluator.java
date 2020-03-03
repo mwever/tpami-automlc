@@ -46,7 +46,6 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements ICo
 		Map<String, DescriptiveStatistics> log = new HashMap<>();
 		Double score = null;
 		try {
-
 			if (this.evaluator instanceof ILoggingObjectEvaluator) {
 				score = ((ILoggingObjectEvaluator<M, Double>) this.evaluator).evaluate(convertedObject, log);
 			} else {

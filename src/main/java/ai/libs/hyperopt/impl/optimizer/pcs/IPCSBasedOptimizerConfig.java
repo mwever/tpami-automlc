@@ -1,4 +1,4 @@
-package ai.libs.hyperopt.impl.pcs;
+package ai.libs.hyperopt.impl.optimizer.pcs;
 
 import java.io.File;
 import java.io.FileInputStream;

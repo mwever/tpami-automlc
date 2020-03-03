@@ -1,10 +1,9 @@
-package ai.libs.hyperopt.impl;
+package ai.libs.hyperopt.impl.optimizer.pcs;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,11 +23,12 @@ import org.slf4j.LoggerFactory;
 
 import ai.libs.hasco.model.CategoricalParameterDomain;
 import ai.libs.hasco.model.Component;
+import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hasco.model.ComponentUtil;
-import ai.libs.hasco.model.Dependency;
 import ai.libs.hasco.model.IParameterDomain;
 import ai.libs.hasco.model.NumericParameterDomain;
 import ai.libs.hasco.model.Parameter;
+import ai.libs.jaicore.basic.StringUtil;
 import ai.libs.jaicore.basic.sets.Pair;
 import ai.libs.jaicore.basic.sets.SetUtil;
 
@@ -40,6 +42,8 @@ public class HASCOToPCSConverter {
 	private static final Logger logger = LoggerFactory.getLogger(HASCOToPCSConverter.class);
 	private static final String ROOT_COMP_NAME = "root";
 	private static final String ROOT_COMP_REQI = "R";
+	
+	private static final boolean ENCODE_PARAMS = true;
 
 	private Map<String, List<String>> componentConditionals;
 	private Set<String> conditionalParametersToRemove = new HashSet<>();
@@ -50,6 +54,20 @@ public class HASCOToPCSConverter {
 	private final boolean rootRequired;
 	private final Collection<Component> components;
 	private final String requestedInterface;
+	
+	private final Map<String, String> defaults = new HashMap<>();
+	
+	private final Map<String,String> maskedCatValues = new HashMap<>();
+	private final Map<String,String> reverseMaskedCatValues = new HashMap<>();
+	private final Random rand = new Random(42);
+	
+	public Collection<Component> getComponents() {
+		return this.components;
+	}
+	
+	public String getRequestedInterface() {
+		return this.requestedInterface;
+	}
 
 	public HASCOToPCSConverter(final Collection<Component> components, final String requestedInterface) {
 		this.components = new HashSet<>(getComponentsWithProvidedInterface(components, requestedInterface));
@@ -82,6 +100,17 @@ public class HASCOToPCSConverter {
 		return components.stream().filter(x -> x.getProvidedInterfaces().contains(interfaceName)).collect(Collectors.toList());
 	}
 
+	private static final Component getComponentWithName(final Collection<Component> components, final String componentName) {
+		try {
+			return components.stream().filter(x -> x.getName().equals(componentName)).findFirst().get();
+		} catch(NoSuchElementException e) {
+			e.printStackTrace();
+			System.out.println("could not find component with name " + componentName);
+			return null;
+		}
+	}
+
+
 	public Map<String, String> getParameterMapping() {
 		return this.dependendParameterMap;
 	}
@@ -106,7 +135,27 @@ public class HASCOToPCSConverter {
 	}
 
 	private String getCategoricalPCSParam(final String paramName, final Collection<String> values, final String defaultValue) {
-		return String.format("%s categorical {%s} [%s]", paramName, "'"+SetUtil.implode(values, "','")+"'", defaultValue);
+		Collection<String> maskedValues = values.stream().map(x -> x.contains(" ") ? this.maskValue(x) : x).collect(Collectors.toList());
+		String maskedDefaultValue = defaultValue.contains(" ") ? this.maskValue(defaultValue) : defaultValue;
+		this.defaults.put(paramName, defaultValue);
+		return String.format("%s categorical {%s} [%s]", paramName, SetUtil.implode(maskedValues, ","), maskedDefaultValue);
+	}
+	
+	private String maskValue(final String value) {
+		if(!this.maskedCatValues.containsKey(value)) {
+			String randomMaskString;
+			do {
+				randomMaskString = StringUtil.getRandomString(20, StringUtil.getCommonChars(false), this.rand.nextLong());
+			} while(this.maskedCatValues.containsKey(randomMaskString));
+			
+			this.maskedCatValues.put(value, randomMaskString);
+			this.reverseMaskedCatValues.put(randomMaskString, value);
+		}
+		return this.maskedCatValues.get(value);
+	}
+	
+	private String demaskValue(final String maskedValue) {
+		return this.reverseMaskedCatValues.get(maskedValue);
 	}
 
 	private void toPCS(final File outputFile) {
@@ -131,27 +180,31 @@ public class HASCOToPCSConverter {
 						constraints.computeIfAbsent(sc.getName() + "." + scri.getKey(), t -> new HashSet<>()).add(constraintForSC);
 					}
 
-					// add constraints for parameters
-					for (Parameter param : sc.getParameters()) {
-						constraints.computeIfAbsent(sc.getName() + "." + param.getName(), t -> new HashSet<>()).add(constraintForSC);
+					if(ENCODE_PARAMS) {
+						// add constraints for parameters
+						for (Parameter param : sc.getParameters()) {
+							constraints.computeIfAbsent(sc.getName() + "." + param.getName(), t -> new HashSet<>()).add(constraintForSC);
+						}
 					}
 				}
 			}
 
-			for (Parameter param : cmp.getParameters()) {
-				if (param.getDefaultDomain() instanceof CategoricalParameterDomain) {
-					String categoricalStr = this.handleCategorical(cmp.getName(), param);
-					if (categoricalStr != null && !categoricalStr.isEmpty()) {
-						singleFileParameters.append(categoricalStr).append(System.lineSeparator());
-					} else {
-						constraintsToRemove.add(cmp.getName()+"."+param.getName());
-					}
-				} else if (param.getDefaultDomain() instanceof NumericParameterDomain) {
-					String numericStr = this.handleNumeric(cmp.getName(), param);
-					if (numericStr != null && !numericStr.isEmpty()) {
-						singleFileParameters.append(numericStr).append(System.lineSeparator());
-					} else {
-						constraintsToRemove.add(cmp.getName()+"."+param.getName());
+			if(ENCODE_PARAMS) {
+				for (Parameter param : cmp.getParameters()) {
+					if (param.getDefaultDomain() instanceof CategoricalParameterDomain) {
+						String categoricalStr = this.handleCategorical(cmp.getName(), param);
+						if (categoricalStr != null && !categoricalStr.isEmpty()) {
+							singleFileParameters.append(categoricalStr).append(System.lineSeparator());
+						} else {
+							constraintsToRemove.add(cmp.getName()+"."+param.getName());
+						}
+					} else if (param.getDefaultDomain() instanceof NumericParameterDomain) {
+						String numericStr = this.handleNumeric(cmp.getName(), param);
+						if (numericStr != null && !numericStr.isEmpty()) {
+							singleFileParameters.append(numericStr).append(System.lineSeparator());
+						} else {
+							constraintsToRemove.add(cmp.getName()+"."+param.getName());
+						}
 					}
 				}
 			}
@@ -189,12 +242,13 @@ public class HASCOToPCSConverter {
 
 		constraintsToRemove.stream().forEach(constraints::remove);
 		for (Entry<String, Set<String>> condition : constraints.entrySet()) {
-			singleFileConditionals.append(String.format("%s | %s", condition.getKey(), SetUtil.implode(condition.getValue(), "||"))).append(System.lineSeparator());
+			singleFileConditionals.append(condition.getValue().stream().map(x -> String.format("%s | %s", condition.getKey(), x)).collect(Collectors.joining("||"))).append(System.lineSeparator());
+//			singleFileConditionals.append(String.format("%s | %s", condition.getKey(), SetUtil.implode(condition.getValue(), "||"))).append(System.lineSeparator());
 		}
 
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
 			bw.write(singleFileParameters.toString());
-			bw.write("Conditionals:" + System.lineSeparator());
+			bw.write(System.lineSeparator()+"Conditionals:" + System.lineSeparator());
 			bw.write(singleFileConditionals.toString());
 		} catch (IOException e) {
 			logger.error(e.getMessage());
@@ -278,6 +332,8 @@ public class HASCOToPCSConverter {
 
 		String paramType = domain.isInteger() ? "integer" : "real";
 		String logSpace = isLogSpace ? " log" : "";
+		
+		this.defaults.put(componentName+"."+param.getName(), defaultValue);
 		return String.format("%s.%s %s [%s,%s] [%s]%s", componentName, param.getName(), paramType, min, max, defaultValue, logSpace);
 	}
 
@@ -294,7 +350,52 @@ public class HASCOToPCSConverter {
 			Log.error("Default value must be contained in categorical values for component:" + componentName);
 			defaultValue = values[0];
 		}
-		return String.format("%s.%s categorical {%s} [%s]", componentName, param.getName(),SetUtil.implode(Arrays.stream(values).map(x -> x.replaceAll(" ", "_")).collect(Collectors.toList()), ","), defaultValue);
+		
+		return this.getCategoricalPCSParam(componentName+"."+param.getName(), Arrays.stream(values).collect(Collectors.toList()), defaultValue);
 	}
 
+	public ComponentInstance getComponentInstanceFromMap(final Map<String, String> parameterMap) {
+		Collection<Component> comps = getComponentsWithProvidedInterface(this.components, this.requestedInterface);
+		if(comps.size() != 1) {
+			throw new IllegalArgumentException("There seem to be multiple or no roots at all.");
+		}
+
+		//demask categorical values
+		Map<String, String> update = new HashMap<>();
+		for(Entry<String, String> entry : parameterMap.entrySet()) {
+			String demaskedValue = this.demaskValue(entry.getValue()); 
+			if(demaskedValue != null) {
+				update.put(entry.getKey(), demaskedValue);
+			}
+		}
+
+		if(this.rootRequired) {
+			return this.getComponentInstanceFromMap(parameterMap, comps.iterator().next().getName()).getSatisfactionOfRequiredInterfaces().get(ROOT_COMP_REQI);
+		} else {
+			return this.getComponentInstanceFromMap(parameterMap, comps.iterator().next().getName());
+		}
+	}
+	
+	private ComponentInstance getComponentInstanceFromMap(final Map<String, String> parameterMap, final String componentName) {
+		Component rootComp = getComponentWithName(this.components, componentName);
+		ComponentInstance rootCI = new ComponentInstance(rootComp, new HashMap<>(), new HashMap<>());
+		for(Parameter param : rootComp.getParameters()) {
+			String nsParam = rootComp.getName() +"."+param.getName();
+			if(parameterMap.containsKey(nsParam)) {
+				rootCI.getParameterValues().put(param.getName(), parameterMap.get(rootComp.getName()+"."+param.getName()));
+			} else {
+				rootCI.getParameterValues().put(param.getName(), this.defaults.get(nsParam));
+			}
+		}
+		for(String reqI : rootComp.getRequiredInterfaces().keySet()) {
+			String nsIface = rootComp.getName() +"."+reqI;
+			if(parameterMap.containsKey(nsIface)) {
+				rootCI.getSatisfactionOfRequiredInterfaces().put(reqI, this.getComponentInstanceFromMap(parameterMap, parameterMap.get(rootComp.getName() +"."+reqI)));
+			} else {
+				rootCI.getSatisfactionOfRequiredInterfaces().put(reqI, this.getComponentInstanceFromMap(parameterMap, this.defaults.get(nsIface)));
+			}
+		}
+		return rootCI;
+	}
+	
 }

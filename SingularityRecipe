@@ -1,6 +1,9 @@
 Bootstrap: docker
 From: ubuntu:18.04
 
+%files
+smac /usr/bin/smac
+
 %post
     echo "Installing the singularity container"
     apt update
@@ -27,3 +30,7 @@ From: ubuntu:18.04
     apt install -y swig
     pip install argparse
     curl https://raw.githubusercontent.com/automl/auto-sklearn/master/requirements.txt | xargs -n 1 -L 1 pip install
+    pip install grpcio
+    pip install grpcio-tools
+
+    chmod +x /usr/bin/smac

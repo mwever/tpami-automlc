@@ -1,6 +1,6 @@
 {
 	"repository": "MEKA",
-	"include": [],
+	"include": ["../weka/weka-singlelabel-base.json", "../weka/weka-singlelabel-meta.json"],
 	"parameters": [],
 	"components": [
 		{

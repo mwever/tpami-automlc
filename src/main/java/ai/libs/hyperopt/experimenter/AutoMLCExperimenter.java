@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import ai.libs.hasco.serialization.ComponentLoader;
 import ai.libs.hyperopt.api.IOptimizer;
+import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
@@ -28,6 +29,8 @@ import ai.libs.hyperopt.impl.model.PlanningOptimizationTask;
 import ai.libs.hyperopt.impl.optimizer.baseline.RandomSearch;
 import ai.libs.hyperopt.impl.optimizer.htn.BestFirstOptimizer;
 import ai.libs.hyperopt.impl.optimizer.htn.MCTSOptimizer;
+import ai.libs.hyperopt.impl.optimizer.pcs.IPCSBasedOptimizerConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.smac.SMACOptimizer;
 import ai.libs.hyperopt.logger.DatabaseLogger;
 import ai.libs.hyperopt.logger.SCandidateEvaluatedSchema;
 import ai.libs.jaicore.basic.sets.SetUtil;
@@ -148,6 +151,7 @@ public class AutoMLCExperimenter implements IExperimentSetEvaluator {
 		case "hyperband":
 			break;
 		case "smac":
+			opt = new SMACOptimizer<IMekaClassifier>(config, task);
 			break;
 		case "random":
 			opt = new RandomSearch<>(config, task);

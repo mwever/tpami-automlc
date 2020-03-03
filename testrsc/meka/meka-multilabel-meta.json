@@ -1,6 +1,6 @@
 {
 	"repository": "MEKA_META",
-	"include": [],
+	"include": ["./meka-multilabel-base.json"],
 	"parameters": [
 	],
 	"components": [

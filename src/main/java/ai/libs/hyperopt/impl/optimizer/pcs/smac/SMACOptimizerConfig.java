@@ -1,9 +1,6 @@
 package ai.libs.hyperopt.impl.optimizer.pcs.smac;
 
-import org.aeonbits.owner.Config.DefaultValue;
-import org.aeonbits.owner.Config.Key;
-
-import ai.libs.hyperopt.impl.pcs.IPCSBasedOptimizerConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.IPCSBasedOptimizerConfig;
 
 public interface SMACOptimizerConfig extends IPCSBasedOptimizerConfig {
 

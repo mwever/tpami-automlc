@@ -1,7 +1,5 @@
 package ai.libs.hyperopt.impl.optimizer.pcs;
 
-import ai.libs.hyperopt.impl.pcs.IPCSBasedOptimizerConfig;
-
 public interface HyperbandLikeOptimizerConfig extends IPCSBasedOptimizerConfig {
 
 	public static final String K_EXEC_PATH = "hbl.execution_path";
