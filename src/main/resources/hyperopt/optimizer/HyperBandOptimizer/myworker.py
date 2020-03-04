@@ -50,7 +50,7 @@ class MyWorker(Worker):
         channel = grpc.insecure_channel("localhost:" + str(self.gRPC_port))
         stub = PCSBasedComponentParameter_pb2_grpc.PCSBasedOptimizerServiceStub(channel)
 
-        cmp = PCSBasedComponentParameter_pb2.PCSBasedComponentProto(name=self.component_name, parameters=params)
+        cmp = PCSBasedComponentParameter_pb2.PCSBasedComponentProto(name=budget, parameters=params)
 
         response = stub.Evaluate(cmp)
         channel.close()

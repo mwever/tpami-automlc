@@ -40,7 +40,7 @@ if __name__ == '__main__':
     channel = grpc.insecure_channel("127.0.0.1:8081")
     stub = PCSBasedComponentParameter_pb2_grpc.PCSBasedOptimizerServiceStub(channel)
 
-    cmp = PCSBasedComponentParameter_pb2.PCSBasedComponentProto(name=componentName, parameters=params)
+    cmp = PCSBasedComponentParameter_pb2.PCSBasedComponentProto(name="5", parameters=params)
 
     myfile = open("algo-log.txt", 'a')
     myfile.write("created proto comp, now evaluate\n")
