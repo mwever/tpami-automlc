@@ -9,7 +9,7 @@ import ai.libs.jaicore.experiments.ExperimentDBEntry;
 import ai.libs.jaicore.experiments.IExperimentIntermediateResultProcessor;
 import ai.libs.jaicore.experiments.exceptions.ExperimentEvaluationFailedException;
 
-public class SMACTest {
+public class HBTest {
 
 	public static final int MAX_MEM = 4096;
 	public static final int NUM_CPUS = 4;
@@ -19,12 +19,12 @@ public class SMACTest {
 
 		Map<String, String> valuesOfKeyFields = new HashMap<>();
 
-		valuesOfKeyFields.put("algorithm", "smac");
+		valuesOfKeyFields.put("algorithm", "hb");
 		valuesOfKeyFields.put("dataset", "flags");
 		valuesOfKeyFields.put("seed", "42");
 		valuesOfKeyFields.put("split", "0");
 		valuesOfKeyFields.put("measure", "FMacroAvgD");
-		valuesOfKeyFields.put("globalTimeout", "60");
+		valuesOfKeyFields.put("globalTimeout", "600");
 		valuesOfKeyFields.put("evaluationTimeout", "45");
 		ExperimentDBEntry experimentEntry = new ExperimentDBEntry(0, new Experiment(MAX_MEM, NUM_CPUS, valuesOfKeyFields));
 

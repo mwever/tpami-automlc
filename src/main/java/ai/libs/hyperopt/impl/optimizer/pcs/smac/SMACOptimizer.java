@@ -1,131 +1,139 @@
 package ai.libs.hyperopt.impl.optimizer.pcs.smac;
 
-import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.io.Files;
+
+import ai.libs.hyperopt.ScenarioFileBuilder;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
-import ai.libs.hyperopt.impl.GlobalConfig;
 import ai.libs.hyperopt.impl.optimizer.pcs.APCSBasedOptimizer;
-import ai.libs.jaicore.basic.FileUtil;
+import ai.libs.jaicore.processes.ProcessIDNotRetrievableException;
+import ai.libs.jaicore.processes.ProcessUtil;
 
 /**
  *
- * @author kadirayk
+ * @author mwever
  *
  */
 public class SMACOptimizer<M> extends APCSBasedOptimizer<M> {
+	private static final String grpcOptDir = "smac";
+	private static final String grpcOptRunScript = "run.py";
+	private static final String grpcOptClientScript = "SMACOptimizerClient.py";
+	private static final String clientConfig = "client.conf";
+	private static final String scenarioFileName = "scenario.txt";
+	private final File optDir;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SMACOptimizer.class);
-	
-	private final String scriptName = "testsmac.py";
-	private final String singularityImage = "automlc.img";
 
-	public SMACOptimizer(final IOptimizerConfig config, final IPlanningOptimizationTask<M> input) {
-		super(config, input);
+	public SMACOptimizer(final String id, final IOptimizerConfig config, final IPlanningOptimizationTask<M> input) {
+		super(id, config, input);
+		this.optDir = new File(this.getConfig().getGPRPCDirectory(), grpcOptDir);
 	}
-
-//	@Override
-//	public void prepareOptimization() throws Exception {
-//		// write search space configuration file
-////		String filename = HASCOToPCSConverter.generatePCSFile(this.getInput(), new File(this.getConfig().getExecutionPath()));
-////		this.getConfig().setProperty(SMACOptimizerConfig.K_SMAC_CFG_PARAM_FILE, filename);
-//
-//		// assemble execution parameters for SMAC and write them to scenario file
-//		String[] keysToWriteIntoScenario = { SMACOptimizerConfig.K_SMAC_CFG_ALGO, SMACOptimizerConfig.K_SMAC_CFG_PARAM_FILE, SMACOptimizerConfig.K_SMAC_CFG_ALGO_RUNS_TIMELIMIT, SMACOptimizerConfig.K_SMAC_CFG_ALWAYS_RACE_DEFAULT,
-//				SMACOptimizerConfig.K_SMAC_CFG_COST_FOR_CRASH, SMACOptimizerConfig.K_SMAC_CFG_CUTOFF, SMACOptimizerConfig.K_SMAC_CFG_DETERMINISTIC, SMACOptimizerConfig.K_SMAC_CFG_GRPC_PORT, SMACOptimizerConfig.K_SMAC_CFG_MEMORY_LIMIT,
-//				SMACOptimizerConfig.K_SMAC_CFG_OVERALL_OBJ, SMACOptimizerConfig.K_SMAC_CFG_RUN_COUNT_LIMIT, SMACOptimizerConfig.K_SMAC_CFG_RUN_OBJ, SMACOptimizerConfig.K_SMAC_CFG_WALL_CLOCK_LIMIT };
-//		ScenarioFileUtil.propertiesToScenarioText(new File(this.getConfig().getExecutionPath(), "scenario.txt"), this.getConfig(), keysToWriteIntoScenario);
-//		String[] keysToWriteIntoClientConfig = { SMACOptimizerConfig.K_SMAC_CFG_PARAM_FILE, SMACOptimizerConfig.PCS_OPTIMIZER_PORT };
-//		ScenarioFileUtil.propertiesToScenarioText(new File(this.getConfig().getExecutionPath(), "client.cfg"), this.getConfig(), keysToWriteIntoClientConfig);
-//	}
-//
-//	@Override
-//	public void runOptimization() throws OptimizationException {
-//		// start grpc server for evaluation
-//		Thread thread = new Thread(() -> {
-//			try {
-//				System.out.println(this.getConfig().getPort());
-//				Server server = ServerBuilder.forPort(this.getConfig().getPort()).addService(new PCSBasedOptimizerServiceImpl<M>(this.getInput())).build();
-//				server.start();
-//				server.awaitTermination();
-//			} catch (IOException | InterruptedException e) {
-//				LOGGER.error(e.getMessage());
-//			}
-//		});
-//		thread.start();
-//		LOGGER.info("started gRPC server");
-//
-//		// run SMAC
-//		StringBuilder command = new StringBuilder();
-//		command.append("run.py --scenario scenario.txt");
-//
-//		if (this.getConfig().getNumThreads() > 1) {
-//			command.append(" --shared_model True --input_psmac_dirs smac3-output*");
-//
-//			ExecutorService executor = Executors.newFixedThreadPool(this.getConfig().getNumThreads());
-//			IntStream.range(0, this.getConfig().getNumThreads()).forEach(x -> executor.submit(() -> this.runSMAC(command.toString())));
-//			executor.shutdown();
-//			try {
-//				if (!executor.awaitTermination(5, TimeUnit.MINUTES)) {
-//					executor.shutdownNow();
-//				}
-//			} catch (InterruptedException ex) {
-//				executor.shutdownNow();
-//				Thread.currentThread().interrupt();
-//			}
-//		} else {
-//			this.runSMAC(command.toString());
-//		}
-//
-//	}
-
-//	private void runSMAC(final String command) {
-//		ProcessBuilder builder = new ProcessBuilder().directory(new File(this.getConfig().getExecutionPath())).command(GlobalConfig.PYTHON_EXEC, "run.py", "--scenario", "scenario.txt").redirectErrorStream(true);
-//		Process p = null;
-//		System.out.println("Execute command " + command);
-//		try {
-//			p = builder.start();
-//		} catch (IOException e) {
-//			System.out.println("Exception!");
-//			LOGGER.error(e.getMessage());
-//			LOGGER.error("Unable spawn python process={} in path={}", command, this.getConfig().getExecutionPath());
-//		}
-//		BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//
-//		String line = null;
-//		List<String> smacOutLines = new ArrayList<>();
-//		while (true) {
-//			try {
-//				line = r.readLine();
-//			} catch (IOException e) {
-//				LOGGER.error(e.getMessage());
-//			}
-//			smacOutLines.add(line);
-//			System.out.println("SMAC out: " + line);
-//			if (line == null) {
-//				break;
-//			}
-//		}
-//		try {
-//			FileUtil.writeFileAsList(smacOutLines, "testrsc/smac.log");
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	@Override
 	public List<String> getCommand() {
-		return Arrays.asList("singularity", "exec", singularityImage, "python", scriptName);
+		return Arrays.asList("singularity", "exec", this.getConfig().getSingularityContainer().getAbsolutePath(), "python", grpcOptRunScript, "--scenario", "scenario.txt");
 	}
 
+	@Override
+	public void prepareConfigFiles() throws IOException {
+		// Copy the run script into the working directory
+		File runScript = new File(this.optDir, grpcOptRunScript);
+		File tempRunScript = new File(this.getWorkingDirectory(), grpcOptRunScript);
+		Files.copy(runScript, tempRunScript);
+
+		// Copy the client script into the working directory
+		File clientScript = new File(this.optDir, grpcOptClientScript);
+		File tempClientScript = new File(this.getWorkingDirectory(), grpcOptClientScript);
+		Files.copy(clientScript, tempClientScript);
+
+		// Create client config file
+		File clientConfigFile = new File(this.getWorkingDirectory(), clientConfig);
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(clientConfigFile))) {
+			bw.write(new ObjectMapper().writeValueAsString(this.getClientConfig()));
+		}
+
+		// Create scenario file
+		File scenarioFile = new File(this.getWorkingDirectory(), scenarioFileName);
+		ScenarioFileBuilder scenarioBuilder = new ScenarioFileBuilder().withPCSFile(this.getConfig().getSearchSpaceFileName()).withAlgo("python " + grpcOptClientScript);
+		if (this.getConfig().cpus() > 1) {
+			scenarioBuilder.withSharedModel("True").withDefaultInputPsmacDirs();
+		}
+		scenarioBuilder.toScenarioFile(scenarioFile);
+	}
+
+	public JsonNode getClientConfig() {
+		ObjectMapper om = new ObjectMapper();
+		ObjectNode root = om.createObjectNode();
+		root.put("gRPC_port", this.getConfig().getPort());
+		return root;
+	}
+
+	@Override
+	protected void runOptimizer() throws Exception {
+		ExecutorService executor = Executors.newFixedThreadPool(this.getConfig().cpus());
+		IntStream.range(0, this.getConfig().cpus()).mapToObj(x -> new Runnable() {
+			@Override
+			public void run() {
+				ProcessBuilder pb = new ProcessBuilder(SMACOptimizer.this.getCommand()).directory(SMACOptimizer.this.getWorkingDirectory()).redirectOutput(Redirect.INHERIT).redirectError(Redirect.INHERIT);
+				Process p = null;
+				int processID = -1;
+				try {
+					p = pb.start();
+					try {
+						processID = ProcessUtil.getPID(p);
+					} catch (ProcessIDNotRetrievableException e1) {
+
+					}
+					p.waitFor(SMACOptimizer.this.getInput().getGlobalTimeout().milliseconds(), TimeUnit.MILLISECONDS);
+				} catch (IOException e) {
+					LOGGER.warn("Could not spawn smac process.", e);
+				} catch (InterruptedException e) {
+					LOGGER.warn("Got interrupted while waiting for the process to finish.");
+					e.printStackTrace();
+
+					if (p.isAlive()) {
+						if (processID >= 0) {
+							try {
+								ProcessUtil.killProcess(processID);
+							} catch (IOException e1) {
+								e1.printStackTrace();
+								p.destroyForcibly();
+							}
+						} else {
+							p.destroyForcibly();
+						}
+					}
+				}
+			}
+
+		}).forEach(executor::submit);
+		executor.shutdown();
+
+		try {
+			executor.awaitTermination(this.getInput().getGlobalTimeout().milliseconds(), TimeUnit.MILLISECONDS);
+		} finally {
+			if (!executor.isTerminated() || !executor.isShutdown()) {
+				executor.shutdownNow();
+			}
+		}
+	}
 
 }

@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import ai.libs.hasco.serialization.ComponentLoader;
 import ai.libs.hyperopt.api.IOptimizer;
-import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
@@ -29,7 +28,9 @@ import ai.libs.hyperopt.impl.model.PlanningOptimizationTask;
 import ai.libs.hyperopt.impl.optimizer.baseline.RandomSearch;
 import ai.libs.hyperopt.impl.optimizer.htn.BestFirstOptimizer;
 import ai.libs.hyperopt.impl.optimizer.htn.MCTSOptimizer;
-import ai.libs.hyperopt.impl.optimizer.pcs.IPCSBasedOptimizerConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.IPCSOptimizerConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.bohb.BOHBOptimizer;
+import ai.libs.hyperopt.impl.optimizer.pcs.hb.HyperBandOptimizer;
 import ai.libs.hyperopt.impl.optimizer.pcs.smac.SMACOptimizer;
 import ai.libs.hyperopt.logger.DatabaseLogger;
 import ai.libs.hyperopt.logger.SCandidateEvaluatedSchema;
@@ -138,6 +139,9 @@ public class AutoMLCExperimenter implements IExperimentSetEvaluator {
 		config.setProperty(IOptimizerConfig.K_CPUS, experimentEntry.getExperiment().getNumCPUs() + "");
 		IPlanningOptimizationTask<IMekaClassifier> task = new PlanningOptimizationTask<IMekaClassifier>(converter, evaluator, cl.getComponents(), REQ_INTERFACE, globalTimeout, evaluationTimeout, cl.getParamConfigs());
 
+		IPCSOptimizerConfig pcsConfig = ConfigFactory.create(IPCSOptimizerConfig.class);
+		pcsConfig.setProperty(IPCSOptimizerConfig.K_CPUS, experimentEntry.getExperiment().getNumCPUs() + "");
+
 		IOptimizer<IPlanningOptimizationTask<IMekaClassifier>, IMekaClassifier> opt = null;
 		switch (algorithm) {
 		case "mcts":
@@ -147,11 +151,13 @@ public class AutoMLCExperimenter implements IExperimentSetEvaluator {
 			opt = new BestFirstOptimizer<>(config, task);
 			break;
 		case "bohb":
+			opt = new BOHBOptimizer<IMekaClassifier>(experimentEntry.getId() + "", pcsConfig, task);
 			break;
 		case "hyperband":
+			opt = new HyperBandOptimizer<IMekaClassifier>(experimentEntry.getId() + "", pcsConfig, task);
 			break;
 		case "smac":
-			opt = new SMACOptimizer<IMekaClassifier>(config, task);
+			opt = new SMACOptimizer<IMekaClassifier>(experimentEntry.getId() + "", pcsConfig, task);
 			break;
 		case "random":
 			opt = new RandomSearch<>(config, task);

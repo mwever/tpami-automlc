@@ -22,4 +22,6 @@ public interface IOptimizationSolutionCandidateFoundEvent<M> extends IScoredSolu
 
 	public long getTimeUntilFound();
 
+	public IOptimizationOutput<M> getOutput();
+
 }

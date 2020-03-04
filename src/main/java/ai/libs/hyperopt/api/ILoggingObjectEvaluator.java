@@ -10,10 +10,6 @@ import org.api4.java.common.attributedobjects.ObjectEvaluationFailedException;
 public interface ILoggingObjectEvaluator<T> extends IObjectEvaluator<T, Double>, IHyperoptObjectEvaluator<T> {
 	
 	@Override
-	default Double evaluate(final T object) throws ObjectEvaluationFailedException, InterruptedException {
-		return this.evaluate(object,new HashMap<>());
-	}
-	@Override
 	default Double evaluate(final T object, final int budget) throws ObjectEvaluationFailedException, InterruptedException {
 		return this.evaluate(object,new HashMap<>(), budget);
 	}

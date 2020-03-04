@@ -42,6 +42,10 @@ public class OptimizationSolutionCandidateFoundEvent<M> implements IOptimization
 		return this.output.getObject();
 	}
 
+	public IOptimizationOutput<M> getOutput() {
+		return this.output;
+	}
+
 	@Override
 	public Double getScore() {
 		return this.output.getScore();

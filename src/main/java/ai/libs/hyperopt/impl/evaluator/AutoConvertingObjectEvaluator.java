@@ -10,7 +10,6 @@ import org.codehaus.plexus.util.ExceptionUtils;
 import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.AListenable;
 import ai.libs.hyperopt.api.ConversionFailedException;
-import ai.libs.hyperopt.api.IComponentInstanceEvaluator;
 import ai.libs.hyperopt.api.IConverter;
 import ai.libs.hyperopt.api.IHyperoptObjectEvaluator;
 import ai.libs.hyperopt.api.ILoggingObjectEvaluator;
@@ -18,7 +17,7 @@ import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.impl.model.OptimizationOutput;
 import ai.libs.hyperopt.impl.model.OptimizationSolutionCandidateFoundEvent;
 
-public class AutoConvertingObjectEvaluator<M> extends AListenable implements IComponentInstanceEvaluator {
+public class AutoConvertingObjectEvaluator<M> extends AListenable implements IHyperoptObjectEvaluator<ComponentInstance> {
 
 	private final String algorithmID;
 	private IConverter<ComponentInstance, M> converter;
@@ -33,11 +32,8 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements ICo
 		this.timestampCreated = System.currentTimeMillis();
 	}
 
-	@Override
-	public Double evaluate(final ComponentInstance source) throws InterruptedException, ObjectEvaluationFailedException {
-		return this.evaluate(source, this.evaluator.getMaxBudget());
-	}
 	
+	@Override
 	public Double evaluate(final ComponentInstance source, final int iterations) throws InterruptedException, ObjectEvaluationFailedException {
 		M convertedObject = null;
 		try {
@@ -70,6 +66,12 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements ICo
 	@Override
 	public String toString() {
 		return new StringBuilder(this.getClass().getName()).append("(").append(this.converter.getClass().getName()).append(",").append(this.evaluator.getClass().getName()).append(")").toString();
+	}
+
+
+	@Override
+	public int getMaxBudget() {
+		return this.evaluator.getMaxBudget();
 	}
 
 }

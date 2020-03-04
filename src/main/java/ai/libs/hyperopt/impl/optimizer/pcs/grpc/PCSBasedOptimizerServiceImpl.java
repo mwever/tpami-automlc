@@ -3,6 +3,10 @@ package ai.libs.hyperopt.impl.optimizer.pcs.grpc;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.api4.java.common.attributedobjects.ObjectEvaluationFailedException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedComponentProto;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedEvaluationResponseProto;
@@ -19,9 +23,11 @@ import io.grpc.stub.StreamObserver;
  */
 public class PCSBasedOptimizerServiceImpl<M> extends PCSBasedOptimizerServiceImplBase {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(Logger.class);
+
 	private final IOptimizationTask<M> input;
 	private final HASCOToPCSConverter searchspaceConverter;
-	
+
 	public PCSBasedOptimizerServiceImpl(final IOptimizationTask<M> input, final HASCOToPCSConverter searchspaceConverter) {
 		this.input = input;
 		this.searchspaceConverter = searchspaceConverter;
@@ -44,15 +50,20 @@ public class PCSBasedOptimizerServiceImpl<M> extends PCSBasedOptimizerServiceImp
 		System.out.println("Build component instance from map: " + parameterMap);
 		ComponentInstance componentInstance = this.searchspaceConverter.getComponentInstanceFromMap(parameterMap);
 
+		int budget = Integer.parseInt(request.getName());
+		LOGGER.info("Run configuration with budget " + budget);
+
 		// Evaluate the score of the component instance.
 		Double score = 0.0;
-//		try {
-//			System.out.println(componentInstance);
-//			score = this.input.getDirectEvaluator(this.getClass().getSimpleName()).evaluate(componentInstance);
-//		} catch (InterruptedException | ObjectEvaluationFailedException e) {
-//			e.printStackTrace();
-//		}
-
+		try {
+			score = this.input.getDirectEvaluator(this.getClass().getSimpleName()).evaluate(componentInstance);
+		} catch (InterruptedException | ObjectEvaluationFailedException e) {
+			e.printStackTrace();
+			if (e instanceof ObjectEvaluationFailedException && e.getMessage().toLowerCase().contains("timeout")) {
+				score = -1.0;
+			}
+			score = -5.0;
+		}
 		PCSBasedEvaluationResponseProto response = PCSBasedEvaluationResponseProto.newBuilder().setResult(score).build();
 
 		responseObserver.onNext(response);
