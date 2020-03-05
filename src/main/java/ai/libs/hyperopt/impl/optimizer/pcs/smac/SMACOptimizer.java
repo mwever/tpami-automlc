@@ -33,7 +33,7 @@ import ai.libs.jaicore.processes.ProcessUtil;
  *
  */
 public class SMACOptimizer<M> extends APCSBasedOptimizer<M> {
-	private static final String grpcOptDir = "smac";
+	private static final String NAME = "smac";
 	private static final String grpcOptRunScript = "run.py";
 	private static final String grpcOptClientScript = "SMACOptimizerClient.py";
 	private static final String clientConfig = "client.conf";
@@ -44,12 +44,16 @@ public class SMACOptimizer<M> extends APCSBasedOptimizer<M> {
 
 	public SMACOptimizer(final String id, final IOptimizerConfig config, final IPlanningOptimizationTask<M> input) {
 		super(id, config, input);
-		this.optDir = new File(this.getConfig().getGPRPCDirectory(), grpcOptDir);
+		this.optDir = new File(this.getConfig().getGPRPCDirectory(), NAME);
 	}
 
 	@Override
-	public List<String> getCommand() {
-		return Arrays.asList("singularity", "exec", this.getConfig().getSingularityContainer().getAbsolutePath(), "python", grpcOptRunScript, "--scenario", "scenario.txt");
+	public String getName() {
+		return NAME;
+	}
+
+	public List<String> getCommand(final int x) {
+		return Arrays.asList("singularity", "exec", this.getConfig().getSingularityContainer().getAbsolutePath(), "python", grpcOptRunScript, "--scenario", "scenario.txt", "--seed", x + "");
 	}
 
 	@Override
@@ -92,7 +96,7 @@ public class SMACOptimizer<M> extends APCSBasedOptimizer<M> {
 		IntStream.range(0, this.getConfig().cpus()).mapToObj(x -> new Runnable() {
 			@Override
 			public void run() {
-				ProcessBuilder pb = new ProcessBuilder(SMACOptimizer.this.getCommand()).directory(SMACOptimizer.this.getWorkingDirectory()).redirectOutput(Redirect.INHERIT).redirectError(Redirect.INHERIT);
+				ProcessBuilder pb = new ProcessBuilder(SMACOptimizer.this.getCommand(x)).directory(SMACOptimizer.this.getWorkingDirectory()).redirectOutput(Redirect.INHERIT).redirectError(Redirect.INHERIT);
 				Process p = null;
 				int processID = -1;
 				try {

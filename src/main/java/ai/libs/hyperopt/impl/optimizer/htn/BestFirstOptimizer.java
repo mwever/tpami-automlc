@@ -16,6 +16,8 @@ import ai.libs.jaicore.planning.hierarchical.algorithms.forwarddecomposition.gra
 
 public class BestFirstOptimizer<M> extends AHTNBasedOptimizer<M> {
 
+	public static final String NAME = "bf";
+
 	private final HASCOViaFDAndBestFirstWithRandomCompletionsFactory hascoFactory;
 	private final AOptimizer algo;
 
@@ -43,6 +45,11 @@ public class BestFirstOptimizer<M> extends AHTNBasedOptimizer<M> {
 	@Override
 	public AOptimizer getAlgo() {
 		return this.algo;
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
 	}
 
 }

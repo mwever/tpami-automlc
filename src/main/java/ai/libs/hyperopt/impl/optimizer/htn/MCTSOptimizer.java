@@ -9,6 +9,8 @@ import ai.libs.jaicore.search.algorithms.standard.mcts.comparison.FixedCommitmen
 
 public class MCTSOptimizer<M> extends AHTNBasedOptimizer<M> {
 
+	public static final String NAME = "mcts";
+
 	private AOptimizer search;
 
 	public MCTSOptimizer(final IOptimizerConfig config, final IPlanningOptimizationTask<M> input) {
@@ -22,6 +24,11 @@ public class MCTSOptimizer<M> extends AHTNBasedOptimizer<M> {
 	@Override
 	public AOptimizer getAlgo() {
 		return this.search;
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
 	}
 
 }

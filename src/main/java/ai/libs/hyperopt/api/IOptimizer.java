@@ -11,4 +11,6 @@ public interface IOptimizer<T, M> extends IAlgorithm<T, IOptimizationOutput<M>> 
 
 	public M getResult();
 
+	public String getName();
+
 }

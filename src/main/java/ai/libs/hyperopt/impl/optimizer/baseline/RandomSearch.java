@@ -34,6 +34,8 @@ import ai.libs.jaicore.basic.algorithm.AOptimizer;
 
 public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizationOutput<M>, Double> implements IOptimizer<IPlanningOptimizationTask<M>, M> {
 
+	public static final String NAME = "random";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(RandomSearch.class);
 
 	private Lock lock = new ReentrantLock();
@@ -161,6 +163,11 @@ public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IO
 
 	public Double getBestScore() {
 		return this.getBestSeenSolution().getScore();
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
 	}
 
 	@Override

@@ -10,6 +10,8 @@ import ai.libs.jaicore.search.algorithms.standard.mcts.UCTPathSearchFactory;
 
 public class UCTOptimizer<M> extends AHTNBasedOptimizer<M> {
 
+	public static final String NAME = "uct";
+
 	private AOptimizer search;
 
 	public UCTOptimizer(final IOptimizerConfig config, final IPlanningOptimizationTask<M> input) {
@@ -26,6 +28,11 @@ public class UCTOptimizer<M> extends AHTNBasedOptimizer<M> {
 	@Override
 	public AOptimizer getAlgo() {
 		return this.search;
+	}
+
+	@Override
+	public String getName() {
+		return NAME;
 	}
 
 }

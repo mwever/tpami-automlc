@@ -153,7 +153,7 @@ public class AutoMLCExperimenter implements IExperimentSetEvaluator {
 		case "bohb":
 			opt = new BOHBOptimizer<IMekaClassifier>(experimentEntry.getId() + "", pcsConfig, task);
 			break;
-		case "hyperband":
+		case "hb":
 			opt = new HyperBandOptimizer<IMekaClassifier>(experimentEntry.getId() + "", pcsConfig, task);
 			break;
 		case "smac":

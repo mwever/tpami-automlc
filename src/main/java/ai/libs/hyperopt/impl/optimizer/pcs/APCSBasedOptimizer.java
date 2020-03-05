@@ -3,7 +3,6 @@ package ai.libs.hyperopt.impl.optimizer.pcs;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.api4.java.algorithm.events.IAlgorithmEvent;
@@ -181,12 +180,6 @@ public abstract class APCSBasedOptimizer<M> extends AOptimizer<IPlanningOptimiza
 		this.getConfig().setProperty(IPCSOptimizerConfig.K_PCS_OPTIMIZER_PORT, port + "");
 		return port;
 	}
-
-	/**
-	 * The command to be executed to run the pcs based optimizer.
-	 * @return List of command parts to be executed.
-	 */
-	public abstract List<String> getCommand();
 
 	@Override
 	public IPCSOptimizerConfig getConfig() {

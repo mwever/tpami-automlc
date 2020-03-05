@@ -1,31 +1,25 @@
 package ai.libs.hyperopt.impl.optimizer.pcs.bohb;
 
-import java.util.List;
-
+import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
-import ai.libs.hyperopt.impl.optimizer.pcs.APCSBasedOptimizer;
-import ai.libs.hyperopt.impl.optimizer.pcs.IPCSOptimizerConfig;
+import ai.libs.hyperopt.impl.optimizer.pcs.AHBLikeOptimizer;
 
 /**
  *
- * @author kadirayk
+ * @author mwever
  *
  */
-public class BOHBOptimizer<M> extends APCSBasedOptimizer<M> {
+public class BOHBOptimizer<M> extends AHBLikeOptimizer<M> {
 
-	public BOHBOptimizer(final String id, final IPCSOptimizerConfig config, final IPlanningOptimizationTask<M> input) {
-		super(id, config, input);
+	private static final String NAME = "bohb";
+
+	public BOHBOptimizer(final String id, final IOptimizerConfig config, final IPlanningOptimizationTask<M> builder) {
+		super(id, config, builder);
 	}
 
 	@Override
-	public List<String> getCommand() {
-		return null;
-	}
-
-	@Override
-	protected void runOptimizer() throws Exception {
-		// TODO Auto-generated method stub
-
+	public String getName() {
+		return NAME;
 	}
 
 }
