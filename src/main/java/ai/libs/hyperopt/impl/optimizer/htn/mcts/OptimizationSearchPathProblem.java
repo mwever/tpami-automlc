@@ -1,4 +1,4 @@
-package ai.libs.hyperopt.impl.optimizer.htn;
+package ai.libs.hyperopt.impl.optimizer.htn.mcts;
 
 import org.api4.java.ai.graphsearch.problem.IPathSearchWithPathEvaluationsInput;
 import org.api4.java.ai.graphsearch.problem.implicit.graphgenerator.IPathGoalTester;

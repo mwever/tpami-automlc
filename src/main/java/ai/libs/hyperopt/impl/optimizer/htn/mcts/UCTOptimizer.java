@@ -1,9 +1,10 @@
-package ai.libs.hyperopt.impl.optimizer.htn;
+package ai.libs.hyperopt.impl.optimizer.htn.mcts;
 
 import org.api4.java.ai.graphsearch.problem.IPathSearchWithPathEvaluationsInput;
 
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
+import ai.libs.hyperopt.impl.optimizer.htn.AHTNBasedOptimizer;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
 import ai.libs.jaicore.planning.hierarchical.algorithms.forwarddecomposition.graphgenerators.tfd.TFDNode;
 import ai.libs.jaicore.search.algorithms.standard.mcts.UCTPathSearchFactory;

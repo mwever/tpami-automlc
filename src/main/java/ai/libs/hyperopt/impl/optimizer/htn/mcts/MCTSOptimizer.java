@@ -1,9 +1,10 @@
-package ai.libs.hyperopt.impl.optimizer.htn;
+package ai.libs.hyperopt.impl.optimizer.htn.mcts;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
+import ai.libs.hyperopt.impl.optimizer.htn.AHTNBasedOptimizer;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
 import ai.libs.jaicore.search.algorithms.standard.mcts.comparison.FixedCommitmentMCTSPathSearch;
 

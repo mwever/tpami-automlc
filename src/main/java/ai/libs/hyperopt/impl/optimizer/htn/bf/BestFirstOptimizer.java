@@ -1,4 +1,4 @@
-package ai.libs.hyperopt.impl.optimizer.htn;
+package ai.libs.hyperopt.impl.optimizer.htn.bf;
 
 import org.aeonbits.owner.ConfigFactory;
 import org.api4.java.ai.graphsearch.problem.pathsearch.pathevaluation.IPathEvaluator;
@@ -11,6 +11,7 @@ import ai.libs.hasco.core.SoftwareConfigurationProblem;
 import ai.libs.hasco.variants.forwarddecomposition.HASCOViaFDAndBestFirstWithRandomCompletionsFactory;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
+import ai.libs.hyperopt.impl.optimizer.htn.AHTNBasedOptimizer;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
 import ai.libs.jaicore.planning.hierarchical.algorithms.forwarddecomposition.graphgenerators.tfd.TFDNode;
 

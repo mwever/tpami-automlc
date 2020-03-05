@@ -1,4 +1,4 @@
-package ai.libs.hyperopt.impl.optimizer.htn;
+package ai.libs.hyperopt.impl.optimizer.htn.mcts;
 
 import java.util.Collection;
 
