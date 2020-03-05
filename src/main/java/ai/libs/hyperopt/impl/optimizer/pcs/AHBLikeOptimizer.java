@@ -1,8 +1,5 @@
 package ai.libs.hyperopt.impl.optimizer.pcs;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.Arrays;
@@ -15,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.io.Files;
 
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
@@ -25,16 +21,14 @@ import ai.libs.jaicore.processes.ProcessUtil;
 public abstract class AHBLikeOptimizer<M> extends APCSBasedOptimizer<M> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AHBLikeOptimizer.class);
 
-	private static final String grpcOptRunScript = "run.py";
-	private static final String grpcOptWorkerScript = "evalworker.py";
-	private static final String clientConfig = "client.conf";
-	private final File optDir;
+	private static final String GRPC_OPT_RUN_SCRIPT = "run.py";
+	private static final String GRPC_OPT_WORKER_SCRIPT = "evalworker.py";
 
 	protected AHBLikeOptimizer(final String id, final IOptimizerConfig config, final IPlanningOptimizationTask<M> task) {
 		super(id, config, task);
-		this.optDir = new File(this.getConfig().getGPRPCDirectory(), this.getName());
 	}
 
+	@Override
 	public JsonNode getClientConfig() {
 		ObjectMapper om = new ObjectMapper();
 		ObjectNode root = om.createObjectNode();
@@ -43,24 +37,13 @@ public abstract class AHBLikeOptimizer<M> extends APCSBasedOptimizer<M> {
 	}
 
 	@Override
-	public void prepareConfigFiles() throws IOException {
-		// Copy the run script into the working directory
-		File runScript = new File(this.optDir, grpcOptRunScript);
-		File tempRunScript = new File(this.getWorkingDirectory(), grpcOptRunScript);
-		LOGGER.trace("Copy {} to {}", runScript.getAbsolutePath(), tempRunScript.getAbsolutePath());
-		Files.copy(runScript, tempRunScript);
+	public String getRunScript() {
+		return GRPC_OPT_RUN_SCRIPT;
+	}
 
-		// Copy the client script into the working directory
-		File workerScript = new File(this.optDir, grpcOptWorkerScript);
-		File tempWorkerScript = new File(this.getWorkingDirectory(), grpcOptWorkerScript);
-		LOGGER.trace("Copy {} to {}", workerScript.getAbsolutePath(), tempWorkerScript.getAbsolutePath());
-		Files.copy(workerScript, tempWorkerScript);
-
-		// Create client config file
-		File clientConfigFile = new File(this.getWorkingDirectory(), clientConfig);
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(clientConfigFile))) {
-			bw.write(new ObjectMapper().writeValueAsString(this.getClientConfig()));
-		}
+	@Override
+	public String getWorkerScript() {
+		return GRPC_OPT_WORKER_SCRIPT;
 	}
 
 	@Override
@@ -97,7 +80,7 @@ public abstract class AHBLikeOptimizer<M> extends APCSBasedOptimizer<M> {
 	}
 
 	public List<String> getCommand() {
-		return Arrays.asList("singularity", "exec", this.getConfig().getSingularityContainer().getAbsolutePath(), "python", grpcOptRunScript, "--min_budget", "1", "--max_budget", "5", "--n_iterations", "100", "--n_workers",
+		return Arrays.asList("singularity", "exec", this.getConfig().getSingularityContainer().getAbsolutePath(), "python", GRPC_OPT_RUN_SCRIPT, "--min_budget", "1", "--max_budget", "5", "--n_iterations", "100", "--n_workers",
 				this.getConfig().cpus() + "", "--id", this.getID() + "");
 	}
 

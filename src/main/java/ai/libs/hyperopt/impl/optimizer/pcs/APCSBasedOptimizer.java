@@ -1,6 +1,8 @@
 package ai.libs.hyperopt.impl.optimizer.pcs;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -13,6 +15,8 @@ import org.api4.java.common.attributedobjects.IObjectEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.io.Files;
 
@@ -31,6 +35,7 @@ import io.grpc.ServerBuilder;
 public abstract class APCSBasedOptimizer<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizationOutput<M>, Double> implements IOptimizer<IPlanningOptimizationTask<M>, M> {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(APCSBasedOptimizer.class);
+	private static final String clientConfig = "client.conf";
 
 	private HASCOToPCSConverter searchspaceConverter;
 
@@ -39,11 +44,15 @@ public abstract class APCSBasedOptimizer<M> extends AOptimizer<IPlanningOptimiza
 	private File pcsFile;
 
 	private Server server;
+	private final File optDir;
+
+	private IOptimizationSolutionCandidateFoundEvent<M> bestSolution = null;
 
 	class ResultListener {
 		@Subscribe
 		public void rcvEvent(final IOptimizationSolutionCandidateFoundEvent<M> e) {
 			if (APCSBasedOptimizer.this.updateBestSeenSolution(e.getOutput())) {
+				APCSBasedOptimizer.this.bestSolution = e;
 				System.out.println("Update best seen solution with score " + e.getScore() + " and candidate " + e.getSolutionCandidate());
 			}
 		}
@@ -69,7 +78,7 @@ public abstract class APCSBasedOptimizer<M> extends AOptimizer<IPlanningOptimiza
 		}
 
 		this.workingDirectory.mkdirs();
-
+		this.optDir = new File(this.getConfig().getGPRPCDirectory(), this.getName());
 	}
 
 	@Override
@@ -140,17 +149,39 @@ public abstract class APCSBasedOptimizer<M> extends AOptimizer<IPlanningOptimiza
 	 * @throws Exception
 	 */
 	protected void prepareConfigFiles() throws Exception {
+		// Create client config file
+		File clientConfigFile = new File(this.getWorkingDirectory(), clientConfig);
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(clientConfigFile))) {
+			bw.write(new ObjectMapper().writeValueAsString(this.getClientConfig()));
+		}
 
+		// Copy the run script into the working directory
+		File runScript = new File(this.optDir, this.getRunScript());
+		File tempRunScript = new File(this.getWorkingDirectory(), this.getRunScript());
+		LOGGER.trace("Copy {} to {}", runScript.getAbsolutePath(), tempRunScript.getAbsolutePath());
+		Files.copy(runScript, tempRunScript);
+
+		// Copy the client script into the working directory
+		File workerScript = new File(this.optDir, this.getWorkerScript());
+		File tempWorkerScript = new File(this.getWorkingDirectory(), this.getWorkerScript());
+		LOGGER.trace("Copy {} to {}", workerScript.getAbsolutePath(), tempWorkerScript.getAbsolutePath());
+		Files.copy(workerScript, tempWorkerScript);
 	}
+
+	public abstract JsonNode getClientConfig();
+
+	public abstract String getRunScript();
+
+	public abstract String getWorkerScript();
 
 	@Override
 	public ComponentInstance getResultAsComponentInstance() {
-		return null;
+		return this.bestSolution.getSolutionCandidate();
 	}
 
 	@Override
 	public M getResult() {
-		return null;
+		return this.bestSolution.getObject();
 	}
 
 	public String getID() {

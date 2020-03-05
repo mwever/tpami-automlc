@@ -1,8 +1,6 @@
 package ai.libs.hyperopt.impl.optimizer.pcs.smac;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.ProcessBuilder.Redirect;
 import java.util.Arrays;
@@ -18,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.io.Files;
 
 import ai.libs.hyperopt.ScenarioFileBuilder;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
@@ -34,17 +31,14 @@ import ai.libs.jaicore.processes.ProcessUtil;
  */
 public class SMACOptimizer<M> extends APCSBasedOptimizer<M> {
 	private static final String NAME = "smac";
-	private static final String grpcOptRunScript = "run.py";
-	private static final String grpcOptClientScript = "SMACOptimizerClient.py";
-	private static final String clientConfig = "client.conf";
+	private static final String GRPC_OPT_RUN_SCRIPT = "run.py";
+	private static final String GRPC_OPT_WORKER_SCRIPT = "SMACOptimizerClient.py";
 	private static final String scenarioFileName = "scenario.txt";
-	private final File optDir;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SMACOptimizer.class);
 
 	public SMACOptimizer(final String id, final IOptimizerConfig config, final IPlanningOptimizationTask<M> input) {
 		super(id, config, input);
-		this.optDir = new File(this.getConfig().getGPRPCDirectory(), NAME);
 	}
 
 	@Override
@@ -52,37 +46,34 @@ public class SMACOptimizer<M> extends APCSBasedOptimizer<M> {
 		return NAME;
 	}
 
-	public List<String> getCommand(final int x) {
-		return Arrays.asList("singularity", "exec", this.getConfig().getSingularityContainer().getAbsolutePath(), "python", grpcOptRunScript, "--scenario", "scenario.txt", "--seed", x + "");
+	@Override
+	public String getRunScript() {
+		return GRPC_OPT_RUN_SCRIPT;
 	}
 
 	@Override
-	public void prepareConfigFiles() throws IOException {
-		// Copy the run script into the working directory
-		File runScript = new File(this.optDir, grpcOptRunScript);
-		File tempRunScript = new File(this.getWorkingDirectory(), grpcOptRunScript);
-		Files.copy(runScript, tempRunScript);
+	public String getWorkerScript() {
+		return GRPC_OPT_WORKER_SCRIPT;
+	}
 
-		// Copy the client script into the working directory
-		File clientScript = new File(this.optDir, grpcOptClientScript);
-		File tempClientScript = new File(this.getWorkingDirectory(), grpcOptClientScript);
-		Files.copy(clientScript, tempClientScript);
+	public List<String> getCommand(final int x) {
+		return Arrays.asList("singularity", "exec", this.getConfig().getSingularityContainer().getAbsolutePath(), "python", GRPC_OPT_RUN_SCRIPT, "--scenario", "scenario.txt", "--seed", x + "");
+	}
 
-		// Create client config file
-		File clientConfigFile = new File(this.getWorkingDirectory(), clientConfig);
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(clientConfigFile))) {
-			bw.write(new ObjectMapper().writeValueAsString(this.getClientConfig()));
-		}
+	@Override
+	public void prepareConfigFiles() throws Exception {
+		super.prepareConfigFiles();
 
 		// Create scenario file
 		File scenarioFile = new File(this.getWorkingDirectory(), scenarioFileName);
-		ScenarioFileBuilder scenarioBuilder = new ScenarioFileBuilder().withPCSFile(this.getConfig().getSearchSpaceFileName()).withAlgo("python " + grpcOptClientScript);
+		ScenarioFileBuilder scenarioBuilder = new ScenarioFileBuilder().withPCSFile(this.getConfig().getSearchSpaceFileName()).withAlgo("python " + GRPC_OPT_WORKER_SCRIPT);
 		if (this.getConfig().cpus() > 1) {
 			scenarioBuilder.withSharedModel("True").withDefaultInputPsmacDirs();
 		}
 		scenarioBuilder.toScenarioFile(scenarioFile);
 	}
 
+	@Override
 	public JsonNode getClientConfig() {
 		ObjectMapper om = new ObjectMapper();
 		ObjectNode root = om.createObjectNode();
