@@ -26,6 +26,8 @@ import ai.libs.hyperopt.example.meka.MekaClassifierEvaluator;
 import ai.libs.hyperopt.impl.evaluator.AutoConvertingObjectEvaluator;
 import ai.libs.hyperopt.impl.model.PlanningOptimizationTask;
 import ai.libs.hyperopt.impl.optimizer.baseline.RandomSearch;
+import ai.libs.hyperopt.impl.optimizer.cfg.ggp.GGP;
+import ai.libs.hyperopt.impl.optimizer.cfg.ggp.IGeneticOptimizerConfig;
 import ai.libs.hyperopt.impl.optimizer.htn.bf.BestFirstOptimizer;
 import ai.libs.hyperopt.impl.optimizer.htn.mcts.MCTSOptimizer;
 import ai.libs.hyperopt.impl.optimizer.pcs.IPCSOptimizerConfig;
@@ -142,6 +144,9 @@ public class AutoMLCExperimenter implements IExperimentSetEvaluator {
 		IPCSOptimizerConfig pcsConfig = ConfigFactory.create(IPCSOptimizerConfig.class);
 		pcsConfig.setProperty(IPCSOptimizerConfig.K_CPUS, experimentEntry.getExperiment().getNumCPUs() + "");
 
+		IGeneticOptimizerConfig gaConfig = ConfigFactory.create(IGeneticOptimizerConfig.class);
+		pcsConfig.setProperty(IGeneticOptimizerConfig.K_CPUS, experimentEntry.getExperiment().getNumCPUs() + "");
+
 		IOptimizer<IPlanningOptimizationTask<IMekaClassifier>, IMekaClassifier> opt = null;
 		switch (algorithm) {
 		case "mcts":
@@ -152,6 +157,9 @@ public class AutoMLCExperimenter implements IExperimentSetEvaluator {
 			break;
 		case "bohb":
 			opt = new BOHBOptimizer<IMekaClassifier>(experimentEntry.getId() + "", pcsConfig, task);
+			break;
+		case "ggp":
+			opt = new GGP<IMekaClassifier>(gaConfig, task);
 			break;
 		case "hb":
 			opt = new HyperBandOptimizer<IMekaClassifier>(experimentEntry.getId() + "", pcsConfig, task);

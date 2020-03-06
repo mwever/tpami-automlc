@@ -77,8 +77,14 @@ dependencies {
  		exclude group: 'net.sourceforge.owlapi'
  		exclude group: 'org.graphstream'
  		exclude group: 'com.github.graphstream'
+ 		exclude group: 'ai.libs.thirdparty'
     }
     
+    compile ('ai.libs.thirdparty:interruptible-weka:0.1.4')
+    compile ('ai.libs.thirdparty:interruptible-meka:0.1.1')
+    compile ('commons-lang:commons-lang:2.6')
+    
+    compile fileTree(dir: 'libs', include: '*.jar')
 	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
 	runtimeOnly group: 'org.slf4j', name:'slf4j-log4j12', version:'1.7.25'
     

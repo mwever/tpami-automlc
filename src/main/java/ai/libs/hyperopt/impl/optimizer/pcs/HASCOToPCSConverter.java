@@ -25,11 +25,9 @@ import ai.libs.hasco.model.CategoricalParameterDomain;
 import ai.libs.hasco.model.Component;
 import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hasco.model.ComponentUtil;
-import ai.libs.hasco.model.IParameterDomain;
 import ai.libs.hasco.model.NumericParameterDomain;
 import ai.libs.hasco.model.Parameter;
 import ai.libs.jaicore.basic.StringUtil;
-import ai.libs.jaicore.basic.sets.Pair;
 import ai.libs.jaicore.basic.sets.SetUtil;
 
 /**
@@ -96,11 +94,11 @@ public class HASCOToPCSConverter {
 		}
 	}
 
-	private static final Collection<Component> getComponentsWithProvidedInterface(final Collection<Component> components, final String interfaceName) {
+	public static final Collection<Component> getComponentsWithProvidedInterface(final Collection<Component> components, final String interfaceName) {
 		return components.stream().filter(x -> x.getProvidedInterfaces().contains(interfaceName)).collect(Collectors.toList());
 	}
 
-	private static final Component getComponentWithName(final Collection<Component> components, final String componentName) {
+	public static final Component getComponentWithName(final Collection<Component> components, final String componentName) {
 		try {
 			return components.stream().filter(x -> x.getName().equals(componentName)).findFirst().get();
 		} catch (NoSuchElementException e) {
@@ -163,7 +161,6 @@ public class HASCOToPCSConverter {
 
 		Map<String, Set<String>> constraints = new HashMap<>();
 		Set<String> constraintsToRemove = new HashSet<>();
-		List<String> parameters = new LinkedList<>();
 
 		for (Component cmp : this.components) {
 			for (Entry<String, String> reqI : cmp.getRequiredInterfaces().entrySet()) {
@@ -210,41 +207,11 @@ public class HASCOToPCSConverter {
 				}
 			}
 
-//			Set<Parameter> params = cmp.getParameters();
-//			Map<String, Integer> dependedParameterCounts = new HashMap<>();
-//			for (Dependency dep : cmp.getDependencies()) {
-//				// conclusion and premise has so far always only 1 element
-//				Pair<Parameter, IParameterDomain> post = dep.getConclusion().iterator().next();
-//				if (params.contains(post.getX())) {
-//					Parameter param = params.stream().filter(p -> p.equals(post.getX())).findFirst().get();
-//					Integer val = dependedParameterCounts.get(param.getName());
-//					val = val == null ? 1 : ++val;
-//					dependedParameterCounts.put(param.getName(), val);
-//					String artificialName = "opt" + val + "-" + post.getX().getName();
-//					this.dependendParameterMap.put(artificialName, post.getX().getName());
-//					Parameter dependendParam = new Parameter(artificialName, post.getY(), post.getX().getDefaultValue());
-//					params.add(dependendParam);
-//				}
-//
-//				Pair<Parameter, IParameterDomain> pre = dep.getPremise().iterator().next().iterator().next();
-//
-//				String cond = this.handleDependencyConditional(cmp.getName(), post, pre, dependedParameterCounts);
-//
-//				List<String> conditionals = this.componentConditionals.get(cmp.getName());
-//				if (conditionals == null) {
-//					conditionals = new ArrayList<>();
-//					conditionals.add(cond);
-//				} else {
-//					conditionals.add(cond);
-//				}
-//				this.componentConditionals.put(cmp.getName(), conditionals);
-//			}
 		}
 
 		constraintsToRemove.stream().forEach(constraints::remove);
 		for (Entry<String, Set<String>> condition : constraints.entrySet()) {
 			singleFileConditionals.append(condition.getValue().stream().map(x -> String.format("%s | %s", condition.getKey(), x)).collect(Collectors.joining("||"))).append(System.lineSeparator());
-//			singleFileConditionals.append(String.format("%s | %s", condition.getKey(), SetUtil.implode(condition.getValue(), "||"))).append(System.lineSeparator());
 		}
 
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
@@ -254,31 +221,6 @@ public class HASCOToPCSConverter {
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
-	}
-
-	private String handleDependencyConditional(final String name, final Pair<Parameter, IParameterDomain> post, final Pair<Parameter, IParameterDomain> pre, final Map<String, Integer> dependedParameterCounts) {
-		int lastDot = name.lastIndexOf(".");
-		String compName = name.substring(0, lastDot);
-		StringBuilder cond = new StringBuilder(name);
-		String artificialName = "opt" + dependedParameterCounts.get(post.getX().getName()) + "-" + post.getX().getName();
-		this.dependendParameterMap.put(artificialName, post.getX().getName());
-		cond.append(".").append(artificialName).append("|");
-		cond.append(name).append(".");
-		cond.append(pre.getX().getName());
-		if (pre.getY() instanceof CategoricalParameterDomain) {
-			CategoricalParameterDomain domain = (CategoricalParameterDomain) pre.getY();
-			cond.append(" in {");
-			for (String val : domain.getValues()) {
-				cond.append(val).append(",");
-			}
-			cond.replace(cond.length() - 1, cond.length(), "");
-			cond.append("}");
-		} else if (pre.getY() instanceof NumericParameterDomain) {
-			NumericParameterDomain domain = (NumericParameterDomain) pre.getY();
-			cond.append(" > ").append(domain.getMin());
-			cond.append(" && ").append(pre.getX().getName()).append(" < ").append(domain.getMax());
-		}
-		return cond.toString();
 	}
 
 	public String nameSpaceInterface(final Component requiringComponent, final String interfaceName) {
