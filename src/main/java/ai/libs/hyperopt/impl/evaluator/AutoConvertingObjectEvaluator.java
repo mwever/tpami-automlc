@@ -32,9 +32,12 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements IHy
 		this.timestampCreated = System.currentTimeMillis();
 	}
 
-	
 	@Override
 	public Double evaluate(final ComponentInstance source, final int iterations) throws InterruptedException, ObjectEvaluationFailedException {
+		return this.evaluate(source, iterations, new HashMap<>());
+	}
+
+	public Double evaluate(final ComponentInstance source, final int iterations, final Map<String, DescriptiveStatistics> log) throws InterruptedException, ObjectEvaluationFailedException {
 		M convertedObject = null;
 		try {
 			convertedObject = this.converter.convert(source);
@@ -43,7 +46,6 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements IHy
 			throw new ObjectEvaluationFailedException(e);
 		}
 
-		Map<String, DescriptiveStatistics> log = new HashMap<>();
 		Double score = null;
 		try {
 			if (this.evaluator instanceof ILoggingObjectEvaluator) {
@@ -60,14 +62,12 @@ public class AutoConvertingObjectEvaluator<M> extends AListenable implements IHy
 			this.getEventBus().post(new OptimizationSolutionCandidateFoundEvent<M>(this.algorithmID, output, ExceptionUtils.getFullStackTrace(e)));
 			throw e;
 		}
-		
 	}
 
 	@Override
 	public String toString() {
 		return new StringBuilder(this.getClass().getName()).append("(").append(this.converter.getClass().getName()).append(",").append(this.evaluator.getClass().getName()).append(")").toString();
 	}
-
 
 	@Override
 	public int getMaxBudget() {

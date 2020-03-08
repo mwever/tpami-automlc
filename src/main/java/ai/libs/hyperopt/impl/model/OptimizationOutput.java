@@ -29,6 +29,15 @@ public class OptimizationOutput<M> implements IOptimizationOutput<M> {
 		this.timeUntilFound = this.timestamp - timestampOptStarted;
 	}
 
+	public OptimizationOutput(final long timestamp, final long timeUntilFound, final M object, final Double score, final ComponentInstance solutionDescription, final Map<String, ? extends Object> annotations) {
+		this.object = object;
+		this.score = score;
+		this.solutionDescription = solutionDescription;
+		this.evaluationReport = annotations;
+		this.timestamp = timestamp;
+		this.timeUntilFound = timeUntilFound;
+	}
+
 	public OptimizationOutput(final long timestampOptStarted, final M object, final Double score, final ComponentInstance solutionDescription) {
 		this(timestampOptStarted, object, score, solutionDescription, null);
 	}

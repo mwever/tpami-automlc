@@ -67,6 +67,10 @@ public class HASCOToPCSConverter {
 		return this.requestedInterface;
 	}
 
+	public Map<String, String> getReverseMaskedCatValues() {
+		return this.reverseMaskedCatValues;
+	}
+
 	public HASCOToPCSConverter(final Collection<Component> components, final String requestedInterface) {
 		this.components = new HashSet<>(getComponentsWithProvidedInterface(components, requestedInterface));
 		this.rootRequired = this.components.size() > 1;
@@ -311,6 +315,7 @@ public class HASCOToPCSConverter {
 				update.put(entry.getKey(), demaskedValue);
 			}
 		}
+		parameterMap.putAll(update);
 
 		if (this.rootRequired) {
 			return this.getComponentInstanceFromMap(parameterMap, comps.iterator().next().getName()).getSatisfactionOfRequiredInterfaces().get(ROOT_COMP_REQI);
