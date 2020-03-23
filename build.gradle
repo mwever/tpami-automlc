@@ -112,7 +112,8 @@ shadowJar {
 jar {
     manifest {
         attributes(
-            'Main-Class': "ai.libs.hyperopt.experimenter.AutoMLCExperimenter"
+            //'Main-Class': "ai.libs.hyperopt.experimenter.AutoMLCExperimenter"
+            'Main-Class': "results.testeval.TestEvalExperimenter"
         )
     }
 }

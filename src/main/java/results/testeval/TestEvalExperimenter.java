@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,8 +150,8 @@ public class TestEvalExperimenter implements IExperimentSetEvaluator {
 			evalTable = "automlc_eval";
 			break;
 		case "bohb":
-			jobsTable = "hblike_clusterjobs";
-			evalTable = "hblike_eval";
+			jobsTable = "bohb_clusterjobs";
+			evalTable = "bohb_eval";
 			break;
 		case "ggp":
 			jobsTable = "ggp_clusterjobs";
@@ -164,8 +166,8 @@ public class TestEvalExperimenter implements IExperimentSetEvaluator {
 			evalTable = "smac_eval";
 			break;
 		case "random":
-			jobsTable = "automlc_clusterjobs";
-			evalTable = "automlc_eval";
+			jobsTable = "random_clusterjobs";
+			evalTable = "random_eval";
 			break;
 		}
 		System.out.println("Assigned jobs table " + jobsTable + " and eval table " + evalTable);
@@ -184,86 +186,106 @@ public class TestEvalExperimenter implements IExperimentSetEvaluator {
 
 		try {
 			System.out.println("Create sql adapter...");
-			SQLAdapter adapter = new SQLAdapter(dbconfig);
+			try (SQLAdapter adapter = new SQLAdapter(dbconfig)) {
 
-			System.out.println("Retrieve original job ID");
-			String queryMeasure = measure;
-			if (algorithm.equals("random")) {
-				queryMeasure = "FMacroAvgD";
-			}
-			// Check whether we can find a job which is in state done
-			List<IKVStore> job = adapter.getResultsOfQuery("SELECT * FROM " + jobsTable + " WHERE done='true' AND dataset='" + datasetName + "' AND algorithm='" + algorithm + "' AND seed=" + seed + " AND split=" + split + " LIMIT 1");
-			if (job.isEmpty()) {
+				System.out.println("Retrieve original job ID");
+				String queryMeasure = measure;
+				if (algorithm.equals("random")) {
+					queryMeasure = "FMacroAvgD";
+				}
+				// Check whether we can find a job which is in state done
+				List<IKVStore> job = adapter.getResultsOfQuery(
+						"SELECT * FROM " + jobsTable + " WHERE done='true' AND dataset='" + datasetName + "' AND algorithm='" + algorithm + "' AND seed=" + seed + " AND split=" + split + " AND measure='" + queryMeasure + "' LIMIT 1");
+				if (job.isEmpty()) {
+					Map<String, Object> results = new HashMap<>();
+					results.put("done", "N/A");
+					processor.processResults(results);
+					return;
+				}
+
+				// experiment id
+				int experimentID = job.get(0).getAsInt("experiment_id");
+				System.out.println("Found original experiment ID: " + experimentID);
+
+				// Retrieve evaluations for experiment id that did not fail
+				System.out.println("Get non-failing evaluations for this experiment");
+				List<IKVStore> evaluations = adapter.getResultsOfQuery("SELECT * FROM " + evalTable + " WHERE experiment_id=" + experimentID + " AND exception IS NULL");
+				Collections.sort(evaluations, new Comparator<IKVStore>() {
+					@Override
+					public int compare(final IKVStore o1, final IKVStore o2) {
+						return o1.getAsLong("time_until_found").compareTo(o2.getAsLong("time_until_found"));
+					}
+				});
+				System.out.println(evaluations.size());
+
+				if (evaluations.isEmpty()) {
+					Map<Long, Double> trace = new HashMap<>();
+					trace.put(0l, 0.0);
+
+					Map<String, Object> results = new HashMap<>();
+					results.put("finalScore", 0.0);
+					results.put("trace", new ObjectMapper().writeValueAsString(trace));
+					results.put("done", true);
+					System.out.println("Results " + results);
+					processor.processResults(results);
+					return;
+				}
+
+				System.out.println("Filter evaluations for only the relevant evaluations");
+				List<IKVStore> filteredEvaluations = new ArrayList<>();
+				Double bestValue = null;
+				ObjectMapper mapper = new ObjectMapper();
+				for (IKVStore store : evaluations) {
+					JsonNode evalReport = mapper.readTree(store.getAsString("evaluation_report"));
+					int n = evalReport.get(measure + "_n").asInt();
+					double evalValue = evalReport.get(measure + "_mean").asDouble() * Math.pow(10, 5 - n);
+					if (bestValue == null || evalValue < bestValue) {
+						System.out.println(bestValue + " " + evalValue);
+						bestValue = evalValue;
+						filteredEvaluations.add(store);
+					}
+				}
+
+				// Evaluate filtered candidates on test data
+				System.out.println("Evaluate candidates on test data...");
+				HASCOToPCSConverter pcsConverter = new HASCOToPCSConverter(cl.getComponents(), "MLClassifier");
+				File outputFile = File.createTempFile("output", ".pcs");
+				outputFile.deleteOnExit();
+				pcsConverter.generatePCSFile(outputFile);
+
+				ComponentInstanceAdapter ciAdapter = new ComponentInstanceAdapter(cl.getComponents());
+				Map<Long, Double> trace = new HashMap<>();
+				Double lastScore = null;
+
+				for (int i = 0; i < filteredEvaluations.size(); i++) {
+					IKVStore testEvalStore = filteredEvaluations.get(i);
+					String ciString = testEvalStore.getAsString(SCandidateEvaluatedSchema.COMPONENT_INSTANCE.getName());
+					ComponentInstance ci = ciAdapter.stringToComponentInstance(ciString);
+					replaceCatValues(ci, pcsConverter.getReverseMaskedCatValues());
+					Map<String, DescriptiveStatistics> evallog = new HashMap<>();
+					double score = autoConvEval.evaluate(ci, evaluator.getMaxBudget(), evallog);
+					trace.put(testEvalStore.getAsLong("time_until_found"), score);
+					lastScore = score;
+					System.out.println(testEvalStore.getAsLong("time_until_found") + ": " + score);
+
+					IOptimizationOutput<IMekaClassifier> output = new OptimizationOutput<>(testEvalStore.getAsLong(SCandidateEvaluatedSchema.TIMESTAMP_FOUND.getName()),
+							testEvalStore.getAsLong(SCandidateEvaluatedSchema.TIME_UNTIL_FOUND.getName()), null, score, ci, evallog);
+					IOptimizationSolutionCandidateFoundEvent<IMekaClassifier> logEntry;
+					if (i < filteredEvaluations.size() - 1) {
+						logEntry = new OptimizationSolutionCandidateFoundEvent<>(algorithm, output);
+					} else {
+						logEntry = new OptimizationSolutionCandidateFoundEvent<>(algorithm, output, "lastCandidate");
+					}
+					logger.rcvCandidateEvaluatedEvent(logEntry);
+				}
+
 				Map<String, Object> results = new HashMap<>();
-				results.put("done", "N/A");
+				results.put("finalScore", lastScore);
+				results.put("trace", new ObjectMapper().writeValueAsString(trace));
+				results.put("done", true);
+				System.out.println("Results " + results);
 				processor.processResults(results);
-				return;
 			}
-
-			// experiment id
-			int experimentID = job.get(0).getAsInt("experiment_id");
-			System.out.println("Found original experiment ID: " + experimentID);
-
-			// Retrieve evaluations for experiment id that did not fail
-			System.out.println("Get non-failing evaluations for this experiment");
-			List<IKVStore> evaluations = adapter.getResultsOfQuery("SELECT * FROM " + evalTable + " WHERE experiment_id=" + experimentID + " AND exception IS NULL ORDER BY time_until_found");
-			System.out.println(evaluations.size());
-
-			System.out.println("Filter evaluations for only the relevant evaluations");
-			List<IKVStore> filteredEvaluations = new ArrayList<>();
-			Double bestValue = null;
-			ObjectMapper mapper = new ObjectMapper();
-			for (IKVStore store : evaluations) {
-				JsonNode evalReport = mapper.readTree(store.getAsString("evaluation_report"));
-				int n = evalReport.get(measure + "_n").asInt();
-				double evalValue = evalReport.get(measure + "_mean").asDouble() * Math.pow(10, 5 - n);
-				if (bestValue == null || evalValue < bestValue) {
-					System.out.println(bestValue + " " + evalValue);
-					bestValue = evalValue;
-					filteredEvaluations.add(store);
-				}
-			}
-
-			// Evaluate filtered candidates on test data
-			System.out.println("Evaluate candidates on test data...");
-			HASCOToPCSConverter pcsConverter = new HASCOToPCSConverter(cl.getComponents(), "MLClassifier");
-			File outputFile = File.createTempFile("output", ".pcs");
-			outputFile.deleteOnExit();
-			pcsConverter.generatePCSFile(outputFile);
-
-			ComponentInstanceAdapter ciAdapter = new ComponentInstanceAdapter(cl.getComponents());
-			Map<Long, Double> trace = new HashMap<>();
-			Double lastScore = null;
-
-			for (int i = 0; i < filteredEvaluations.size(); i++) {
-				IKVStore testEvalStore = filteredEvaluations.get(i);
-				String ciString = testEvalStore.getAsString(SCandidateEvaluatedSchema.COMPONENT_INSTANCE.getName());
-				ComponentInstance ci = ciAdapter.stringToComponentInstance(ciString);
-				replaceCatValues(ci, pcsConverter.getReverseMaskedCatValues());
-				Map<String, DescriptiveStatistics> evallog = new HashMap<>();
-				double score = autoConvEval.evaluate(ci, evaluator.getMaxBudget(), evallog);
-				trace.put(testEvalStore.getAsLong("time_until_found"), score);
-				lastScore = score;
-
-				System.out.println(testEvalStore.getAsLong("time_until_found") + ": " + score);
-
-				IOptimizationOutput<IMekaClassifier> output = new OptimizationOutput<>(testEvalStore.getAsLong(SCandidateEvaluatedSchema.TIMESTAMP_FOUND.getName()),
-						testEvalStore.getAsLong(SCandidateEvaluatedSchema.TIME_UNTIL_FOUND.getName()), null, score, ci, evallog);
-				IOptimizationSolutionCandidateFoundEvent<IMekaClassifier> logEntry;
-				if (i < filteredEvaluations.size() - 1) {
-					logEntry = new OptimizationSolutionCandidateFoundEvent<>(algorithm, output);
-				} else {
-					logEntry = new OptimizationSolutionCandidateFoundEvent<>(algorithm, output, "lastCandidate");
-				}
-				logger.rcvCandidateEvaluatedEvent(logEntry);
-
-			}
-
-			Map<String, Object> results = new HashMap<>();
-			results.put("finalScore", lastScore);
-			results.put("trace", new ObjectMapper().writeValueAsString(trace));
-			results.put("done", true);
-			processor.processResults(results);
 		} catch (Exception e) {
 			throw new ExperimentEvaluationFailedException(e);
 		}

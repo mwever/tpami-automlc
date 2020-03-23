@@ -95,12 +95,14 @@ public class GGP<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizati
 						List<CandidateProgram> population = new ArrayList<>(initPop.getInitialPopulation());
 						Collections.sort(population);
 						while (!Thread.currentThread().isInterrupted()) {
+							System.out.println("Evaluate Population");
 							try {
 								GGP.this.evaluate(population);
 							} catch (InterruptedException e) {
+								System.out.println("Got interrupted");
 								logger.info("Got interrupted. Shutdown task now.");
-							} finally {
 								finished.release();
+								break;
 							}
 
 							List<CandidateProgram> offspring = new ArrayList<>(GGP.this.getConfig().getPopulationSize());
@@ -109,6 +111,7 @@ public class GGP<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizati
 								offspring.add(population.get(i));
 							}
 							if (Thread.interrupted()) {
+								System.out.println("Thread got interrupted, cancel GGP.");
 								throw new InterruptedException();
 							}
 
@@ -196,21 +199,27 @@ public class GGP<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizati
 		for (CandidateProgram individual : population) {
 			if (this.cacheMap.containsKey(individual.toString())) {
 				((GRCandidateProgram) individual).setFitnessValue(this.cacheMap.get(individual.toString()));
+				semaphore.release();
 			} else {
 				Runnable evaluateTask = new Runnable() {
 					@Override
 					public void run() {
-						if (Thread.interrupted() || interrupted.get()) {
-							semaphore.release();
-						}
-						ComponentInstance ci = GGP.this.converter.grammarStringToComponentInstance(individual.toString());
-						GRCandidateProgram realInd = ((GRCandidateProgram) individual);
 						try {
-							realInd.setFitnessValue(evaluator.evaluate(ci));
-							System.out.println("Evaluated individual with score " + realInd.getFitnessValue() + ": " + ci);
-						} catch (ObjectEvaluationFailedException | InterruptedException e) {
-							realInd.setFitnessValue(10000.0);
-						} finally {
+							if (Thread.interrupted() || interrupted.get()) {
+								semaphore.release();
+							}
+							ComponentInstance ci = GGP.this.converter.grammarStringToComponentInstance(individual.toString());
+							GRCandidateProgram realInd = ((GRCandidateProgram) individual);
+							try {
+								realInd.setFitnessValue(evaluator.evaluate(ci));
+							} catch (ObjectEvaluationFailedException | InterruptedException e) {
+								realInd.setFitnessValue(10000.0);
+							} finally {
+								semaphore.release();
+							}
+						} catch (Throwable e) {
+							System.err.println(individual.toString());
+							e.printStackTrace();
 							semaphore.release();
 						}
 					}

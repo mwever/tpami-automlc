@@ -62,7 +62,7 @@ public class CFGConverter {
 				}
 			} else if (param.getDefaultDomain() instanceof CategoricalParameterDomain) {
 				CategoricalParameterDomain dom = (CategoricalParameterDomain) param.getDefaultDomain();
-				productions.put(paramNT, paramNT + " ::= " + Arrays.stream(dom.getValues()).collect(Collectors.joining(" | ")) + "\n");
+				productions.put(paramNT, paramNT + " ::= " + Arrays.stream(dom.getValues()).map(x -> x.contains(" ") ? x.replaceAll(" ", "_") : x).collect(Collectors.joining(" | ")) + "\n");
 			}
 		}
 
@@ -84,7 +84,7 @@ public class CFGConverter {
 		String[] tokens = grammarString.split(" ");
 		Map<String, String> paramValues = new HashMap<>();
 		for (int i = 1; i < tokens.length; i = i + 2) {
-			paramValues.put(tokens[i], tokens[i + 1]);
+			paramValues.put(tokens[i], tokens[i + 1].contains("_") ? tokens[i + 1].replaceAll("_", " ") : tokens[i + 1]);
 		}
 		return this.buildComponentInstanceFromMap(tokens[0], paramValues);
 	}

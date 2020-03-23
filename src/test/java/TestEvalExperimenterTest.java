@@ -15,10 +15,10 @@ public class TestEvalExperimenterTest {
 		TestEvalExperimenter runner = new TestEvalExperimenter();
 		Map<String, String> valuesOfKeyFields = new HashMap<>();
 		valuesOfKeyFields.put("algorithm", "hb");
-		valuesOfKeyFields.put("dataset", "birds");
+		valuesOfKeyFields.put("dataset", "bibtex");
 		valuesOfKeyFields.put("seed", "42");
 		valuesOfKeyFields.put("split", "0");
-		valuesOfKeyFields.put("measure", "FMicroAvg");
+		valuesOfKeyFields.put("measure", "FMacroAvgD");
 		ExperimentDBEntry experimentEntry = new ExperimentDBEntry(0, new Experiment(MAX_MEM, NUM_CPUS, valuesOfKeyFields));
 
 		runner.evaluate(experimentEntry, new IExperimentIntermediateResultProcessor() {
