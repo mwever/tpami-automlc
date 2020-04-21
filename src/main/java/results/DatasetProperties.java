@@ -17,7 +17,7 @@ import weka.core.Instances;
 
 public class DatasetProperties {
 
-	private static final File DATASET_FOLDER = new File("../../git/datasets/classification/multi-label");
+	private static final File DATASET_FOLDER = new File("original_datasets/");
 
 	public static void main(final String[] args) throws Exception {
 		KVStoreCollection col = new KVStoreCollection();
@@ -75,7 +75,7 @@ public class DatasetProperties {
 	}
 
 	private static double uniqueLabelCombinations(final Instances data) {
-		return (double) data.stream().map(x -> IntStream.range(0, data.classIndex()).mapToObj(y -> x.value(y) + "").collect(Collectors.joining("-"))).collect(Collectors.toSet()).size() / data.size();
+		return data.stream().map(x -> IntStream.range(0, data.classIndex()).mapToObj(y -> x.value(y) + "").collect(Collectors.joining("-"))).collect(Collectors.toSet()).size();
 	}
 
 	private static double labelToInstanceRatio(final Instances data) {

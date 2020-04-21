@@ -1,39 +1,37 @@
 package results;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+
 import ai.libs.jaicore.basic.kvstore.KVStoreCollection;
 import ai.libs.jaicore.basic.kvstore.KVStoreCollection.EGroupMethod;
 import ai.libs.jaicore.basic.kvstore.KVStoreCollectionTwoLayerPartition;
 import ai.libs.jaicore.basic.kvstore.KVStoreSequentialComparator;
-import ai.libs.jaicore.basic.kvstore.KVStoreUtil;
-import ai.libs.jaicore.db.sql.SQLAdapter;
 
 public class ScatterPlots {
 
 	private static final String[] measures = { "FMacroAvgD", "FMacroAvgL", "FMicroAvg" };
 	private static final int measureIx = 2;
-	private static final Map<String, String> replacements = new HashMap<>();
 
+	private static final String DATA_FILE_NAME = "data/scatter_plots_" + measureIx + ".data";
+
+	// What approach to compare against the rest.
 	private static final String APPROACH = "bf";
 
-	public static void main(final String[] args) throws SQLException {
+	public static void main(final String[] args) throws SQLException, IOException {
+//		SQLAdapter adapter = new SQLAdapter("", "", "", "");
+//		KVStoreCollection col = KVStoreUtil.readFromMySQLQuery(adapter, "SELECT * FROM testeval_jobs WHERE finalScore IS NOT NULL && measure='" + measures[measureIx] + "'", new HashMap<>());
+//		col.setCollectionID("Scatter Plots Data " + measureIx);
+//		col.serializeTo(new File(DATA_FILE_NAME));
 
-		SQLAdapter adapter = new SQLAdapter("isys-otfml.cs.upb.de", "results", "Hallo333!", "conference_tpami_mlc");
-
-		KVStoreCollection col = KVStoreUtil.readFromMySQLQuery(adapter, "SELECT * FROM testeval_jobs WHERE finalScore IS NOT NULL && measure='" + measures[measureIx] + "'", new HashMap<>());
-
-		// load smac
-//		KVStoreCollection colSMAC = KVStoreUtil.readFromMySQLQuery(adapter, "SELECT * FROM smac_clusterjobs WHERE finalScore IS NOT NULL && measure='" + measures[measureIx] + "'", new HashMap<>());
-//		col.addAll(colSMAC);
-
-		// load hb and bohb
-//		KVStoreCollection hbLikeCol = KVStoreUtil.readFromMySQLQuery(adapter, "SELECT * FROM hblike_clusterjobs WHERE finalScore IS NOT NULL && measure='" + measures[measureIx] + "'", new HashMap<>());
-//		col.addAll(hbLikeCol);
+		KVStoreCollection col = new KVStoreCollection(FileUtils.readFileToString(new File(DATA_FILE_NAME)));
 
 		Map<String, EGroupMethod> grouping = new HashMap<>();
 		grouping.put("finalScore", EGroupMethod.AVG);

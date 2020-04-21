@@ -81,13 +81,28 @@ public class AverageAnytimePlot implements IAverageAnytimePlot {
 	public String toString(final List<Long> timestamps, final String color) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\\addplot[color=").append(color).append(",mark=none] coordinates {\n");
-		for (Long ts : timestamps) {
+		for (int i = 0; i < timestamps.size(); i++) {
+			long ts = timestamps.get(i);
+			double currentScore = this.getScoreAtTime(ts);
+			Double previousScore = null;
+			Double nextScore = null;
+			if (i > 0) {
+				previousScore = this.getScoreAtTime(timestamps.get(i - 1));
+			}
+			if (i < timestamps.size() - 1) {
+				nextScore = this.getScoreAtTime(timestamps.get(i + 1));
+			}
+
+			if (previousScore != null && nextScore != null && (Math.abs(currentScore - previousScore) < 1E-8 && Math.abs(currentScore - nextScore) < 1E-8)) {
+				continue;
+			}
 			sb.append("(").append(ts).append(",").append(this.getScoreAtTime(ts)).append(")\n");
 		}
 		sb.append("};");
 		return sb.toString();
 	}
 
+	@Override
 	public String toLine() {
 		StringBuilder sb = new StringBuilder();
 		for (Long timestamp : this.getTimestampList()) {

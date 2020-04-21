@@ -1,6 +1,5 @@
 package results;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -100,11 +99,7 @@ public class StatisticsUtil {
 //		System.out.println(indicesWithNans + " " + Arrays.toString(sampleA) + " " + Arrays.toString(sampleB));
 
 		double[] cleanedSampleA = IntStream.range(0, sampleA.length).filter(x -> !indicesWithNans.contains(x)).mapToDouble(x -> sampleA[x]).toArray();
-		double[] cleanedSampleB = IntStream.range(0, sampleB.length).filter(x -> !indicesWithNans.contains(x)).mapToDouble(x -> sampleA[x]).toArray();
-
-		if (cleanedSampleA.length >= 10) {
-			System.out.println(Arrays.toString(cleanedSampleA) + " " + Arrays.toString(cleanedSampleB));
-		}
+		double[] cleanedSampleB = IntStream.range(0, sampleB.length).filter(x -> !indicesWithNans.contains(x)).mapToDouble(x -> sampleB[x]).toArray();
 
 		if (cleanedSampleA.length == 0) {
 			return 1;

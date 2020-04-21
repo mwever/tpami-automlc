@@ -101,7 +101,7 @@ public class TestEvalExperimenter implements IExperimentSetEvaluator {
 
 	public static void runExperiments() throws ExperimentDBInteractionFailedException, InterruptedException {
 		ExperimentRunner runner = new ExperimentRunner(m, new TestEvalExperimenter(), dbHandle);
-		runner.randomlyConductExperiments(-1);
+		runner.randomlyConductExperiments(1);
 	}
 
 	@Override
@@ -258,6 +258,8 @@ public class TestEvalExperimenter implements IExperimentSetEvaluator {
 				Double lastScore = null;
 
 				for (int i = 0; i < filteredEvaluations.size(); i++) {
+					System.gc();
+					System.out.println("Evaluate candidate " + (i + 1) + " of " + filteredEvaluations.size());
 					IKVStore testEvalStore = filteredEvaluations.get(i);
 					String ciString = testEvalStore.getAsString(SCandidateEvaluatedSchema.COMPONENT_INSTANCE.getName());
 					ComponentInstance ci = ciAdapter.stringToComponentInstance(ciString);
@@ -270,6 +272,7 @@ public class TestEvalExperimenter implements IExperimentSetEvaluator {
 
 					IOptimizationOutput<IMekaClassifier> output = new OptimizationOutput<>(testEvalStore.getAsLong(SCandidateEvaluatedSchema.TIMESTAMP_FOUND.getName()),
 							testEvalStore.getAsLong(SCandidateEvaluatedSchema.TIME_UNTIL_FOUND.getName()), null, score, ci, evallog);
+
 					IOptimizationSolutionCandidateFoundEvent<IMekaClassifier> logEntry;
 					if (i < filteredEvaluations.size() - 1) {
 						logEntry = new OptimizationSolutionCandidateFoundEvent<>(algorithm, output);
@@ -287,6 +290,8 @@ public class TestEvalExperimenter implements IExperimentSetEvaluator {
 				processor.processResults(results);
 			}
 		} catch (Exception e) {
+			throw new ExperimentEvaluationFailedException(e);
+		} catch (Throwable e) {
 			throw new ExperimentEvaluationFailedException(e);
 		}
 	}
