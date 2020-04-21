@@ -29,7 +29,6 @@ import ai.libs.hyperopt.impl.optimizer.baseline.RandomSearch;
 import ai.libs.hyperopt.impl.optimizer.cfg.ggp.GGP;
 import ai.libs.hyperopt.impl.optimizer.cfg.ggp.IGeneticOptimizerConfig;
 import ai.libs.hyperopt.impl.optimizer.htn.bf.BestFirstOptimizer;
-import ai.libs.hyperopt.impl.optimizer.htn.mcts.MCTSOptimizer;
 import ai.libs.hyperopt.impl.optimizer.pcs.IPCSOptimizerConfig;
 import ai.libs.hyperopt.impl.optimizer.pcs.bohb.BOHBOptimizer;
 import ai.libs.hyperopt.impl.optimizer.pcs.hb.HyperBandOptimizer;
@@ -149,9 +148,6 @@ public class AutoMLCExperimenter implements IExperimentSetEvaluator {
 
 		IOptimizer<IPlanningOptimizationTask<IMekaClassifier>, IMekaClassifier> opt = null;
 		switch (algorithm) {
-		case "mcts":
-			opt = new MCTSOptimizer<>(config, task);
-			break;
 		case "bf":
 			opt = new BestFirstOptimizer<>(config, task);
 			break;

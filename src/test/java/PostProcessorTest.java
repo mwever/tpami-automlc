@@ -21,9 +21,6 @@ import weka.core.Instances;
 public class PostProcessorTest {
 	public static void main(final String[] args) throws Exception {
 
-		System.out.println(new String(System.currentTimeMillis() + "").length());
-		System.exit(0);
-
 		SQLAdapter adapter = new SQLAdapter(ConfigFactory.create(IAutoMLCExperimentConfig.class));
 
 		List<IKVStore> res = adapter.getResultsOfQuery("SELECT * FROM test_eval WHERE id =108");

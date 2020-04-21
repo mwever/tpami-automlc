@@ -9,23 +9,23 @@ import ai.libs.jaicore.experiments.ExperimentDBEntry;
 import ai.libs.jaicore.experiments.IExperimentIntermediateResultProcessor;
 import ai.libs.jaicore.experiments.exceptions.ExperimentEvaluationFailedException;
 
-public class MCTSTest {
+public class BOHBTest {
 
 	public static final int MAX_MEM = 4096;
-	public static final int NUM_CPUS = 4;
+	public static final int NUM_CPUS = 8;
 
 	public static void main(final String[] args) throws ExperimentEvaluationFailedException, InterruptedException {
 		AutoMLCExperimenter runner = new AutoMLCExperimenter();
 
 		Map<String, String> valuesOfKeyFields = new HashMap<>();
 
-		valuesOfKeyFields.put("algorithm", "mcts");
+		valuesOfKeyFields.put("algorithm", "hb");
 		valuesOfKeyFields.put("dataset", "flags");
 		valuesOfKeyFields.put("seed", "42");
 		valuesOfKeyFields.put("split", "0");
-		valuesOfKeyFields.put("measure", "F1MacroAvgD");
-		valuesOfKeyFields.put("globalTimeout", "300");
-		valuesOfKeyFields.put("evaluationTimeout", "30");
+		valuesOfKeyFields.put("measure", "FMacroAvgD");
+		valuesOfKeyFields.put("globalTimeout", "60");
+		valuesOfKeyFields.put("evaluationTimeout", "45");
 		ExperimentDBEntry experimentEntry = new ExperimentDBEntry(0, new Experiment(MAX_MEM, NUM_CPUS, valuesOfKeyFields));
 
 		runner.evaluate(experimentEntry, new IExperimentIntermediateResultProcessor() {

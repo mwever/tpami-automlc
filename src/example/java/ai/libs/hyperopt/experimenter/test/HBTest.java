@@ -19,7 +19,7 @@ public class HBTest {
 
 		Map<String, String> valuesOfKeyFields = new HashMap<>();
 
-		valuesOfKeyFields.put("algorithm", "hb");
+		valuesOfKeyFields.put("algorithm", "bohb");
 		valuesOfKeyFields.put("dataset", "flags");
 		valuesOfKeyFields.put("seed", "42");
 		valuesOfKeyFields.put("split", "0");
