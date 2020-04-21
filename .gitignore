@@ -13,7 +13,6 @@ testrsc/smac.log
 test.scenario
 benchmark.properties
 datasets
-automlc-setup.properties
 automlc.img
 automlc
 working_dir
