@@ -61,7 +61,7 @@ def grpcVersion = '1.23.0'
 
 dependencies {    
     // include ailibs for compilation
-    compile ('ai.libs:mlplan-meka:0.2.1') {
+    compile ('ai.libs:mlplan-meka:0.2.3') {
  		exclude group: 'org.nd4j'
  		exclude group: 'org.bytedeco.javacpp-presets'
  		exclude group: 'org.deeplearning4j'
@@ -80,8 +80,8 @@ dependencies {
  		exclude group: 'ai.libs.thirdparty'
     }
     
-    compile ('ai.libs.thirdparty:interruptible-weka:0.1.4')
-    compile ('ai.libs.thirdparty:interruptible-meka:0.1.0')
+    compile ('ai.libs.thirdparty:interruptible-weka:0.1.5')
+    compile ('ai.libs.thirdparty:interruptible-meka:0.1.2')
     compile ('commons-lang:commons-lang:2.6')
     
     compile fileTree(dir: 'libs', include: '*.jar')

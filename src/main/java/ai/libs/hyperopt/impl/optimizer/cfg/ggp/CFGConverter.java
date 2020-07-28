@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import ai.libs.hasco.model.CategoricalParameterDomain;
-import ai.libs.hasco.model.Component;
-import ai.libs.hasco.model.ComponentInstance;
-import ai.libs.hasco.model.NumericParameterDomain;
-import ai.libs.hasco.model.Parameter;
 import ai.libs.hyperopt.impl.optimizer.pcs.HASCOToPCSConverter;
+import ai.libs.jaicore.components.model.CategoricalParameterDomain;
+import ai.libs.jaicore.components.model.Component;
+import ai.libs.jaicore.components.model.ComponentInstance;
+import ai.libs.jaicore.components.model.Interface;
+import ai.libs.jaicore.components.model.NumericParameterDomain;
+import ai.libs.jaicore.components.model.Parameter;
 
 public class CFGConverter {
 
@@ -66,12 +66,12 @@ public class CFGConverter {
 			}
 		}
 
-		for (Entry<String, String> requiredInterface : component.getRequiredInterfaces().entrySet()) {
-			String nsI = component.getName() + "." + requiredInterface.getKey();
-			String reqINT = "<" + requiredInterface.getValue() + ">";
+		for (Interface requiredInterface : component.getRequiredInterfaces()) {
+			String nsI = component.getName() + "." + requiredInterface.getId();
+			String reqINT = "<" + requiredInterface.getName() + ">";
 			compProduction.append(" ").append(nsI).append(" ").append(reqINT);
 			if (!productions.containsKey(reqINT)) {
-				Collection<Component> componentsMatching = HASCOToPCSConverter.getComponentsWithProvidedInterface(components, requiredInterface.getValue());
+				Collection<Component> componentsMatching = HASCOToPCSConverter.getComponentsWithProvidedInterface(components, requiredInterface.getName());
 				productions.put(reqINT, reqINT + " ::= " + this.componentsToOrListOfNonTerminals(componentsMatching) + "\n");
 				componentsMatching.stream().forEach(c -> this.addComponentProductions(components, c, productions));
 			}
@@ -94,8 +94,8 @@ public class CFGConverter {
 		Map<String, ComponentInstance> reqIs = new HashMap<>();
 		ComponentInstance root = new ComponentInstance(HASCOToPCSConverter.getComponentWithName(this.components, componentName), parameters, reqIs);
 		// reconstruct required interfaces
-		for (Entry<String, String> reqI : root.getComponent().getRequiredInterfaces().entrySet()) {
-			root.getSatisfactionOfRequiredInterfaces().put(reqI.getKey(), this.buildComponentInstanceFromMap(values.get(componentName + "." + reqI.getKey()), values));
+		for (Interface reqI : root.getComponent().getRequiredInterfaces()) {
+			root.getSatisfactionOfRequiredInterfaces().put(reqI.getId(), this.buildComponentInstanceFromMap(values.get(componentName + "." + reqI.getId()), values));
 		}
 		// reconstruct param values
 		for (Parameter param : root.getComponent().getParameters()) {

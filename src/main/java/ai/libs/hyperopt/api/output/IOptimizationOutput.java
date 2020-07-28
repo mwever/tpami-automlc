@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.api4.java.common.attributedobjects.ScoredItem;
 
-import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.jaicore.components.model.ComponentInstance;
 
 public interface IOptimizationOutput<M> extends ScoredItem<Double> {
 

@@ -7,12 +7,12 @@ import org.api4.java.common.attributedobjects.ObjectEvaluationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedComponentProto;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedEvaluationResponseProto;
 import ai.libs.hasco.pcsbasedoptimization.proto.PCSBasedOptimizerServiceGrpc.PCSBasedOptimizerServiceImplBase;
 import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.impl.optimizer.pcs.HASCOToPCSConverter;
+import ai.libs.jaicore.components.model.ComponentInstance;
 import io.grpc.stub.StreamObserver;
 
 /**

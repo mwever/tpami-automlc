@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.io.Files;
 
-import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.AListenable;
 import ai.libs.hyperopt.api.IOptimizer;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
@@ -29,6 +28,7 @@ import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.api.output.IOptimizationSolutionCandidateFoundEvent;
 import ai.libs.hyperopt.impl.optimizer.pcs.grpc.PCSBasedOptimizerServiceImpl;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
+import ai.libs.jaicore.components.model.ComponentInstance;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 

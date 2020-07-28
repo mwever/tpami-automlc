@@ -19,6 +19,7 @@ import ai.libs.jaicore.basic.kvstore.KVStore;
 import ai.libs.jaicore.basic.kvstore.KVStoreCollection;
 import ai.libs.jaicore.basic.kvstore.KVStoreCollection.EGroupMethod;
 import ai.libs.jaicore.basic.kvstore.KVStoreSequentialComparator;
+import ai.libs.jaicore.basic.kvstore.KVStoreStatisticsUtil;
 import ai.libs.jaicore.basic.kvstore.KVStoreUtil;
 import ai.libs.jaicore.db.sql.SQLAdapter;
 
@@ -167,7 +168,7 @@ public class ResultTable {
 	private static Map<String, DescriptiveStatistics> calculateStatistics(final KVStoreCollection collection) {
 		KVStoreStatisticsUtil.best(collection, "dataset", "algorithm", "finalScore");
 		KVStoreStatisticsUtil.rank(collection, "dataset", "algorithm", "finalScore");
-		KVStoreStatisticsUtil.bestWilcoxonSignedRankTest(collection, "dataset", "algorithm", "finalScore_list", "sig");
+		KVStoreStatisticsUtil.bestWilcoxonSignedRankTest(collection, "dataset", "algorithm", "split", "finalScore_list", "sig");
 
 		Map<String, DescriptiveStatistics> averageRankStats = KVStoreStatisticsUtil.averageRank(collection, "algorithm", "rank");
 		collection.stream().forEach(x -> x.put("finalScore", 1 - x.getAsDouble("finalScore")));

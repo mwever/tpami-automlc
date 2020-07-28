@@ -16,7 +16,6 @@ import org.api4.java.algorithm.exceptions.AlgorithmTimeoutedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hasco.serialization.ComponentLoader;
 import ai.libs.hyperopt.api.IOptimizer;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
@@ -36,6 +35,7 @@ import ai.libs.hyperopt.impl.optimizer.pcs.smac.SMACOptimizer;
 import ai.libs.hyperopt.logger.DatabaseLogger;
 import ai.libs.hyperopt.logger.SCandidateEvaluatedSchema;
 import ai.libs.jaicore.basic.sets.SetUtil;
+import ai.libs.jaicore.components.serialization.ComponentLoader;
 import ai.libs.jaicore.db.IDatabaseConfig;
 import ai.libs.jaicore.experiments.ExperimentDBEntry;
 import ai.libs.jaicore.experiments.ExperimentDatabasePreparer;

@@ -7,7 +7,6 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.api4.java.common.attributedobjects.ObjectEvaluationFailedException;
 import org.codehaus.plexus.util.ExceptionUtils;
 
-import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.AListenable;
 import ai.libs.hyperopt.api.ConversionFailedException;
 import ai.libs.hyperopt.api.IConverter;
@@ -16,6 +15,7 @@ import ai.libs.hyperopt.api.ILoggingObjectEvaluator;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.impl.model.OptimizationOutput;
 import ai.libs.hyperopt.impl.model.OptimizationSolutionCandidateFoundEvent;
+import ai.libs.jaicore.components.model.ComponentInstance;
 
 public class AutoConvertingObjectEvaluator<M> extends AListenable implements IHyperoptObjectEvaluator<ComponentInstance> {
 

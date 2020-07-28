@@ -11,8 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ai.libs.hasco.model.Component;
-import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.jaicore.components.model.Component;
+import ai.libs.jaicore.components.model.ComponentInstance;
 
 public class ComponentInstanceAdapter {
 

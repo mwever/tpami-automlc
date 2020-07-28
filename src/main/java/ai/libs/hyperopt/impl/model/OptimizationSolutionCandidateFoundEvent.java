@@ -2,9 +2,9 @@ package ai.libs.hyperopt.impl.model;
 
 import java.util.Map;
 
-import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.api.output.IOptimizationSolutionCandidateFoundEvent;
+import ai.libs.jaicore.components.model.ComponentInstance;
 
 /**
  * Basic implementation of an optimizer solution, providing access to the optimizer solution found and its score as well as the timestamp when it has been found.
@@ -42,6 +42,7 @@ public class OptimizationSolutionCandidateFoundEvent<M> implements IOptimization
 		return this.output.getObject();
 	}
 
+	@Override
 	public IOptimizationOutput<M> getOutput() {
 		return this.output;
 	}

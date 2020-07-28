@@ -13,8 +13,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import ai.libs.hasco.model.Component;
-import ai.libs.hasco.model.ComponentInstance;
+import ai.libs.jaicore.components.model.Component;
+import ai.libs.jaicore.components.model.ComponentInstance;
 
 public class ComponentInstanceReader extends StdDeserializer<ComponentInstance> {
 

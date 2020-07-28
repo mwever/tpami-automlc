@@ -1,7 +1,6 @@
 package ai.libs.hyperopt.impl.optimizer.baseline;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -21,16 +20,16 @@ import org.api4.java.common.attributedobjects.ObjectEvaluationFailedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hasco.core.Util;
-import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.ConversionFailedException;
 import ai.libs.hyperopt.api.IOptimizer;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
 import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.impl.model.OptimizationOutput;
-import ai.libs.hyperopt.util.ComponentUtil;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
+import ai.libs.jaicore.components.model.ComponentInstance;
+import ai.libs.jaicore.components.model.ComponentInstanceUtil;
+import ai.libs.jaicore.components.model.ComponentUtil;
 
 public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizationOutput<M>, Double> implements IOptimizer<IPlanningOptimizationTask<M>, M> {
 
@@ -100,10 +99,11 @@ public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IO
 						} finally {
 							RandomSearch.this.lock.unlock();
 						}
+
 					} catch (ConversionFailedException e) {
-						LOGGER.info("Could not convert candidate {} into an executable object and a respective entry has been logged to the evaluation table.", Util.getComponentNamesOfComposition(ci));
+						LOGGER.info("Could not convert candidate {} into an executable object and a respective entry has been logged to the evaluation table.", ComponentInstanceUtil.toComponentNameString(ci));
 					} catch (ObjectEvaluationFailedException e) {
-						LOGGER.info("Could not evaluate candidate {} and a respective entry has been logged to the evaluation table.", Util.getComponentNamesOfComposition(ci));
+						LOGGER.info("Could not evaluate candidate {} and a respective entry has been logged to the evaluation table.", ComponentInstanceUtil.toComponentNameString(ci));
 					} catch (InterruptedException e) {
 						LOGGER.info("Thread {} has been interrupted, thus, shutting down this thread.");
 						break;
@@ -122,32 +122,8 @@ public class RandomSearch<M> extends AOptimizer<IPlanningOptimizationTask<M>, IO
 		private ComponentInstance sampleRandomComponent() {
 			LOGGER.trace("Sample uniformly algorithm selection.");
 			ComponentInstance ciToInstantiate = new ComponentInstance(RandomSearch.this.allSelections.get(this.rand.nextInt(RandomSearch.this.allSelections.size())));
-			List<ComponentInstance> queue = new LinkedList<>();
-			queue.add(ciToInstantiate);
-
-			LOGGER.trace("Sample parameters for contained components.");
-			while (!queue.isEmpty()) {
-				ComponentInstance currentCI = queue.remove(0);
-				if (!currentCI.getComponent().getParameters().isEmpty()) {
-					ComponentInstance parametrization = null;
-					while (parametrization == null) {
-						try {
-							parametrization = ComponentUtil.randomParameterizationOfComponent(currentCI.getComponent(), this.rand);
-						} catch (Exception e) {
-							LOGGER.warn("Could not instantiate component instance {} with random parameters", ciToInstantiate, e);
-						}
-					}
-					currentCI.getParameterValues().putAll(parametrization.getParameterValues());
-
-				}
-
-				if (!currentCI.getSatisfactionOfRequiredInterfaces().isEmpty()) {
-					queue.addAll(currentCI.getSatisfactionOfRequiredInterfaces().values());
-				}
-			}
-
 			LOGGER.trace("Return randomly sampled component instance.");
-			return ciToInstantiate;
+			return ComponentUtil.getRandomParametrization(ciToInstantiate, this.rand);
 		}
 	}
 

@@ -14,18 +14,18 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hasco.model.BooleanParameterDomain;
-import ai.libs.hasco.model.CategoricalParameterDomain;
-import ai.libs.hasco.model.Component;
-import ai.libs.hasco.model.NumericParameterDomain;
-import ai.libs.hasco.model.Parameter;
 import ai.libs.hyperopt.impl.HASCORepository;
 import ai.libs.jaicore.basic.FileUtil;
 import ai.libs.jaicore.basic.sets.PartialOrderedSet;
+import ai.libs.jaicore.components.model.BooleanParameterDomain;
+import ai.libs.jaicore.components.model.CategoricalParameterDomain;
+import ai.libs.jaicore.components.model.Component;
+import ai.libs.jaicore.components.model.NumericParameterDomain;
+import ai.libs.jaicore.components.model.Parameter;
 
 /**
  * For converting PCS format to HASCO format
- * 
+ *
  * @author kadirayk
  *
  */
@@ -36,11 +36,11 @@ public class PCSToHASCOConverter {
 	private static List<String> componentsFromConditionals = new ArrayList<>();
 
 	/**
-	 * 
+	 *
 	 * @param repositoryName name of hasco file and repository
 	 * @param pcsFolder      path to the folder that contains pcs file
 	 */
-	public static void generateHASCOFile(String repositoryName, String pcsFolder) {
+	public static void generateHASCOFile(final String repositoryName, final String pcsFolder) {
 		File[] files = getPCSFiles(pcsFolder);
 		List<Component> components = new ArrayList<>();
 		for (File pcsFile : files) {
@@ -64,15 +64,13 @@ public class PCSToHASCOConverter {
 		repository.setComponents(withoutDuplicates);
 		String jsonString = repository.toString();
 		try {
-			FileUtils.writeStringToFile(
-					new File("." + File.separator + pcsFolder + File.separator + repositoryName + ".json"), jsonString,
-					"ISO-8859-1");
+			FileUtils.writeStringToFile(new File("." + File.separator + pcsFolder + File.separator + repositoryName + ".json"), jsonString, "ISO-8859-1");
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 		}
 	}
 
-	private static Component convertToHASCOComponent(File pcsFile) {
+	private static Component convertToHASCOComponent(final File pcsFile) {
 		String componentName = getFullComponentName(pcsFile);
 		Component component = new Component(componentName);
 		List<String> lines = null;
@@ -105,17 +103,16 @@ public class PCSToHASCOConverter {
 		return component;
 	}
 
-	private static boolean isInterface(Matcher matcher) {
+	private static boolean isInterface(final Matcher matcher) {
 		boolean isInterface = false;
 		if (matcher.matches()) {
 			String paramName = matcher.group(1).trim();
-			isInterface = componentsFromConditionals.stream()
-					.anyMatch(c -> (c.contains(paramName + " in") || c.contains(paramName + "in")));
+			isInterface = componentsFromConditionals.stream().anyMatch(c -> (c.contains(paramName + " in") || c.contains(paramName + "in")));
 		}
 		return isInterface;
 	}
 
-	private static Parameter handleCategorical(Matcher matcher) {
+	private static Parameter handleCategorical(final Matcher matcher) {
 		if (matcher.matches()) {
 			String paramName = matcher.group(1).trim();
 			String[] values = matcher.group(2).split(",");
@@ -124,8 +121,7 @@ public class PCSToHASCOConverter {
 			}
 			String defaultValue = matcher.group(3).trim();
 			Parameter param = null;
-			if (values.length == 2 && ((values[0].equalsIgnoreCase("false") && values[1].equalsIgnoreCase("true"))
-					|| (values[0].equalsIgnoreCase("true") && values[1].equalsIgnoreCase("false")))) {
+			if (values.length == 2 && ((values[0].equalsIgnoreCase("false") && values[1].equalsIgnoreCase("true")) || (values[0].equalsIgnoreCase("true") && values[1].equalsIgnoreCase("false")))) {
 				BooleanParameterDomain domain = new BooleanParameterDomain();
 				param = new Parameter(paramName, domain, defaultValue);
 			} else {
@@ -137,7 +133,7 @@ public class PCSToHASCOConverter {
 		return null;
 	}
 
-	private static Parameter handleNumeric(Matcher matcher) {
+	private static Parameter handleNumeric(final Matcher matcher) {
 		if (matcher.matches()) {
 			String paramName = matcher.group(1).trim();
 			String min = matcher.group(3).trim();
@@ -147,8 +143,7 @@ public class PCSToHASCOConverter {
 			boolean isInteger = il.equalsIgnoreCase("i");
 			NumericParameterDomain domain = null;
 			try {
-				domain = new NumericParameterDomain(isInteger, Double.valueOf(min).longValue(),
-						Double.parseDouble(max));
+				domain = new NumericParameterDomain(isInteger, Double.valueOf(min).longValue(), Double.parseDouble(max));
 			} catch (Exception e) {
 				System.out.println(e.getLocalizedMessage());
 			}
@@ -157,7 +152,7 @@ public class PCSToHASCOConverter {
 		return null;
 	}
 
-	private static List<String> separateForbiddenParams(List<String> lines) {
+	private static List<String> separateForbiddenParams(final List<String> lines) {
 		List<String> forbiddens = new ArrayList<>();
 		for (String line : lines) {
 			if (line.startsWith("{") && line.endsWith("}")) {
@@ -168,7 +163,7 @@ public class PCSToHASCOConverter {
 		return forbiddens;
 	}
 
-	private static List<String> handleComments(List<String> lines) {
+	private static List<String> handleComments(final List<String> lines) {
 		List<String> cleanLines = new ArrayList<>();
 		for (String line : lines) {
 			int pos = line.indexOf("#");
@@ -183,11 +178,11 @@ public class PCSToHASCOConverter {
 
 	/**
 	 * removes conditionals from the given list and returns the conditionals
-	 * 
+	 *
 	 * @param lines
 	 * @return
 	 */
-	private static List<String> separateParamsFromConditionals(List<String> lines) {
+	private static List<String> separateParamsFromConditionals(final List<String> lines) {
 		List<String> conditionals = new ArrayList<>();
 		List<String> otherLinesToRemove = new ArrayList<>();
 		for (String line : lines) {
@@ -207,7 +202,7 @@ public class PCSToHASCOConverter {
 		return conditionals;
 	}
 
-	private static void handleRequiredInterface(Component component, String line, List<String> parameterLines) {
+	private static void handleRequiredInterface(final Component component, final String line, final List<String> parameterLines) {
 		String interfaceName = line.split(" ")[0];
 		component.addRequiredInterface(interfaceName, interfaceName);
 		Matcher matcher = PCSConstants.CATEGORICAL_PATTERN.matcher(line);
@@ -220,10 +215,8 @@ public class PCSToHASCOConverter {
 				Component comp = new Component(inf);
 				comp.addProvidedInterface(interfaceName);
 				componentsFromRequiredInterfaces.add(comp);
-				List<String> conditions = componentsFromConditionals.stream()
-						.filter(c -> c.contains(" in {" + comp.getName() + "}")).collect(Collectors.toList());
-				List<String> otherConditions = componentsFromConditionals.stream()
-						.filter(c -> c.contains("| " + comp.getName())).collect(Collectors.toList());
+				List<String> conditions = componentsFromConditionals.stream().filter(c -> c.contains(" in {" + comp.getName() + "}")).collect(Collectors.toList());
+				List<String> otherConditions = componentsFromConditionals.stream().filter(c -> c.contains("| " + comp.getName())).collect(Collectors.toList());
 				conditions.addAll(otherConditions);
 				for (String cond : conditions) {
 					String firstPart = cond.split(" ")[0];
@@ -252,7 +245,7 @@ public class PCSToHASCOConverter {
 		}
 	}
 
-	private static String getFullComponentName(File pcsFile) {
+	private static String getFullComponentName(final File pcsFile) {
 		String fullName = null;
 		try {
 			List<String> lines = FileUtil.readFileAsList(pcsFile.getAbsolutePath());
@@ -291,7 +284,7 @@ public class PCSToHASCOConverter {
 		return fullName;
 	}
 
-	private static Parameter handleNumericParameter(String[] splitted) {
+	private static Parameter handleNumericParameter(final String[] splitted) {
 		String paramName = getSimpleParameterName(splitted[0]);
 		String range = splitted[1];
 		String defaultVal = splitted[2];
@@ -323,12 +316,12 @@ public class PCSToHASCOConverter {
 		return param;
 	}
 
-	private static String getSimpleParameterName(String fullParamName) {
+	private static String getSimpleParameterName(final String fullParamName) {
 		int lastDot = fullParamName.lastIndexOf(".");
 		return fullParamName.substring(lastDot + 1);
 	}
 
-	private static Parameter handleCategoricalParameter(String[] splitted) {
+	private static Parameter handleCategoricalParameter(final String[] splitted) {
 		String paramName = getSimpleParameterName(splitted[0]);
 		String val = splitted[1];
 		int bracketIndex = val.indexOf("[");
@@ -349,22 +342,21 @@ public class PCSToHASCOConverter {
 
 	}
 
-	private static File[] getPCSFiles(String pcsFolder) {
+	private static File[] getPCSFiles(final String pcsFolder) {
 		File dir = new File(pcsFolder);
 		File[] files = dir.listFiles(new FilenameFilter() {
 			@Override
-			public boolean accept(File dir, String name) {
+			public boolean accept(final File dir, final String name) {
 				return name.endsWith(".pcs");
 			}
 		});
 		return files;
 	}
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		// generateHASCOFile("Auto-WEKA",
 		// "PCSBasedOptimizerScripts/HyperBandOptimizer");
-		Pattern p = Pattern.compile(
-				"([a-zA-Z0-9_\\-@\\.:;\\\\\\/?!$%&*+<>]*) *(\\[-?[0-9]*e?-?[0-9]*\\.?[0-9]*e?-?[0-9]*, *-?[0-9]*\\.?[0-9]*]) *(\\[[0-9]*\\.?[0-9]*])(i?l?)");
+		Pattern p = Pattern.compile("([a-zA-Z0-9_\\-@\\.:;\\\\\\/?!$%&*+<>]*) *(\\[-?[0-9]*e?-?[0-9]*\\.?[0-9]*e?-?[0-9]*, *-?[0-9]*\\.?[0-9]*]) *(\\[[0-9]*\\.?[0-9]*])(i?l?)");
 		Matcher matcher = p.matcher("extra_trees:max_features [0.01, 1.0] [1.0]");
 		matcher.matches();
 		matcher.group();

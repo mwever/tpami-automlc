@@ -5,12 +5,12 @@ import java.util.Collection;
 import org.api4.java.algorithm.Timeout;
 import org.api4.java.common.attributedobjects.IObjectEvaluator;
 
-import ai.libs.hasco.model.Component;
-import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.IConverter;
 import ai.libs.hyperopt.api.IHyperoptObjectEvaluator;
 import ai.libs.hyperopt.api.input.IOptimizationTask;
 import ai.libs.hyperopt.impl.evaluator.AutoConvertingObjectEvaluator;
+import ai.libs.jaicore.components.model.Component;
+import ai.libs.jaicore.components.model.ComponentInstance;
 
 public class OptimizationTask<M> implements IOptimizationTask<M> {
 

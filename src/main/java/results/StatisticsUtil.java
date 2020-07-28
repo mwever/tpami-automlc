@@ -1,5 +1,6 @@
 package results;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,6 +11,8 @@ import org.apache.commons.math3.stat.inference.TTest;
 import org.apache.commons.math3.stat.inference.WilcoxonSignedRankTest;
 import org.apache.commons.math3.stat.ranking.NaNStrategy;
 import org.apache.commons.math3.stat.ranking.TiesStrategy;
+
+import ai.libs.jaicore.basic.ValueUtil;
 
 /**
  * Utils for computing some statistics from collections of doubles or arrays.
@@ -117,6 +120,11 @@ public class StatisticsUtil {
 	 */
 	public static boolean wilcoxonSignedRankSumTestTwoSided(final double[] sampleA, final double[] sampleB) {
 		double pValue = wilcoxonSignedRankSumTestP(sampleA, sampleB);
+		Arrays.stream(sampleA).map(x -> ValueUtil.round(x, 4)).forEach(x -> System.out.print(x + " "));
+		System.out.println();
+		Arrays.stream(sampleB).map(x -> ValueUtil.round(x, 4)).forEach(x -> System.out.print(x + " "));
+		System.out.println();
+		System.out.println(pValue + " " + Arrays.toString(sampleA) + " " + Arrays.toString(sampleB));
 		return pValue < 0.05;
 	}
 
@@ -150,7 +158,24 @@ public class StatisticsUtil {
 	 * @return True iff the difference is significant (p-value &lt; 0.05)
 	 */
 	public static boolean mannWhitneyTwoSidedSignificance(final double[] sampleA, final double[] sampleB) {
-		return mannWhitneyTwoSidedSignificanceP(sampleA, sampleB) < 0.05;
+		double pValue = mannWhitneyTwoSidedSignificanceP(sampleA, sampleB);
+		System.out.println(pValue + " " + Arrays.stream(sampleA).average().getAsDouble() + " " + Arrays.stream(sampleB).average().getAsDouble());
+
+		for (int i = 0; i < sampleA.length; i++) {
+			double diff = sampleA[i] - sampleB[i];
+			if (diff < 0) {
+				System.out.print("W ");
+			} else if (diff > 0) {
+				System.out.print("L ");
+			} else {
+				System.out.print("T ");
+			}
+		}
+		System.out.println();
+		System.out.println(Arrays.toString(sampleA));
+		System.out.println(Arrays.toString(sampleB));
+		System.out.println();
+		return pValue < 0.05;
 	}
 
 	/**

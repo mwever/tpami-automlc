@@ -23,8 +23,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ai.libs.hasco.model.ComponentInstance;
-import ai.libs.hasco.serialization.ComponentLoader;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.api.output.IOptimizationSolutionCandidateFoundEvent;
 import ai.libs.hyperopt.example.meka.MekaClassifierConverter;
@@ -37,6 +35,8 @@ import ai.libs.hyperopt.logger.DatabaseLogger;
 import ai.libs.hyperopt.logger.SCandidateEvaluatedSchema;
 import ai.libs.hyperopt.util.ComponentInstanceAdapter;
 import ai.libs.jaicore.basic.sets.SetUtil;
+import ai.libs.jaicore.components.model.ComponentInstance;
+import ai.libs.jaicore.components.serialization.ComponentLoader;
 import ai.libs.jaicore.db.IDatabaseConfig;
 import ai.libs.jaicore.db.sql.SQLAdapter;
 import ai.libs.jaicore.experiments.ExperimentDBEntry;

@@ -21,14 +21,15 @@ import org.jfree.util.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ai.libs.hasco.model.CategoricalParameterDomain;
-import ai.libs.hasco.model.Component;
-import ai.libs.hasco.model.ComponentInstance;
-import ai.libs.hasco.model.ComponentUtil;
-import ai.libs.hasco.model.NumericParameterDomain;
-import ai.libs.hasco.model.Parameter;
 import ai.libs.jaicore.basic.StringUtil;
 import ai.libs.jaicore.basic.sets.SetUtil;
+import ai.libs.jaicore.components.model.CategoricalParameterDomain;
+import ai.libs.jaicore.components.model.Component;
+import ai.libs.jaicore.components.model.ComponentInstance;
+import ai.libs.jaicore.components.model.ComponentUtil;
+import ai.libs.jaicore.components.model.Interface;
+import ai.libs.jaicore.components.model.NumericParameterDomain;
+import ai.libs.jaicore.components.model.Parameter;
 
 /**
  * For converting HASCO format to PCS format
@@ -81,7 +82,7 @@ public class HASCOToPCSConverter {
 		while (!currentComponents.isEmpty()) {
 			Component currentComponent = currentComponents.remove(0);
 			this.components.add(currentComponent);
-			currentComponent.getRequiredInterfaces().entrySet().stream().filter(x -> resolvedInterfaces.add(x.getValue())).forEach(x -> currentComponents.addAll(getComponentsWithProvidedInterface(components, x.getValue())));
+			currentComponent.getRequiredInterfaces().stream().filter(x -> resolvedInterfaces.add(x.getName())).forEach(x -> currentComponents.addAll(getComponentsWithProvidedInterface(components, x.getName())));
 		}
 
 		if (this.rootRequired) {
@@ -167,19 +168,19 @@ public class HASCOToPCSConverter {
 		Set<String> constraintsToRemove = new HashSet<>();
 
 		for (Component cmp : this.components) {
-			for (Entry<String, String> reqI : cmp.getRequiredInterfaces().entrySet()) {
-				Collection<Component> subCompList = getComponentsWithProvidedInterface(this.components, reqI.getValue());
-				String reqIString = this.getCategoricalPCSParam(cmp.getName() + "." + reqI.getKey(), subCompList.stream().map(x -> x.getName()).collect(Collectors.toList()), subCompList.iterator().next().getName());
+			for (Interface reqI : cmp.getRequiredInterfaces()) {
+				Collection<Component> subCompList = getComponentsWithProvidedInterface(this.components, reqI.getName());
+				String reqIString = this.getCategoricalPCSParam(cmp.getName() + "." + reqI.getId(), subCompList.stream().map(x -> x.getName()).collect(Collectors.toList()), subCompList.iterator().next().getName());
 				// add parameter definition for required interface
 				singleFileParameters.append(reqIString).append(System.lineSeparator());
 
 				// Add constraints for activation of sub-components
 				for (Component sc : subCompList) {
-					String constraintForSC = String.format("%s in {%s}", cmp.getName() + "." + reqI.getKey(), sc.getName());
+					String constraintForSC = String.format("%s in {%s}", cmp.getName() + "." + reqI.getId(), sc.getName());
 
 					// add constraints for required interfaces
-					for (Entry<String, String> scri : sc.getRequiredInterfaces().entrySet()) {
-						constraints.computeIfAbsent(sc.getName() + "." + scri.getKey(), t -> new HashSet<>()).add(constraintForSC);
+					for (Interface scri : sc.getRequiredInterfaces()) {
+						constraints.computeIfAbsent(sc.getName() + "." + scri.getId(), t -> new HashSet<>()).add(constraintForSC);
 					}
 
 					if (ENCODE_PARAMS) {
@@ -335,12 +336,12 @@ public class HASCOToPCSConverter {
 				rootCI.getParameterValues().put(param.getName(), this.defaults.get(nsParam));
 			}
 		}
-		for (String reqI : rootComp.getRequiredInterfaces().keySet()) {
-			String nsIface = rootComp.getName() + "." + reqI;
+		for (Interface reqI : rootComp.getRequiredInterfaces()) {
+			String nsIface = rootComp.getName() + "." + reqI.getId();
 			if (parameterMap.containsKey(nsIface)) {
-				rootCI.getSatisfactionOfRequiredInterfaces().put(reqI, this.getComponentInstanceFromMap(parameterMap, parameterMap.get(rootComp.getName() + "." + reqI)));
+				rootCI.getSatisfactionOfRequiredInterfaces().put(reqI.getId(), this.getComponentInstanceFromMap(parameterMap, parameterMap.get(rootComp.getName() + "." + reqI.getId())));
 			} else {
-				rootCI.getSatisfactionOfRequiredInterfaces().put(reqI, this.getComponentInstanceFromMap(parameterMap, this.defaults.get(nsIface)));
+				rootCI.getSatisfactionOfRequiredInterfaces().put(reqI.getId(), this.getComponentInstanceFromMap(parameterMap, this.defaults.get(nsIface)));
 			}
 		}
 		return rootCI;

@@ -8,9 +8,7 @@ import org.api4.java.common.attributedobjects.ScoredItem;
 
 import com.google.common.eventbus.Subscribe;
 
-import ai.libs.hasco.events.HASCOSolutionEvent;
-import ai.libs.hasco.model.ComponentInstance;
-import ai.libs.hasco.variants.forwarddecomposition.HASCOViaFDFactory;
+import ai.libs.hasco.core.events.HASCOSolutionEvent;
 import ai.libs.hyperopt.api.ConversionFailedException;
 import ai.libs.hyperopt.api.IOptimizer;
 import ai.libs.hyperopt.api.input.IOptimizerConfig;
@@ -18,12 +16,9 @@ import ai.libs.hyperopt.api.input.IPlanningOptimizationTask;
 import ai.libs.hyperopt.api.output.IOptimizationOutput;
 import ai.libs.hyperopt.impl.model.OptimizationOutput;
 import ai.libs.jaicore.basic.algorithm.AOptimizer;
-import ai.libs.jaicore.planning.hierarchical.algorithms.forwarddecomposition.graphgenerators.tfd.TFDNode;
-import ai.libs.jaicore.search.probleminputs.GraphSearchWithPathEvaluationsInput;
+import ai.libs.jaicore.components.model.ComponentInstance;
 
 public abstract class AHTNBasedOptimizer<M> extends AOptimizer<IPlanningOptimizationTask<M>, IOptimizationOutput<M>, Double> implements IOptimizer<IPlanningOptimizationTask<M>, M> {
-
-	private HASCOViaFDFactory<GraphSearchWithPathEvaluationsInput<TFDNode, String, Double>, Double> factory;
 
 	private final long timestamp = System.currentTimeMillis();
 

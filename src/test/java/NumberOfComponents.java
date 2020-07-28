@@ -1,8 +1,8 @@
 import java.io.File;
 import java.io.IOException;
 
-import ai.libs.hasco.model.ComponentUtil;
-import ai.libs.hasco.serialization.ComponentLoader;
+import ai.libs.jaicore.components.model.ComponentUtil;
+import ai.libs.jaicore.components.serialization.ComponentLoader;
 
 public class NumberOfComponents {
 

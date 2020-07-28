@@ -20,11 +20,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.eventbus.Subscribe;
 
-import ai.libs.hasco.model.ComponentInstance;
 import ai.libs.hyperopt.api.logger.IDatabaseLoggerConfig;
 import ai.libs.hyperopt.api.output.IOptimizationSolutionCandidateFoundEvent;
 import ai.libs.hyperopt.util.ComponentInstanceAdapter;
 import ai.libs.hyperopt.util.DBSchemaUtil;
+import ai.libs.jaicore.components.model.ComponentInstance;
 import ai.libs.jaicore.db.sql.SQLAdapter;
 
 public class DatabaseLogger<M> {

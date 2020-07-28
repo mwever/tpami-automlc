@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ai.libs.hasco.model.Component;
+import ai.libs.jaicore.components.model.Component;
 import ai.libs.jaicore.logging.ToJSONStringUtil;
 
 @JsonPropertyOrder({ "repository", "components" })
@@ -22,18 +22,18 @@ public class HASCORepository {
 	List<Component> components = new ArrayList<>();
 
 	public String getRepository() {
-		return repository;
+		return this.repository;
 	}
 
-	public void setRepository(String repository) {
+	public void setRepository(final String repository) {
 		this.repository = repository;
 	}
 
 	public List<Component> getComponents() {
-		return components;
+		return this.components;
 	}
 
-	public void setComponents(List<Component> components) {
+	public void setComponents(final List<Component> components) {
 		this.components = components;
 	}
 
@@ -50,5 +50,5 @@ public class HASCORepository {
 		fields.put("components", this.components);
 		return ToJSONStringUtil.toJSONString(this.getClass().getSimpleName(), fields);
 	}
-	
+
 }
