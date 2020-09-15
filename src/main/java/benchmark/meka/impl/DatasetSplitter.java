@@ -16,7 +16,7 @@ import weka.core.Instances;
 public class DatasetSplitter {
 
 	private static final File OUT_DIR = new File("datasets/");
-	private static final File DATASET_FOLDER = new File("../datasets/classification/multi-label/");
+	private static final File DATASET_FOLDER = new File("original_datasets/");
 	private static final int NUM_FOLDS = 10;
 
 	private static final List<Long> SEEDS = Arrays.asList(42l);

@@ -151,11 +151,6 @@ task exportAlgorithmsInSearchSpace(type: JavaExec) {
   main = "benchmark.results.searchspace.SearchSpaceAlgorithmList"
 }
 
-task printDeepestCandidatesInSearchSpace(type: JavaExec) {
-  classpath sourceSets.main.runtimeClasspath
-  main = "benchmark.results.candidates.DeepestCandidates"
-}
-
 task printAlgorithmIncumbentFrequencies(type: JavaExec) {
   classpath sourceSets.main.runtimeClasspath
   main = "benchmark.results.candidates.IncumbentStats"
@@ -171,6 +166,31 @@ task generateMultiLabelSearchSpaceDescription(type: JavaExec) {
   classpath sourceSets.main.runtimeClasspath
   main = "benchmark.results.searchspace.SearchSpaceDescription"
   args = ["meka", "searchspace-meka.html"]
+}
+
+// Benchmark API
+
+task generateDatasetSplits(type: JavaExec) {
+	classpath sourceSets.main.runtimeClasspath
+	main = "benchmark.meka.impl.DatasetSplitter"
+}
+
+task initializeExperimentsInDatabase(type: JavaExec) {
+	classpath sourceSets.main.runtimeClasspath
+	main = "benchmark.meka.experimenter.AutoMLCExperimenter"
+	args = ["init"]
+}
+
+task runExperimentEvaluationWorker(type: JavaExec) {
+	classpath sourceSets.main.runtimeClasspath
+	main = "benchmark.meka.experimenter.AutoMLCExperimenter"
+	args = ["run"]
+}
+
+task cleanExperimentsInDatabase(type: JavaExec) {
+	classpath sourceSets.main.runtimeClasspath
+	main = "benchmark.meka.experimenter.AutoMLCExperimenter"
+	args = ["delete"]
 }
 
 task generateAll {

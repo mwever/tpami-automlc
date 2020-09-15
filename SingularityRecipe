@@ -7,27 +7,14 @@ smac /usr/bin/smac
 %post
     echo "Installing the singularity container"
     apt update
-    apt install -y apt-utils
-    apt install -y software-properties-common
+    apt install -y apt-utils software-properties-common
     apt update
     apt install -f
 
-    apt install -y apt-transport-https
-    apt install -y ca-certificates
-    apt install -y gnupg2
-    apt install -y git
-    apt install -y curl
-    apt install -y build-essential
-    apt install -y systemd
-    apt install -y gcc
-
-    apt install -y mc
-
-    apt install -y python3-pip
+    apt install -y apt-transport-https ca-certificates gnupg2 git curl build-essential systemd gcc mc python3-pip swig
     ln -s /usr/bin/python3 /usr/bin/python
     ln -s /usr/bin/pip3 /usr/bin/pip
 
-    apt install -y swig
     pip install argparse
     curl https://raw.githubusercontent.com/automl/auto-sklearn/master/requirements.txt | xargs -n 1 -L 1 pip install
     pip install grpcio

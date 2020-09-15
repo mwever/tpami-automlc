@@ -13,7 +13,7 @@ from hpbandster.optimizers import BOHB as BOHB
 from hpbandster.optimizers import HyperBand as HyperBand
 from evalworker import MyWorker
 
-parser = argparse.ArgumentParser(description='Hyperband')
+parser = argparse.ArgumentParser(description='BOHB')
 parser.add_argument('--min_budget', type=float, help='Minimum budget used during the optimization.', default=1)
 parser.add_argument('--max_budget', type=float, help='Maximum budget used during the optimization.', default=5)
 parser.add_argument('--eta', type=float, help='In each iteration, a complete run of sequential halving is executed. In it, after evaluating each configuraiton on the same subset size, only a fraction of 1/eta of them advances to the next round. Must be greater or equal to 2', default=2)
