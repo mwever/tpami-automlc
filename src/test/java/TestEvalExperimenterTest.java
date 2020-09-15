@@ -5,7 +5,7 @@ import ai.libs.jaicore.experiments.Experiment;
 import ai.libs.jaicore.experiments.ExperimentDBEntry;
 import ai.libs.jaicore.experiments.IExperimentIntermediateResultProcessor;
 import ai.libs.jaicore.experiments.exceptions.ExperimentEvaluationFailedException;
-import results.testeval.TestEvalExperimenter;
+import benchmark.results.testeval.TestEvalExperimenter;
 
 public class TestEvalExperimenterTest {
 	public static final int MAX_MEM = 4096;

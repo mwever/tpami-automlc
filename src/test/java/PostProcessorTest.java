@@ -5,13 +5,13 @@ import java.util.List;
 import org.aeonbits.owner.ConfigFactory;
 import org.api4.java.datastructure.kvstore.IKVStore;
 
-import ai.libs.hyperopt.experimenter.IAutoMLCExperimentConfig;
-import ai.libs.hyperopt.util.ComponentInstanceAdapter;
 import ai.libs.jaicore.components.model.ComponentInstance;
 import ai.libs.jaicore.components.serialization.ComponentLoader;
 import ai.libs.jaicore.db.sql.SQLAdapter;
 import ai.libs.jaicore.ml.classification.multilabel.learner.IMekaClassifier;
 import ai.libs.mlplan.multilabel.mekamlplan.MekaPipelineFactory;
+import benchmark.core.util.ComponentInstanceAdapter;
+import benchmark.meka.experimenter.IAutoMLCExperimentConfig;
 import meka.classifiers.multilabel.Evaluation;
 import meka.core.MLUtils;
 import meka.core.Metrics;

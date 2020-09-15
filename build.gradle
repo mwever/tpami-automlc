@@ -113,9 +113,76 @@ jar {
     manifest {
         attributes(
             //'Main-Class': "ai.libs.hyperopt.experimenter.AutoMLCExperimenter"
-            'Main-Class': "results.testeval.TestEvalExperimenter"
+            'Main-Class': "ai.libs.mlplan.experimenter.MLPlanExperimenter"
         )
     }
+}
+
+// Result Generation Tasks
+task compileScatterPlots(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "results.ScatterPlots"
+}
+
+task compileAnytimeAverageRankPlots(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "benchmark.results.anytime.AnytimeAverageRankPlotter"
+}
+
+task compileResultTables(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "benchmark.results.solution.ResultTable"
+}
+
+task compileIncumbentFrequencyStatistics(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "benchmark.results.candidates.IncumbentStats"
+}
+
+
+// Search Space Description Tasks
+task exportSearchSpacesToGephiFormat(type: JavaExec) {
+	classpath sourceSets.main.runtimeClasspath
+	main = "benchmark.results.searchspace.GephiExportView"
+}
+
+task exportAlgorithmsInSearchSpace(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "benchmark.results.searchspace.SearchSpaceAlgorithmList"
+}
+
+task printDeepestCandidatesInSearchSpace(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "benchmark.results.candidates.DeepestCandidates"
+}
+
+task printAlgorithmIncumbentFrequencies(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "benchmark.results.candidates.IncumbentStats"
+}
+
+task generateSingleLabelSearchSpaceDescription(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "benchmark.results.searchspace.SearchSpaceDescription"
+  args = ["weka", "searchspace-weka.html"]
+}
+
+task generateMultiLabelSearchSpaceDescription(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "benchmark.results.searchspace.SearchSpaceDescription"
+  args = ["meka", "searchspace-meka.html"]
+}
+
+task generateAll {
+	// search space describing artefacts
+	exportAlgorithmsInSearchSpace
+	exportSearchSpacesToGephiFormat
+	generateSingleLabelSearchSpaceDescription
+	generateMultiLabelSearchSpaceDescription
+	
+	// generate result data analysis artefacts
+	compileScatterPlots
+	compileAnytimeAverageRankPlots
 }
 
 configurations {

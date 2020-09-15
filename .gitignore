@@ -18,3 +18,11 @@ automlc
 working_dir
 /test
 __pycache__
+/results/anytime-plots/
+/results/bu/
+/results/gephi-export/
+/results/scatter-plots/
+/results/tables/
+/results/incumbent-frequencies.txt
+/results/searchspace-meka.html
+/results/searchspace-weka.html

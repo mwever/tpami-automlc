@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import ai.libs.hyperopt.impl.optimizer.pcs.HASCOToPCSConverter;
 import ai.libs.jaicore.components.model.ComponentInstance;
 import ai.libs.jaicore.components.model.ComponentUtil;
 import ai.libs.jaicore.components.serialization.ComponentLoader;
+import benchmark.core.impl.optimizer.pcs.HASCOToPCSConverter;
 
 public class HASCO2PCSConverterTest {
 	private static final String REQUESTED_INTERFACE = "MLClassifier";

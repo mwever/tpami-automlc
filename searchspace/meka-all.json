@@ -1,0 +1,6 @@
+{
+	"repository": "ML2-Plan for MEKA",
+	"include": ["./meka-base.json", "./meka-meta.json", "./weka-all.json"],
+	"parameters": [	],
+	"components": [	]
+}

@@ -1,0 +1,6 @@
+{
+	"repository": "ML-Plan for WEKA",
+	"include": ["./weka-meta.json","./weka-base.json"],
+	"parameters": [	],
+	"components": [	]
+}
