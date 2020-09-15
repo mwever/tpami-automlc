@@ -1,4 +1,4 @@
-# Automated Machine Learning for Multi-Label Classification: Overview and Benchmark
+# AutoML for Multi-Label Classification: Overview and Empirical Evaluation
 
 This project provides a platform for benchmarking different optimizers for the task of automated machine learning ensuring all optimizers to work on the same set of potential solution candidates. The implementation is based on the Java open-source library [AILibs](https://github.com/starlibs/AILibs), providing the basic technical support for describing search spaces, HTN planning and heuristic search algorithms, as well as the infrastructure for synchronizing the execution of a benchmarking suite on a distributed system.
 
@@ -79,4 +79,6 @@ The command will produce its output in the folder `results/scatter-plots`, where
 ```Shell
 ./gradlew generateResultTables
 ```
+
+
 
