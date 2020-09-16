@@ -130,9 +130,30 @@ task testBOHB(type: JavaExec) {
   main = "ai.libs.hyperopt.experimenter.test.BOHBTest"
 }
 
-task testHTNBF(type: JavaExec) {
+task testHB(type: JavaExec) {
   classpath sourceSets.main.runtimeClasspath
-  main = "ai.libs.hyperopt.experimenter.test.BFTest"
+  main = "ai.libs.hyperopt.experimenter.test.HBTest"
+}
+task testSMAC(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "ai.libs.hyperopt.experimenter.test.SMACTest"
+}
+task testRandomSearch(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "ai.libs.hyperopt.experimenter.test.RandomSearchTest"
+}
+task testGGP(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "ai.libs.hyperopt.experimenter.test.GGPTest"
+}
+
+task testAllOptimizers() {
+	testHTNBF
+	testBOHB
+	testHB
+	testSMAC
+	testRandomSearch
+	testGGP
 }
 
 // Result Generation Tasks

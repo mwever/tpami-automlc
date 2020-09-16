@@ -29,6 +29,23 @@ However, since we mainly work with Singularity containers to have a clearly dist
 In order to test your setup we have prepared a test runner that will work out-of-the-box if everything has been setup correctly.
 More precisely, you can test whether each of the optimizers can be run for a specific dataset split with short timeouts of 1 minute for the entire optimization run and 45 seconds for a single evaluation. 
 
+You can test to run each optimizer individually via the following commands:
+
+```Shell
+./gradlew testHTNBF
+./gradlew testBOHB
+./gradlew testHB
+./gradlew testSMAC
+./gradlew testRandomSearch
+./gradlew testGGP
+```
+
+As a shortcut you can also simply test all the optimizers as follows:
+
+```Shell
+./gradlew testAllOptimizers
+```
+
 ## Using the Benchmark
 
 The benchmark implemented in this repository is meant to be run in a distributed way.
