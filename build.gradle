@@ -118,6 +118,23 @@ jar {
     }
 }
 
+// Optimizer Tests
+
+task testHTNBF(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "ai.libs.hyperopt.experimenter.test.BFTest"
+}
+
+task testBOHB(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "ai.libs.hyperopt.experimenter.test.BOHBTest"
+}
+
+task testHTNBF(type: JavaExec) {
+  classpath sourceSets.main.runtimeClasspath
+  main = "ai.libs.hyperopt.experimenter.test.BFTest"
+}
+
 // Result Generation Tasks
 task compileScatterPlots(type: JavaExec) {
   classpath sourceSets.main.runtimeClasspath

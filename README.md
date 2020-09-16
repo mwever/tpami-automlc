@@ -11,7 +11,7 @@ Prerequisites: Due to certain dependencies requiring a Linux operating system, t
 
 ### Preparing the Singularity Container
 
-In order to set up a Singularity Container, please ensure that you have administrator permissions and installed the [Singularity Container](https://sylabs.io/guides/3.6/user-guide/) software on your computer. (Hint: On Ubuntu you can simply install it via `sudo apt install singularity-container`. Once you have Singularity Container installed on your system, follow these steps in order to create the container:
+In order to set up a Singularity Container, please ensure that you have administrator permissions and installed the [Singularity Container](https://sylabs.io/guides/3.6/user-guide/) software on your computer. (Hint: On Ubuntu you can simply install it via `sudo apt install singularity-container`). Once you have Singularity Container installed on your system, follow these steps in order to create the container:
 
 1. Build a singularity container from the provided recipe file: `sudo singularity build automlc.sif SingularityRecipe`. 
 2. Once the container is built, you can now proceed to run a shell within the Singularity container like this: `singularity shell automlc.sif` (No sudo this time).
@@ -28,6 +28,110 @@ However, since we mainly work with Singularity containers to have a clearly dist
 
 In order to test your setup we have prepared a test runner that will work out-of-the-box if everything has been setup correctly.
 More precisely, you can test whether each of the optimizers can be run for a specific dataset split with short timeouts of 1 minute for the entire optimization run and 45 seconds for a single evaluation. 
+
+## Using the Benchmark
+
+The benchmark implemented in this repository is meant to be run in a distributed way.
+
+### Hardware Requirements
+For running a benchmark suite you need the following resources:
+A central database server managing the experiments to be executed and worker clients meeting the hardware requirements.
+In the paper we used worker clients each equipped with `8 CPU cores` and `32GB RAM`.
+The recommended hardware specifications for the database server depends on the degree of parallelization and how you set the parameters for the experiments.
+The latter point is for instance depending what evaluation timeouts you choose for assessing the performance of single candidates.
+The smaller the timeout the more intermediate evaluation results will be logged in the database.
+As a consequence there will be a higher load on the respective database server.
+In our study and with the timeout configuration proposed in the paper, we found that a configuration of `4 CPU cores` and `16GB RAM` is sufficient to deal with up to 200 worker clients.
+For the database, we tested only a MySQL database. In principle other drivers are usable, but may require the inclusion of additional dependencies for the project.
+Officially, we only support MySQL databases.
+
+### Initialize the Database Server
+
+In order to initialize the database server, first of all, you need to fill in the connection details in the `automlc-setup.properties` file.
+
+```properties
+...
+db.driver = mysql
+db.host = <YOUR DB HOST>
+db.username = <YOUR DB USER>
+db.password = <YOUR DB PASSWORD>
+db.database = <YOUR DATABASE NAME>
+db.table = <YOUR JOBS TABLE NAME>
+db.ssl = <FLAG WHETHER TO USE SSL>
+candidate_eval_table = <YOUR INTERMEDIATE EVALUATIONS TABLE NAME>
+...
+``` 
+
+The specifics of the benchmark are then given with the following properties in the same files:
+
+```properties
+mem.max = 32768 // maximum available memory
+cpu.max = 8 // number of cores
+
+... // database connection properties and AILibs experimenter specific properties 
+
+
+algorithm = bf,random,hb,bohb,smac,ggp // optimizers to consider
+dataset = arts1,bibtex,birds,bookmarks,business1,computers1,education1,emotions,enron-f,entertainment1,flags,genbase,health1,llog-f,mediamill,medical,recreation1,reference1,scene,science1,social1,society1,tmc2007,yeast // datasets to consider
+measure = FMacroAvgD,FMacroAvgL,FMicroAvg // performance measures to consider
+split = 0,1,2,3,4,5,6,7,8,9 // split indices to consider
+seed = 42 // seed of the dataset splitter to consider
+globalTimeout=86400 // timeout for an entire optimization run
+evaluationTimeout=1800 // timeout for a single candidate evaluation
+
+... // constant properties for the experiment runner
+```
+
+Based on this specification, the benchmark will compute all possible combinations of entires given via the fields `algorithm`, `dataset`, `measure`, `split`, `seed`, `globalTimeout`, `evaluationTimeout`.
+In principle it is also possible to configure multiple seeds, globalTimeouts or evaluationTimeouts in the same style as it is done e.g. for the algorithm field, i.e. simply by seperating multiple values by a comma.
+
+Once the database connection is configured and the property values for all the benchmark suite specific parameters have been set, you can proceed by initializing the database server centrally managing the experiment conduction with the following command:
+
+```Shell
+./gradlew initializeExperimentsInDatabase
+``` 
+
+This will automatically create a table with the name specified in the `db.table` property which will then specify all the experiments to be executed which have been computed via taking the cross-product of all possible combinations of the properties describing the benchmark suite.
+
+For cleaning this table, i.e., removing all of its entries, you can run the following command:
+
+```Shell
+./gradlew cleanExperimentsInDatabase
+``` 
+
+**Caution:** This functionality will also remove all results that are stored in this table after running an experiment.
+
+### Preparing Dataset Splits
+
+The original datasets from which the train and test splits have been derived are provided via this repository as well.
+The datasets are located in the `original_datasets/` directory.
+In order to derive the train and test dataset splits via a 10-fold cross-validation, run the following command:
+
+```Shell
+./gradlew generatedatasetSplits
+```
+This will create a directory `datasets/`, where the generated train and test splits are stored in seperated files.
+As this procedure is done for all datasets contained in the `original_datasets/` directory and seed combinations, this probably takes some time and disk space.
+The generated files follow the name schema `<DATASET>_<SEED>_<SPLIT INDEX>_{train|test}.arff`. As the worker client relies on this naming, the schema must not be changed.
+Unfortunately, we cannot provide the dataset splits used in our study directly, as this would dramatically increase the size of the repository and lead to unreasonable download times for cloning.
+However, on request we can of course provide the original dataset splits.
+
+**Note**: We assume that all worker clients either have all the dataset splits locally available or share a network hard drive, centrally providing access to the respective dataset splits. The dataset folder can be configured in the `automlc-setup.properties` file via the property `datasetFolder`. 
+
+### Running a Worker Client
+
+Once everything is set up correctly, you may run a worker client via the command
+
+```Shell
+./gradlew runExperimentEvaluationWorker
+```
+
+The execution of the worker will also rely on the database connection configured in the `automlc-setup.properties`.
+However, there is nothing specific you need to configure when deploying the worker client in a distributed way.
+In fact, you can simply run the same command multiple times (on different nodes) in order to parallelize the processing of the benchmark.
+
+The central database server will take care that each of the specified experiments will be executed only once at maximum, i.e. it will prevent the same experiment from being conducted twice. 
+Since one worker client will also only take care of running a single experiment, you need to deploy as many worker clients as there are rows in the jobs table (named as you configured it in the properties file). In addition to the final results, the worker clients will also store intermediate evaluation results, i.e., candidates that have been requested for evaluation by the respective optimizer together with the measured performance value.
 
 ## Visualizing Benchmark Data
 
@@ -49,7 +153,7 @@ This will create a txt file in the `/results` directory with the name `searchspa
 
 #### Export to Gephi to visualize the search space as a DAG
 
-Gephi is a graph modeling and visualization tool. You can export the search space as described in the `searchspace/` folder to the Gephi graph format to be loaded and visualized in Gephi. By running
+[Gephi](https://gephi.org/) is a graph modeling and visualization tool. You can export the search space as described in the `searchspace/` folder to the Gephi graph format to be loaded and visualized in Gephi. By running
 
 ```Shell
 ./gradlew exportSearchSpacesToGephiFormat
@@ -100,7 +204,8 @@ Furthermore, we have presented anytime average rank plots comparing the differen
 ```
 
 This will generate several `.tex`-files in the directory `results/anytime-plots/`.
-In fact, there are even two different types of plots: First following the naming schema `avgrank-<MEASURE>.tex` you will find the average rank plots as presented in the paper. However, for each combination of measure and dataset you can also find the actual average performance in terms of the respective performance measure of the different optimizers.
+In fact, there are even two different types of plots: First following the naming schema `avgrank-<MEASURE>.tex` you will find the average rank plots as presented in the paper.
+However, for each combination of measure and dataset you can also find the actual average anytime performance of the different optimizers contained in the files named after the schema `<MEASURE>_<DATASET>.tex`.
 Since presenting those would have required lots of space, these plots have not been included in the paper but are made available here as a kind of supplementary material.
 
 #### Generate Result Tables
