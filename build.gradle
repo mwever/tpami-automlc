@@ -151,11 +151,6 @@ task exportAlgorithmsInSearchSpace(type: JavaExec) {
   main = "benchmark.results.searchspace.SearchSpaceAlgorithmList"
 }
 
-task printAlgorithmIncumbentFrequencies(type: JavaExec) {
-  classpath sourceSets.main.runtimeClasspath
-  main = "benchmark.results.candidates.IncumbentStats"
-}
-
 task generateSingleLabelSearchSpaceDescription(type: JavaExec) {
   classpath sourceSets.main.runtimeClasspath
   main = "benchmark.results.searchspace.SearchSpaceDescription"

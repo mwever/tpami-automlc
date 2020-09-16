@@ -18,14 +18,34 @@ In order to set up a Singularity Container, please ensure that you have administ
 3. Please make sure that your current folder is mounted into the Singularity container. You may prove this by typing `dir`. If the files of the project's root directory are printed on your command line, everything should be fine.
 4. You are now prepared to run the tasks via the gradle wrapper. For further steps please have a look at the subsequent documentation.
 
+### Without a Singularity Container
+
+If you are running Linux you also have the possibility to run the benchmark directly on your system, without creating any Singularity container.
+To this end, we have prepared a `requirements.txt` file so that you can install the required dependencies for the Python environment with ease.
+However, since we mainly work with Singularity containers to have a clearly distinct system running, preventing interferences with inappropriate python versions and compatibility conflicts in general, we do not officially support the setup variant without creating a Singularity container.
+
 ### Test your Setup
 
-Once you have prepared 
+In order to test your setup we have prepared a test runner that will work out-of-the-box if everything has been setup correctly.
+More precisely, you can test whether each of the optimizers can be run for a specific dataset split with short timeouts of 1 minute for the entire optimization run and 45 seconds for a single evaluation. 
 
-## Showing Results
+## Visualizing Benchmark Data
+
+Throughout the paper, several visualization of the results have been presented. A pre-processed version of the logged data is contained in the directory `results/data/`.
+From this data, you can further process the data to derive the numbers presented in the paper. Plots that have been generated via LaTeX's `tikz` or `pgfplots`, you can even generate the corresponding LaTeX code in the following. 
 
 ### Inspecting the Search Space
 The configuration files containing the specification of the search space are contained in the folder `searchspace/`. For this, the root file is `searchspace/meka-all.json` and (recursively) includes the remaining configuration files
+
+#### List Algorithms Contained in the Search Space
+
+If you only want to obtain a list of algorithms ordered by algorithm type that are contained in the search space including their abbreviation as given in the paper, you can use the following short cut:
+
+```Shell
+./gradlew exportAlgorithmsInSearchSpace
+```
+
+This will create a txt file in the `/results` directory with the name `searchspace-algorithms-in-space.txt` listing all the algorithm types together with the algorithms belonging to these types.
 
 #### Export to Gephi to visualize the search space as a DAG
 
@@ -52,33 +72,55 @@ This will generate a file `results/searchspace-meka.html`. If you want to genera
 
 This will generate a file `results/searchspace-weka.html`.
 
+The bar charts comparing the two search spaces in the paper have been generated from the statistical values contained on the top of these HTML documents. However, since the plots have been generated using `matplotlibs` in Python, please refer to the Jupyter notebook `TPAMI Plots.ipynb` for deriving the bar charts from these statistics.
+Therewith, you can obtain the comparison figure for the different search spaces.
+
+
+
 ### Evaluation Results
 
 The data obtained by running the benchmark across various datasets and folds can be found in `results/data`. From this data you can generate several statistics, summaries, and plots. How these can be generated is explained in the following.
 
 #### Generate One-VS-Rest Scatter Plots
 
-In the corresponding paper we compared the different optimizers in a one-vs-rest fashion plotting their performances against each other facilitating the analysis which approach performs preferably over the rest. The plots can be generated with the following command:
+In the paper we compared the different optimizers in a one-vs-rest fashion plotting their performances against each other facilitating the analysis which approach performs preferably over the rest. The plots can be generated with the following command:
 
 ```Shell
-./gradlew generateScatterPlots
+./gradlew compileScatterPlots
 ```
 
 The command will produce its output in the folder `results/scatter-plots`, where afterwards you will find for each optimizer and performance measure (instance-wise F-measure, label-wise F-measure, and micro F-measure) you will find a LaTeX file named like this: `scatter-<optimizer>VSrest-<measure>.tex`. Furthermore you can find a `main.tex` which will include all packages and scatter plots to compile them into a PDF document.
 
 #### Generate Anytime Average Rank Plots
 
+Furthermore, we have presented anytime average rank plots comparing the different optimizers across the time dimension. You can compile the result data into these anytime plots by executing the following command:
+
 ```Shell
-./gradlew generateAnytimeAverageRankPlots
+./gradlew compileAnytimeAverageRankPlots
 ```
 
-`results/anytime-plots/`
+This will generate several `.tex`-files in the directory `results/anytime-plots/`.
+In fact, there are even two different types of plots: First following the naming schema `avgrank-<MEASURE>.tex` you will find the average rank plots as presented in the paper. However, for each combination of measure and dataset you can also find the actual average performance in terms of the respective performance measure of the different optimizers.
+Since presenting those would have required lots of space, these plots have not been included in the paper but are made available here as a kind of supplementary material.
 
 #### Generate Result Tables
 
+For a comparison of the performance of eventually returned incumbents, we presented tables for each measure individually.
+You can generate these tables yourself once again by running the following command:
+
 ```Shell
-./gradlew generateResultTables
+./gradlew compileResultTables
 ```
 
+This will again generate `.tex`-files containing the LaTeX code to represent the corresponding table data. In addition to the average performances per dataset and optimizer, a Wilcoxon signed-rank test is conducted with a threshold for the p-value of 0.05. The best results, significant improvements and degradations are highlighted as described in the paper. Furthermore, in the last row of the tables, an average rank for each optimizer across all datasets is given.
 
+#### Generate Incumbent Frequency Statistics
 
+Another figure in the paper shows which algorithms have been chosen with what frequency by which optimizer. Since these plots have been generated with the help of matplotlibs, here, we will only compile the necessary statistics from the data, necessary to produce the figures.
+In order to compile the statistics from the result data, run the following command:
+
+```Shell
+./gradlew compileIncumbentFrequencyStatistics
+```
+
+This will generate a txt file `results/incumbent-frequencies.txt` containing JSON arrays that can be copied and pasted into a Jupyter notebook which is also available via this repository. Please refer to the `TPAMI Plots.ipynb` notebook file for further processing of the compiled raw data into the nested donut charts.
