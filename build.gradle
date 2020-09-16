@@ -226,6 +226,25 @@ task cleanExperimentsInDatabase(type: JavaExec) {
 	args = ["delete"]
 }
 
+
+task initializePostProcessingsInDatabase(type: JavaExec) {
+	classpath sourceSets.main.runtimeClasspath
+	main = "benchmark.results.testeval.TestEvalExperimenter"
+	args = ["init"]
+}
+
+task runPostProcessingWorker(type: JavaExec) {
+	classpath sourceSets.main.runtimeClasspath
+	main = "benchmark.results.testeval.TestEvalExperimenter"
+	args = ["run"]
+}
+
+task cleanPostProcessingsInDatabase(type: JavaExec) {
+	classpath sourceSets.main.runtimeClasspath
+	main = "benchmark.results.testeval.TestEvalExperimenter"
+	args = ["delete"]
+}
+
 task generateAll {
 	// search space describing artefacts
 	exportAlgorithmsInSearchSpace

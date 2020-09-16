@@ -125,7 +125,7 @@ The datasets are located in the `original_datasets/` directory.
 In order to derive the train and test dataset splits via a 10-fold cross-validation, run the following command:
 
 ```Shell
-./gradlew generatedatasetSplits
+./gradlew generateDatasetSplits
 ```
 This will create a directory `datasets/`, where the generated train and test splits are stored in seperated files.
 As this procedure is done for all datasets contained in the `original_datasets/` directory and seed combinations, this probably takes some time and disk space.
@@ -149,6 +149,21 @@ In fact, you can simply run the same command multiple times (on different nodes)
 
 The central database server will take care that each of the specified experiments will be executed only once at maximum, i.e. it will prevent the same experiment from being conducted twice. 
 Since one worker client will also only take care of running a single experiment, you need to deploy as many worker clients as there are rows in the jobs table (named as you configured it in the properties file). In addition to the final results, the worker clients will also store intermediate evaluation results, i.e., candidates that have been requested for evaluation by the respective optimizer together with the measured performance value.
+
+### Post-Processing for Anytime Test Performances
+
+Since assessing the test performances on-line, i.e. during an optimizer run, would distort the overall perception of the optimization performance, all the test performances for later on compiling anytime plots etc. have been estimated via a post-processing step based on the log of intermediate candidate evaluations.
+The post-processing is also implemented in a distributed way, analoguous to the already explained setup for running the actual benchmark of optimizers. In contrast to the latter, for the post-processing the `test-eval.properties` serves as a configuration.
+Obviously, the jobs table for the post-processing needs a different name than the one specified for the benchmark itself. Furthermore, it will also use the `automlc-setup.properties` file for accessing the logged data and filtering the evaluated candidates.
+Additionally, the post-processing requires access to the datasets directory.
+
+As before you can configure the corresponding properties, for which optimizers,datasets, measures, etc. you want to run the post-processing. Furthermore you can setup the jobs table for distributing the workload on a cluster etc. as already described before for the benchmark via the following commands:
+
+```Shell
+./gradlew initializePostProcessingsInDatabase
+./gradlew cleanPostProcessingsInDatabase
+./gradlew runPostProcessingWorker
+```
 
 ## Visualizing Benchmark Data
 
