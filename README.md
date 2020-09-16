@@ -4,11 +4,27 @@ This project provides a platform for benchmarking different optimizers for the t
 
 The benchmark distinguishes itself from previously published benchmark in the way how the optimizers are integrated with the benchmarking system. While all optimizers share the same routine for executing candidate solutions, the benchmark works in a cross-platform fashion, i.e. although the benchmark and the execution of candidate solutions is implemented in Java, optimizers available in Python can be benchmarked within the system. The search space and recursive structures of the search space are automatically translated into a format understandable to the respective optimizers. The inter-platform communication is done via the [Google ProtoBuf](https://developers.google.com/protocol-buffers) library which offers interfaces for various platforms. Thereby, the communication link only transfers the execution request to the benchmarking system allowing to share the same evaluation routine for all the optimizers. Another advantage is that it also allows for live-tracking the performance of the optimizers, logging each evaluated candidate and monitoring the current incumbent at any point in time.
 
+## Table of Contents
+
 1. [Quickstart - Setup](#quickstart---setup)
     1. [Preparing the Singularity Container](#preparing-the-singularity-container)
     1. [Without a Singularity Container](#without-a-singularity-container)
     1. [Test your Setup](#test-your-setup)
-1. [Using the Benchmark](#using-the-benchmark)
+1. [Running the Benchmark](#running-the-benchmark)
+    1. [Hardware Requirements](#hardware-requirements)
+    1. [Initialize the Database Server](#initialize-the-database-server)
+    1. [Running a Worker Client](#running-a-worker-client)
+    1. [Post-Processing for Anytime Test Performances](#post-processing-for-anytime-test-performances)
+1. [Visualizing Benchmark Data](#visualizing-benchmark-data)
+    1. [Inspecting the Search Space](#inspecting-the-search-space)
+        1. [List Algorithms Contained in the Search Space](#list-algorithms-contained-in-the-search-space)
+        1. [Export to Gephi to visualize the search space as a DAG](#export-to-gephi-to-visualize-the-search-space-as-a-dag)
+        1. [Generate HTML Overview](#generate-html-overview)
+    1. [Evaluation Results](#evaluation-results)
+        1. [Generate One-VS-Rest Scatter Plots](#generate-one-vs-rest-scatter-plots)
+        1. [Generate Anytime Average Rank Plots](#generate-anytime-average-rank-plots)
+        1. [Generate Result Tables](#generate-result-tables)
+        1. [Generate Incumbent Frequency Statistics](#generate-incumbent-frequency-statistics)
 
 ## Quickstart - Setup
 
@@ -51,7 +67,7 @@ As a shortcut you can also simply test all the optimizers as follows:
 ./gradlew testAllOptimizers
 ```
 
-## Using the Benchmark
+## Running the Benchmark
 
 The benchmark implemented in this repository is meant to be run in a distributed way.
 
