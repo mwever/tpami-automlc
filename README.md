@@ -4,6 +4,11 @@ This project provides a platform for benchmarking different optimizers for the t
 
 The benchmark distinguishes itself from previously published benchmark in the way how the optimizers are integrated with the benchmarking system. While all optimizers share the same routine for executing candidate solutions, the benchmark works in a cross-platform fashion, i.e. although the benchmark and the execution of candidate solutions is implemented in Java, optimizers available in Python can be benchmarked within the system. The search space and recursive structures of the search space are automatically translated into a format understandable to the respective optimizers. The inter-platform communication is done via the [Google ProtoBuf](https://developers.google.com/protocol-buffers) library which offers interfaces for various platforms. Thereby, the communication link only transfers the execution request to the benchmarking system allowing to share the same evaluation routine for all the optimizers. Another advantage is that it also allows for live-tracking the performance of the optimizers, logging each evaluated candidate and monitoring the current incumbent at any point in time.
 
+1. [Quickstart](#quickstart---setup)
+    1. [Preparing the Singularity Container](#preparing-the-singularity-container)
+    1. [Without a Singularity Container](#without-a-singularity-container)
+    1. [Test your Setup](#test-your-setup)
+1. [Using the Benchmark](#using-the-benchmark)
 
 ## Quickstart - Setup
 
