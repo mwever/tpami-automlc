@@ -16,7 +16,7 @@ smac /usr/bin/smac
     ln -s /usr/bin/pip3 /usr/bin/pip
 
     pip install argparse
-    curl https://raw.githubusercontent.com/automl/auto-sklearn/master/requirements.txt | xargs -n 1 -L 1 pip install
+    curl https://github.com/automl/auto-sklearn/blob/877170d6b1df0508a13a8984159aeddfc92a6cef/requirements.txt | xargs -n 1 -L 1 pip install
     pip install grpcio
     pip install grpcio-tools
     chmod +x /usr/bin/smac

@@ -15,7 +15,7 @@ public class OptimizerTester {
 	public static final int MAX_MEM = 4096;
 
 	public static final String DATASET = "flags";
-	public static final int SEED = 0;
+	public static final int SEED = 42;
 	public static final int SPLIT = 0;
 	public static final String MEASURE = "FMacroAvgD";
 	public static final int GLOBAL_TIMEOUT = 60;
@@ -33,7 +33,8 @@ public class OptimizerTester {
 		valuesOfKeyFields.put("measure", OptimizerTester.MEASURE);
 		valuesOfKeyFields.put("globalTimeout", OptimizerTester.GLOBAL_TIMEOUT + "");
 		valuesOfKeyFields.put("evaluationTimeout", OptimizerTester.EVAL_TIMEOUT + "");
-		ExperimentDBEntry experimentEntry = new ExperimentDBEntry(0, new Experiment(MAX_MEM, NUM_CPUS, valuesOfKeyFields));
+		ExperimentDBEntry experimentEntry = new ExperimentDBEntry(0,
+				new Experiment(MAX_MEM, NUM_CPUS, valuesOfKeyFields));
 
 		runner.evaluate(experimentEntry, new IExperimentIntermediateResultProcessor() {
 			@Override

@@ -32,7 +32,8 @@ public class DatabaseLogger<M> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseLogger.class);
 
 	private static final File CONFIG_FILE = new File("automlc-setup.properties");
-	private static final IDatabaseLoggerConfig DB_CONFIG = (IDatabaseLoggerConfig) ConfigFactory.create(IDatabaseLoggerConfig.class).loadPropertiesFromFile(CONFIG_FILE);
+	private static final IDatabaseLoggerConfig DB_CONFIG = (IDatabaseLoggerConfig) ConfigFactory
+			.create(IDatabaseLoggerConfig.class).loadPropertiesFromFile(CONFIG_FILE);
 	private static final Class<SCandidateEvaluatedSchema> SCHEMA = SCandidateEvaluatedSchema.class;
 
 	private final SQLAdapter adapter;
@@ -40,13 +41,22 @@ public class DatabaseLogger<M> {
 
 	private final AtomicInteger orderNo = new AtomicInteger(0);
 
+	protected DatabaseLogger() {
+		this.defaultValues = null;
+		this.adapter = null;
+	}
+
 	public DatabaseLogger(final Map<String, Object> defaultValues) throws Exception {
 		this.adapter = new SQLAdapter(DB_CONFIG);
 		this.defaultValues = defaultValues;
 
 		// check whether table exists and has the right format.
-		this.adapter.query(DBSchemaUtil.generateCreateTableStatement(SCHEMA, DB_CONFIG.getLogTable()));
-		List<String> columnsTable = this.adapter.query("SHOW COLUMNS FROM " + DB_CONFIG.getLogTable()).stream().map(x -> x.getAsString("Field")).collect(Collectors.toList());
+		this.adapter.executeQueriesAtomically(Arrays.asList(this.adapter
+				.getPreparedStatement(DBSchemaUtil.generateCreateTableStatement(SCHEMA, DB_CONFIG.getLogTable()))));
+		// this.adapter.query(DBSchemaUtil.generateCreateTableStatement(SCHEMA,
+		// DB_CONFIG.getLogTable()));
+		List<String> columnsTable = this.adapter.query("SHOW COLUMNS FROM " + DB_CONFIG.getLogTable()).stream()
+				.map(x -> x.getAsString("Field")).collect(Collectors.toList());
 		String checkAndExtendTable = DBSchemaUtil.checkAndExtendTable(SCHEMA, DB_CONFIG.getLogTable(), columnsTable);
 		if (checkAndExtendTable != null) {
 			this.adapter.query(checkAndExtendTable);
@@ -54,15 +64,18 @@ public class DatabaseLogger<M> {
 	}
 
 	@Subscribe
-	public void rcvCandidateEvaluatedEvent(final IOptimizationSolutionCandidateFoundEvent<M> e) throws JsonProcessingException, SQLException {
+	public void rcvCandidateEvaluatedEvent(final IOptimizationSolutionCandidateFoundEvent<M> e)
+			throws JsonProcessingException, SQLException {
 		Map<String, Object> keyValuePairs = new HashMap<>(this.defaultValues);
 		keyValuePairs.put(SCandidateEvaluatedSchema.THREAD_ID.getName(), e.getAlgorithmId());
-		keyValuePairs.put(SCandidateEvaluatedSchema.COMPONENT_INSTANCE.getName(), new ComponentInstanceAdapter().componentInstanceToString(e.getSolutionCandidate()));
+		keyValuePairs.put(SCandidateEvaluatedSchema.COMPONENT_INSTANCE.getName(),
+				new ComponentInstanceAdapter().componentInstanceToString(e.getSolutionCandidate()));
 
 		if (e.getEvaluationReport() != null && !e.getEvaluationReport().isEmpty()) {
 			Map<String, Object> mapToWrite = new HashMap<>();
 			for (Entry<String, ? extends Object> entry : e.getEvaluationReport().entrySet()) {
-				if (entry.getValue() instanceof DescriptiveStatistics) { // transform descriptive statistics appropriately
+				if (entry.getValue() instanceof DescriptiveStatistics) { // transform descriptive statistics
+																			// appropriately
 					DescriptiveStatistics stats = (DescriptiveStatistics) entry.getValue();
 					mapToWrite.put(entry.getKey() + "_min", stats.getMin());
 					mapToWrite.put(entry.getKey() + "_max", stats.getMax());
@@ -73,8 +86,13 @@ public class DatabaseLogger<M> {
 					mapToWrite.put(entry.getKey(), entry.getValue());
 				}
 			}
-			keyValuePairs.put(SCandidateEvaluatedSchema.EVALUATION_REPORT.getName(), new ObjectMapper().writeValueAsString(mapToWrite));
-			keyValuePairs.put(SCandidateEvaluatedSchema.EVAL_VALUE.getName(), ((DescriptiveStatistics) e.getEvaluationReport().get(this.defaultValues.get(SCandidateEvaluatedSchema.MEASURE.getName()))).getMean());
+			keyValuePairs.put(SCandidateEvaluatedSchema.EVALUATION_REPORT.getName(),
+					new ObjectMapper().writeValueAsString(mapToWrite));
+			keyValuePairs
+					.put(SCandidateEvaluatedSchema.EVAL_VALUE.getName(),
+							((DescriptiveStatistics) e.getEvaluationReport()
+									.get(this.defaultValues.get(SCandidateEvaluatedSchema.MEASURE.getName())))
+									.getMean());
 		}
 
 		if (e.getException() != null) {
@@ -89,7 +107,8 @@ public class DatabaseLogger<M> {
 		while (!ciList.isEmpty()) {
 			ComponentInstance ci = ciList.remove(0);
 			abstractDescription.append(ci.getComponent().getName()).append("(");
-			abstractDescription.append(ci.getParameterValues().entrySet().stream().map(x -> x.getKey() + "=" + x.getValue()).collect(Collectors.joining(", ")));
+			abstractDescription.append(ci.getParameterValues().entrySet().stream()
+					.map(x -> x.getKey() + "=" + x.getValue()).collect(Collectors.joining(", ")));
 			abstractDescription.append(")").append(" - ");
 			ciList.addAll(ci.getSatisfactionOfRequiredInterfaces().values());
 		}

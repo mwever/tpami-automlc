@@ -16,8 +16,9 @@ public class InstantiationTest {
 
 	@Test
 	public void testInstantiation() throws IOException, ComponentInstantiationFailedException {
-		Collection<Component> components = new ComponentLoader(new File("searchspace/weka-singlelabel-base.json")).getComponents();
-		Component sgd = ComponentUtil.getComponentsProvidingInterface(components, "weka.classifiers.functions.SGD").iterator().next();
+		Collection<Component> components = new ComponentLoader(new File("searchspace/weka-base.json")).getComponents();
+		Component sgd = ComponentUtil.getComponentsProvidingInterface(components, "weka.classifiers.trees.J48")
+				.iterator().next();
 		ComponentInstance ci = ComponentUtil.getDefaultParameterizationOfComponent(sgd);
 
 		WekaPipelineFactory factory = new WekaPipelineFactory();
